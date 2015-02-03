@@ -1,3 +1,25 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error | Sudoku Champs</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+            <li><a href="/rules">Rules</a></li>
+        </ul>
+    </nav>
+    <h1>That was odd.</h1>
+    <h2><%= error.status %></h2>
+    <p>
+       It would appear that we have had a little bit of a technical issue, so let's double check. <br />
+       Yep, it's definitely a technical issue. Rest assured, as our team of professional superheroes is toiling night
+       and day to get this back on track. <br />
+       In the meantime, why don't you go to a <a href="/">page that works ?</a>
+    </p>
+</body>
+<footer><a href="/developers">Devlopers</a></footer>
+</html>

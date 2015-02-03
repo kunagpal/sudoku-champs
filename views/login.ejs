@@ -2,13 +2,25 @@
 <html>
   <head>
     <title>Login | Sudoku Champs</title>
-    <link rel='stylesheet' href='../public/styles/style.css' />
+    <link rel="stylesheet" href="/styles/style.css" />
   </head>
   <body>
-  <form method="POST">
-    Name<input type="text" id="name"/> <br />
-    Password<input type="password" id="pass" /> <br />
-    <input type="submit" value="Submit"/>
-  </form>
+      <nav>
+          <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/login">Login</a></li>
+              <li><a href="/register">Register</a></li>
+              <li><a href="/rules">Rules</a></li>
+          </ul>
+      </nav>
+      <h1>Login</h1>
+      <form method="POST" action="login">
+            Name<input type="text" id="name"/> <br />
+            Password<input type="password" id="pass" /> <br />
+                    <input type="submit" value="Submit"/>
+      </form>
   </body>
+  <footer>
+      <a href="/developers">Devlopers</a>
+  </footer>
 </html>

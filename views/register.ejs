@@ -2,16 +2,28 @@
 <html>
   <head>
     <title>Register | Sudoku Champs</title>
-    <link rel='stylesheet' href='../public/styles/style.css' />
+    <link rel="stylesheet" href="/styles/style.css" />
   </head>
   <body>
-    <form method="POST">
-      Name<input type="text" id="name"/> <br />
-      Email Address<input type="email" id="email" /> <br />
-      Phone<input type="number" id="phone" /> <br />
-      Password<input type="password" id="pass" /> <br />
-      Confirm password<input type="password" id="confirm" /> <br />
-      <input type="submit" value="Submit"/>
-    </form>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/register">Register</a></li>
+          <li><a href="/rules">Rules</a></li>
+        </ul>
+      </nav>
+      <h1>Register</h1>
+      <form method="POST" action="/register">
+          Name<input type="text" id="name"/> <br />
+          Email Address<input type="email" id="email" /> <br />
+          Phone<input type="number" id="phone" /> <br />
+          Password<input type="password" id="pass" /> <br />
+          Confirm password<input type="password" id="confirm" /> <br />
+                          <input type="submit" value="Submit"/>
+      </form>
   </body>
+  <footer>
+      <a href="/developers">Devlopers</a>
+  </footer>
 </html>

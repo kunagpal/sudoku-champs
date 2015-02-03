@@ -2,12 +2,23 @@
 <html>
   <head>
     <title>Forgot | Sudoku Champs</title>
-    <link rel='stylesheet' href='../public/styles/style.css' />
+    <link rel="stylesheet" href="/styles/style.css" />
   </head>
   <body>
-  <form method="POST">
-    Email Address<input type="email" id="email" /> <br />
-                 <input type="submit" value="Submit"/>
-  </form>
+      <nav>
+          <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/login">Login</a></li>
+             <li><a href="/register">Register</a></li>
+             <li><a href="/rules">Rules</a></li>
+          </ul>
+      </nav>
+      <form method="POST" action="/forgot">
+            Email Address<input type="email" id="email" /> <br />
+                         <input type="submit" value="Submit"/>
+      </form>
   </body>
+  <footer>
+      <a href="/developers">Devlopers</a>
+  </footer>
 </html>
