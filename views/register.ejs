@@ -8,20 +8,56 @@
   <body>
       <nav>
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/login">Login</a></li>
-          <li><a href="/register">Register</a></li>
-          <li><a href="/rules">Rules</a></li>
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/login">Login</a>
+            </li>
+            <li>
+                <a href="/play">Play</a>
+            </li>
+            <li>
+                <a href="/register">Register</a>
+            </li>
+            <li>
+                <a href="/rules">Rules</a>
+            </li>
+            <li>
+                <a href="/leader">Leaderboard</a>
+            </li>
         </ul>
       </nav>
-      <h1>Register</h1>
+      <h1>Let's get this started</h1>
+      <h2>Registration is completely free and takes only a minute. <br />(Depending on your internet connection of course)<br /> Already registered ? Login <a href="/login">here</a></h2>
       <form method="POST" action="/register">
-          Name<input type="text" id="name"/> <br />
-          Email Address<input type="email" id="email" /> <br />
-          Phone<input type="number" id="phone" /> <br />
-          Password<input type="password" id="pass" /> <br />
-          Confirm password<input type="password" id="confirm" /> <br />
-                          <input type="submit" value="Submit"/>
+          <table>
+            <tr>
+                <td>Name</td>
+                <td><input type="text" id="name" placeholder="User"/></td>
+            </tr>
+            <tr>
+                <td>Email Address</td>
+                <td><input type="email" id="email" placeholder="Email"/></td>
+            </tr>
+            <tr>
+                <td>Phone</td>
+                <td><input type="number" id="phone" placeholder="Phone"/></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input type="password" id="pass" placeholder="Password"/></td>
+            </tr>
+            <tr>
+                <td>Confirm password</td>
+                <td><input type="password" id="confirm" placeholder="Confirm"/></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="I am ready."/>
+                </td>
+            </tr>
+          </table>
       </form>
   </body>
   <footer>
