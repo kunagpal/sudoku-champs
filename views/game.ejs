@@ -4,36 +4,50 @@
     <title>Play | Sudoku Champs</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="/styles/style.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/flipclock.css" type="text/css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/scripts/flipclock.js"></script>
   </head>
   <body>
       <nav>
           <ul>
               <li>
-                  <a href="/">Home</a>
+                  <a href="/">HOME</a>
               </li>
               <li>
-                  <a href="/login">Login</a>
+                  <a href="/login">LOGIN</a>
               </li>
               <li>
-                  <a href="/play">Play</a>
+                  <a href="/play" id="inv">PLAY</a>
               </li>
               <li>
-                  <a href="/register">Register</a>
+                  <a href="/register">REGISTER</a>
               </li>
               <li>
-                  <a href="/rules">Rules</a>
+                  <a href="/rules">RULES</a>
               </li>
               <li>
-                  <a href="/leader">Leaderboard</a>
+                  <a href="/leader">LEADERBOARD</a>
               </li>
           </ul>
       </nav>
       <h1>Let the games begin !</h1>
-      <h2>May the numbers be with you, in more ways than one.</h2>
+      <h2>May the numbers be with you, in more ways than one. <br /> But first, select a game mode...</h2>
+      <div class="clock" style="margin:2em;"></div>
+      <div class="message"></div>
+      <script type="text/javascript">
+          var clock;
+          $(document).ready(function() {
+              clock = $('.clock').FlipClock({
+                  clockFace: 'HourlyCounter'
+              });
+          });
+      </script>
       <table>
       </table>
   </body>
   <footer>
-      <a href="/developers">Devlopers</a>
+      <a href="logout" id="logout">I wish to leave</a>
+      <a href="/developers" id="dev">Devlopers</a>
   </footer>
 </html>

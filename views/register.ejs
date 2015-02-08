@@ -9,32 +9,32 @@
       <nav>
         <ul>
             <li>
-                <a href="/">Home</a>
+                <a href="/">HOME</a>
             </li>
             <li>
-                <a href="/login">Login</a>
+                <a href="/login">LOGIN</a>
             </li>
             <li>
-                <a href="/play">Play</a>
+                <a href="/play">PLAY</a>
             </li>
             <li>
-                <a href="/register">Register</a>
+                <a href="/register" id="inv">REGISTER</a>
             </li>
             <li>
-                <a href="/rules">Rules</a>
+                <a href="/rules">RULES</a>
             </li>
             <li>
-                <a href="/leader">Leaderboard</a>
+                <a href="/leader">LEADERBOARD</a>
             </li>
         </ul>
       </nav>
-      <h1>Let's get this started</h1>
+      <h1>Let's get started</h1>
       <h2>Registration is completely free and takes only a minute. <br />(Depending on your internet connection of course)<br /> Already registered ? Login <a href="/login">here</a></h2>
       <form method="POST" action="/register">
           <table>
             <tr>
                 <td>Name</td>
-                <td><input type="text" id="name" placeholder="User"/></td>
+                <td><input type="text" id="name" placeholder="User" autofocus="true"/></td>
             </tr>
             <tr>
                 <td>Email Address</td>
@@ -61,6 +61,7 @@
       </form>
   </body>
   <footer>
-      <a href="/developers">Devlopers</a>
+      <a href="logout" id="logout">I wish to leave</a>
+      <a href="/developers" id="dev">Devlopers</a>
   </footer>
 </html>
