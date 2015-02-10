@@ -21,7 +21,7 @@
                   <a href="/register">REGISTER</a>
               </li>
               <li>
-                  <a href="/rules" id="inv">RULES</a>
+                  <a id="inv">RULES</a>
               </li>
               <li>
                   <a href="/leader">LEADERBOARD</a>
@@ -40,7 +40,7 @@
             <li>
                 In order to complete a game of Sudoku, you, the participant must fill in a pre-supplied 9 X 9 grid such
                 such that each row, column and regular 3 X 3 sub-grid within the original grid contains each of the
-                numbers 1 through 9, but exactly once, as shown <a href="/solved">here</a>.
+                numbers 1 through 9, but exactly once, as shown <a href="/solved" id="reg">here</a>.
             </li>
             <li>
                 The initial provided grid will have some numbers filled in, which will guide you along the way.
@@ -61,12 +61,23 @@
                 </ol>
             </li>
             <li>
-
+                At any given point of time, all players involved in the game will be subjected to the process of ranking
+                (game category wise), with ascension priority being attributed to the following factors:
+                <ol>
+                    <li>
+                        Points earned: Each victory (in case of a head to head match) earns the victor two points, a loss
+                        earns the player zero points, and a tie / victory by opponent forfeit results in one point.
+                    </li>
+                    <li> Matches won. </li>
+                    <li> Matches played. </li>
+                    <li> Number of forfeits, if any.</li>
+                    <li> </li>
+                </ol>
             </li>
       </ol>
   </body>
   <footer>
-      <a href="logout" id="logout">I wish to leave</a>
+      <a href="/logout" id="logout">I wish to leave</a>
       <a href="/developers" id="dev">Devlopers</a>
   </footer>
 </html>

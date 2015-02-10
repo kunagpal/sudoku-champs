@@ -1,21 +1,20 @@
+var path = require('path');
 var async = require('async');
+var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var router = require('express').Router();
-var uri = process.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/project';
 var mongo = require('mongodb').MongoClient;
-var User;
+var users = require(path.join(__dirname, '..', 'database', 'users'));
+var uri = process.env.MONGOLAB_URI || 'mongodb://localhost/project';
+if (process.env.LOGENTRIES_TOKEN)
+{
+    var log = require('node-logentries').logger({token: process.env.LOGENTRIES_TOKEN});
+}
 /* GET home page. */
 router.get('/', function(req, res, next)
 {
-    if (req.signedCookies.name)
-    {
-        res.redirect('/');
-    }
-    else
-    {
-        res.render('index', { title: 'Express' });
-    }
+    res.render('index', {response: "" });
 });
 // GET login page
 router.get('/login', function(req, res, next) {
@@ -35,15 +34,22 @@ router.get('/forgot', function(req, res, next) {
 });
 // GET reset token page
 router.get('/reset/:token', function(req, res) {
-    User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
-        if (!user) {
-            req.flash('error', 'Password reset token is invalid or has expired.');
-            return res.redirect('/forgot');
+    mongo.connect(uri, function(err, db) {
+        if(err)
+        {
+            throw err;
         }
-        res.render('reset', {
-            user: req.user,
-            title: 'Title'
-        });
+        else
+        {
+            db.collection('users').findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+                if (!user)
+                {
+                    req.flash('error', 'Password reset token is invalid or has expired.');
+                    return res.redirect('/forgot');
+                }
+                res.render('reset', { user: req.user, title: 'Title' });
+            });
+        }
     });
 });
 // GET solved example
@@ -56,27 +62,65 @@ router.get('/leader', function(req, res, next) {
 });
 // GET game page
 router.get('/play', function(req, res, next) {
+    if (req.signedCookies.name)
+    {
+        res.render('game', { title: 'Express' });
+    }
+    else
+    {
+        res.redirect('/login');
+    }
+});
+// POST play page
+router.post('/play', function(req, res, next) {
     res.render('game', { title: 'Express' });
 });
 // POST login page
 router.post('/login', function(req, res, next) {
-    res.render('login', { title: 'Express' });
+    if (req.signedCookies.name)
+    {
+        res.clearCookie('name', { });
+    }
+    //console.log('here');
+    if (log)
+    {
+        log.log(req.body.name + " " + req.body.password + "received");
+    }
+    users.fetch({_id : req.body.name}, function (err, doc)
+    {
+        if (err)
+        {
+            console.log(err.message);
+            res.render('index', {response: "Incorrect Username"});
+        }
+        else if (doc)
+        {
+            if (bcrypt.compareSync(req.body.password, doc['password_hash']))
+            {
+                console.log("Login Successful" + req.body.name);
+                res.cookie('name', doc['_id'], {maxAge: 86400000, signed: true});
+                res.redirect('/play');
+            }
+            else
+            {
+                console.log('Incorrect Credentials');
+                res.render('index', {response: "Incorrect Password"});
+            }
+        }
+        else
+        {
+            console.log('No such user exists');
+            res.render('index', {response: "Invalid Username"});
+        }
+    });
 });
 // GET registration page
 router.get('/register', function(req, res, next) {
-    if (req.signedCookies.name)
-    {
-        res.redirect('/home');
-    }
-    else
-    {
         res.render('register', { response: "" });
-    }
 });
 // POST register page
 router.post('/register', function(req, res, next) {
-    var onGetCount =
-    mongoUsers.getCount(function (err, number)
+    users.getCount(function (err, number)
     {
         if (err)
         {
@@ -89,7 +133,7 @@ router.post('/register', function(req, res, next) {
             {
                 var newUser =
                 {
-                    _id : req.body.manager_name,
+                    _id : req.body.name,
                     dob : new Date(),
                     team_no : parseInt(number) + 1,
                     password_hash : bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
@@ -105,24 +149,23 @@ router.post('/register', function(req, res, next) {
                     streak: 0,
                     worst : -1,
                     best : Number.MAX_VALUE,
-                    avg : 0
+                    avg : 0,
+                    rep : 0
                 };
-                var onInsert = function (err, docs)
+                users.insert(newUser, function (err, docs)
                 {
                     if (err)
                     {
                         console.log(err.message);
                         // Make it more user friendly, output the error to the view
-                        res.render('register', {response: "Team Name Already Exists"});
+                        res.render('register', {response: "Please choose a different user name"});
                     }
                     else
                     {
-                        var name = docs[0]['_id'];
-                        res.cookie('name', name, {maxAge: 86400000, signed: true});
-                        res.redirect('/home/players');
+                        res.cookie('name', docs[0]['_id'], {maxAge: 86400000, signed: true});
+                        res.redirect('/play');
                     }
-                };
-                mongoUsers.insert(newUser, onInsert);
+                });
             }
             else
             {
@@ -143,17 +186,28 @@ router.post('/forgot', function(req, res, next) {
             });
         },
         function(token, done) {
-
-            User.findOne({ email: req.body.email }, function(err, user) {
-                if (!user) {
-                    req.flash('error', 'No account with that email address exists.');
-                    return res.redirect('/forgot');
+            mongo.connect(uri, function(err, db) {
+                if(err)
+                {
+                    throw err;
                 }
-                user.resetPasswordToken = token;
-                user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-                user.save(function(err) {
-                    done(err, token, user);
-                });
+                else
+                {
+                    db.collection('users').findOne({ email: req.body.email }, function(err, user) {
+                        if (!user)
+                        {
+                            req.flash('error', 'No account with that email address exists.');
+                            return res.redirect('/forgot');
+                        }
+                        user.resetPasswordToken = token;
+                        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+                        console.log(user);
+                        db.collection('users').save(user, function(err) {
+                                done(err, token, user);
+                            }
+                        );
+                    })
+                }
             });
         },
         function(token, user, done) {
@@ -167,7 +221,7 @@ router.post('/forgot', function(req, res, next) {
             var mailOptions = {
                 to: user.email,
                 from: 'sudokuchampster@gmail.com',
-                subject: 'Node.js Password Reset',
+                subject: 'Time to get back in the game',
                 text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                 'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
                 'http://' + req.headers.host + '/reset/' + token + '\n\n' +
@@ -187,19 +241,28 @@ router.post('/forgot', function(req, res, next) {
 router.post('/reset/:token', function(req, res) {
     async.waterfall([
         function(done) {
-            User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
-                if (!user) {
-                    req.flash('error', 'Password reset token is invalid or has expired.');
-                    return res.redirect('back');
+            mongo.connect(uri, function(err, db){
+                if(err)
+                {
+                    throw err;
                 }
-                user.password = req.body.password;
-                user.resetPasswordToken = undefined;
-                user.resetPasswordExpires = undefined;
-                user.save(function(err) {
-                    req.logIn(user, function(err) {
-                        done(err, user);
+                else
+                {
+                    db.collection('users').findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+                        if (!user) {
+                            req.flash('error', 'Password reset token is invalid or has expired.');
+                            return res.redirect('back');
+                        }
+                        user.password = req.body.password;
+                        user.resetPasswordToken = undefined;
+                        user.resetPasswordExpires = undefined;
+                        user.save(function(err) {
+                            req.logIn(user, function(err) {
+                                done(err, user);
+                            });
+                        });
                     });
-                });
+                }
             });
         },
         function(user, done) {
@@ -227,15 +290,11 @@ router.post('/reset/:token', function(req, res) {
     });
 });
 // POST logout page
-router.post('/logout', function(req, res, next) {
+router.get('/logout', function(req, res, next) {
     if (req.signedCookies.name)
     {
-        res.clearCookie('name', { });
-        res.redirect('/logout');
+        res.clearCookie('name', {});
     }
-    else
-    {
-        res.redirect('/');
-    }
+    res.redirect('/login');
 });
 module.exports = router;

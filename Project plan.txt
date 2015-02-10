@@ -1,0 +1,65 @@
+Project Plan.txt (for project evaluative purposes only)
+
+I. Problem Statement
+   a) The aim of this endeavour is to create a robust, universal adn scalable platform that allows it's users to engage
+      in an online sudoku competition.
+   b) It is a well known fact that all pre-exiting online sudoku platforms are just involved with single player modes,
+      which single-handedly eradicates the whole point of going through all the effort of building and maintaining a
+      website in the first place. Hence, this project aims to become the first inroad towards making sudoku an engaging,
+      user-centric and mentally-intensive experience.
+
+II. Project Objectives
+    The team members listed below shall work on the requirements listed below, name wise:
+    a) Karan Babariya: 		
+        1) UI / UX.
+        2) Professional look and feel.
+        3) Cross platform scalability.
+        4) Adaptive front-end response to user events.				 
+        5) Responsive design. 	
+    b) Kunal Nagpal
+        1) Random sudoku grid generation, with solver functionality.
+        2) Leaderboard content generation.
+        3) Multiple gameplay modes.		
+        4) User statistical management
+        5) User record CRUD operations.
+
+III. Feasibility Study
+    a) We, as student developers believe that this project holds great potential, not just to serve as a cornerstone of
+       the game to it's current crop of followers, but also to kindle newer levels and extents of interest.
+    b) Given that a sizable portion of the proposed scope of works has been put into development, and also that the
+       remaining portions follow these both systematically as well as chronologically, the project is expected to be
+       complete within the stipulated time frame.
+    c) Academic clauses aside, this project also represents a great opportunity to put into application the often over-
+       theoretical aspects of algorithm design and analysis. Hence, the ability to break any problem down into it's
+       fundamental mathematical components is likely to be inculcated here.
+
+IV. Process Model
+    a) This project initiative will be built on the foundations of the <> process model.
+    b) Given that Sudoku is a NP-hard problem, it would be feasible to not conform the development scheme to any process
+       model that works on a lock and key basis. Hence, the evolutionary model would be the only sensible choice in this
+       case.
+
+V. Deliverables
+    a) In short, the platform will provide users with the ability not just to play games, but also savour tailored analytics
+       for their performance. Additionally, this system should (in theory) be able to predict a range of completion
+       statistics for any given scenario.
+    b) In the interests of full disclosure, this platform will be built on an express framework using Node.js for the
+       backend scripting and database linkages. Further, we will be using the no-schema database model via MongoDB.
+
+VI. Project Scheduling
+    a) Proposed schedule:
+       1) February:
+          * 3 - 10: Initial setup and requirement analysis.
+          * 11 - 18: Deciding priority of ascension for various tasks and their associated sub-tasks.
+          * 19 - 28: Formal commencement of front-end tasks, completing skeletal layout for the front - end.
+       2) March:
+          * 1 - 8: Finishing up on the front end, adding UI / UX to existing framework.
+          * 9 - 16: Front end testing and fine-tuning, adding backend routes.
+          * 17 - 24: Adding database connections and user record management functionality.
+          * 25 - 31: Implementing game logic and metrics.
+       3) April:
+          * 1 - 8: Adding additional game modes.
+          * 9 - 16: Testing the backend.
+          * 17 - 24: Final inspection to reveal any potential flaws, checking for the possibility of additional features,
+                     acting upon them.
+          * 25 - 30: Final testing.

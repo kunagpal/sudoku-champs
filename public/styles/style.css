@@ -33,7 +33,7 @@ nav ul li a{
     display : block;
 }
 nav a:hover {
-    background-color : #FFFFFF;
+    background-color : #8f8f8f;
     color : #000000;
 }
 nav ul{
@@ -68,10 +68,13 @@ tr {
     width : 100px;
 }
 h1 {
- padding-top : 5%;
- margin-top : 0;
+    padding-top: 5%;
+    margin-top: 0;
 }
-
+h2 {
+    padding-top: 2%;
+    margin-top: 0;
+}
 table{
     margin : 0 40% 0;
     table-layout : fixed;
@@ -82,7 +85,11 @@ table th {
 table td {
     text-align : left;
 }
-#inv {
-    background-color : #605f5f;
+#reg{
     color : #FFFFFF;
+    background-color : #000000;
+}
+#inv {
+    background-color : #FFFFFF;
+    color : #000000;
 }

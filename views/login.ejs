@@ -12,7 +12,7 @@
                   <a href="/">HOME</a>
               </li>
               <li>
-                  <a href="/login" id="inv">LOGIN</a>
+                  <a id="inv">LOGIN</a>
               </li>
               <li>
                   <a href="/play">PLAY</a>
@@ -31,18 +31,18 @@
       <h1>
           Already registered? Great.<br /> Not? No worries, go <a href="/register">here</a>
       </h1>
-      <form method="POST" action="login" class="center">
+      <form method="POST" action="/login" class="center">
             <table>
                 <tr>
                     <td>Name</td>
                     <td>
-                        <input type="text" id="name" placeholder="User" autofocus="true"/>
+                        <input type="text" name="name" placeholder="User" autofocus="true"/>
                     </td>
                 </tr>
                 <tr>
                     <td>Password</td>
                     <td>
-                        <input type="password" id="pass" placeholder="Password"/>
+                        <input type="password" name="password" placeholder="Password"/>
                     </td>
                 </tr>
             </table>
@@ -51,7 +51,7 @@
       <a href="/forgot">I need help with my password</a>
   </body>
   <footer>
-      <a href="logout" id="logout">I wish to leave</a>
+      <a href="/logout" id="logout">I wish to leave</a>
       <a href="/developers" id="dev">Devlopers</a>
   </footer>
 </html>

@@ -1,0 +1,42 @@
+Requirements.txt (for project evaluative purposes only)
+This file contains a comprehensive list of all the project requirements for Sudoku Champs. 
+The list is likely to be updated as and when the requirements change, grow, fall out of scale, or simply become obsolete.
+
+I. Problem statement:
+    The sole purpose of this project is to undertake the construction of a universal platform that allows it's users to
+    engage in an online Sudoku competition.
+
+II. Background information:
+    a) Sudoku is a number placement game that is played on a nine by nine grid of cells, which are further arranged into
+       9 smaller boxes of three by three cells each. It is often colloquially referred to as the 'number crossword puzzle'.
+
+    b) At this point of time, it would be noteworthy to mention that although online sudoku systems exist at the time
+       of writing this statement, none of them have provided their users with the possibility of online competitive play.
+
+    c) In response to aforementioned limitations, this system in particular will be focused on the scope of competitive
+       play.
+
+III. Stakeholders: Users, student developers, faculty guide, testers (as applicable).
+
+IV. Requirements
+    As student developers, we would like to include the following requirements for our project:
+    a) Functional:
+
+        1) Professional look and feel, appropriate UI / UX integration.
+        2) User registration and guest play facility.
+        3) Random grid generator function, with pre-instated storage within the database.
+        4) In game hints, with player in-game surrender options.
+        5) Online competitive play, with the possibility of multiple game modes beside the pre-existing classic ones.
+        6) Leaderboard and statistical generation facility for individual users.
+        7) Advanced user record management system: Rudimentary CRUD operations, as well as security management.
+        8) Practice mode for beginner level players, challenge mode for experts who are familiar with the game.
+
+    b) Non-functional:
+        1) Performance: The application performance metrics and indices should be independent of network characteristics,
+           within the limits of technical scope and possibility.
+        2) Scalability: The application should not fall into the spiral of throttling operations in the event of several
+           multiple users attempting access.
+        3) Usability: The application should not only serve those who are familiar with it's underlying concept, but also
+           attract more users toward it's universe of function.
+        4) Security: Lastly, user security should be given paramount importance, via the implementation of several checks
+           and such in order to thwart unauthorized access.

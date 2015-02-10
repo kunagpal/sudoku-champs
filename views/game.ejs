@@ -18,7 +18,7 @@
                   <a href="/login">LOGIN</a>
               </li>
               <li>
-                  <a href="/play" id="inv">PLAY</a>
+                  <a id="inv">PLAY</a>
               </li>
               <li>
                   <a href="/register">REGISTER</a>
@@ -37,17 +37,13 @@
       <div class="message"></div>
       <script type="text/javascript">
           var clock;
-          $(document).ready(function() {
-              clock = $('.clock').FlipClock({
-                  clockFace: 'HourlyCounter'
-              });
-          });
+          $(document).ready(function() {clock = $('.clock').FlipClock({clockFace: 'HourlyCounter' });});
       </script>
       <table>
       </table>
   </body>
   <footer>
-      <a href="logout" id="logout">I wish to leave</a>
+      <a href="/logout" id="logout">I wish to leave</a>
       <a href="/developers" id="dev">Devlopers</a>
   </footer>
 </html>

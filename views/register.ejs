@@ -18,7 +18,7 @@
                 <a href="/play">PLAY</a>
             </li>
             <li>
-                <a href="/register" id="inv">REGISTER</a>
+                <a id="inv">REGISTER</a>
             </li>
             <li>
                 <a href="/rules">RULES</a>
@@ -29,28 +29,28 @@
         </ul>
       </nav>
       <h1>Let's get started</h1>
-      <h2>Registration is completely free and takes only a minute. <br />(Depending on your internet connection of course)<br /> Already registered ? Login <a href="/login">here</a></h2>
+      <h2>Registration is completely free and takes only a minute. <br />(Depending on your internet connection, of course)<br /> Already registered ? Login <a href="/login">here</a></h2>
       <form method="POST" action="/register">
           <table>
             <tr>
                 <td>Name</td>
-                <td><input type="text" id="name" placeholder="User" autofocus="true"/></td>
+                <td><input type="text" name="name" placeholder="User" autofocus="true"/></td>
             </tr>
             <tr>
                 <td>Email Address</td>
-                <td><input type="email" id="email" placeholder="Email"/></td>
+                <td><input type="email" name="email" placeholder="Email"/></td>
             </tr>
             <tr>
                 <td>Phone</td>
-                <td><input type="number" id="phone" placeholder="Phone"/></td>
+                <td><input type="number" name="phone" placeholder="Phone"/></td>
             </tr>
             <tr>
                 <td>Password</td>
-                <td><input type="password" id="pass" placeholder="Password"/></td>
+                <td><input type="password" name="password" placeholder="Password"/></td>
             </tr>
             <tr>
                 <td>Confirm password</td>
-                <td><input type="password" id="confirm" placeholder="Confirm"/></td>
+                <td><input type="password" name="confirm" placeholder="Confirm"/></td>
             </tr>
             <tr>
                 <td colspan="2">
@@ -61,7 +61,7 @@
       </form>
   </body>
   <footer>
-      <a href="logout" id="logout">I wish to leave</a>
+      <a href="/logout" id="logout">I wish to leave</a>
       <a href="/developers" id="dev">Devlopers</a>
   </footer>
 </html>
