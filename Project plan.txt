@@ -34,9 +34,9 @@ III. Feasibility Study
        fundamental mathematical components is likely to be inculcated here.
 
 IV. Process Model
-    a) This project initiative will be built on the foundations of the <> process model.
+    a) This project initiative will be built on the foundations of the incremental process model.
     b) Given that Sudoku is a NP-hard problem, it would be feasible to not conform the development scheme to any process
-       model that works on a lock and key basis. Hence, the evolutionary model would be the only sensible choice in this
+       model that works on a lock and key basis. Hence, the incremental model would be the only sensible choice in this
        case.
 
 V. Deliverables
