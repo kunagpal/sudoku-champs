@@ -1,12 +1,13 @@
 var path = require('path');
 var async = require('async');
-var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
+var flash = require('express-flash');
+var bcrypt = require('bcrypt-nodejs');
 var nodemailer = require('nodemailer');
 var router = require('express').Router();
 var mongo = require('mongodb').MongoClient;
-var users = require(path.join(__dirname, '..', 'database', 'users'));
 var uri = process.env.MONGOLAB_URI || 'mongodb://localhost/project';
+var users = require(path.join(__dirname, '..', 'database', 'users'));
 if (process.env.LOGENTRIES_TOKEN)
 {
     var log = require('node-logentries').logger({token: process.env.LOGENTRIES_TOKEN});
