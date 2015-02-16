@@ -29,7 +29,7 @@
           </ul>
       </nav>
       <h1 class="center">Some games are meant to be played without rules. This is not one of them.</h1>
-      <ol>
+      <ol id="contain">
             <li>
                 All the rules mentioned herein are subject to change without any prior notice at all. By signing up for
                 Sudoku Champs, you agree to follow all the regulations below.
@@ -48,7 +48,9 @@
             <li>
                 The game is declared to be concluded when any one of the following conditions hold true:
                 <ol>
-                    <li> One of the two opponents (in case of a head to head match) successfully completes an unsolved puzzle. </li>
+                    <li> One of the two opponents (in case of a head to head match) successfully completes an unsolved
+                         puzzle.
+                    </li>
                     <li> The player concedes the game by opting to declare. </li>
                 </ol>
             </li>
@@ -71,13 +73,39 @@
                     <li> Matches won. </li>
                     <li> Matches played. </li>
                     <li> Number of forfeits, if any.</li>
-                    <li> </li>
+                    <li> Reputation. This is a calculated index dynamically assigned to each user after every match,
+                         completed or otherwise.
+                    </li>
                 </ol>
+            </li>
+            <li>
+                In challenge modes, players will be required to complete specified tasks, such as solve a certain number
+                of cells within a certain time limit. Successful completion of each challenge results in an increase in
+                reputation, whereas failure to complete / forfeit will result in reputation loss. The exact magnitude of
+                reputation change depends on the difficulty of the challenge, and the extent of completion.
+            </li>
+            <li>
+                Players may also fine-tune their skills by partaking in a variety of practice modes, whose results have
+                absolutely no bearing on user ranking metrics whatsoever.
             </li>
       </ol>
   </body>
   <footer>
-      <a href="/logout" id="logout">I wish to leave</a>
-      <a href="/developers" id="dev">Devlopers</a>
+      <nav>
+          <ul>
+              <li>
+                  <a href="/logout">I wish to leave</a>
+              </li>
+              <li>
+                  <a href="/privacy">Privacy</a>
+              </li>
+              <li>
+                  <a href="/contact">Get in touch</a>
+              </li>
+              <li>
+                  <a href="/developers">Developers</a>
+              </li>
+          </ul>
+      </nav>
   </footer>
 </html>

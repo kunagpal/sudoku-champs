@@ -4,9 +4,10 @@ html {
 }
 body {
   top : 0;
-  padding: 0;
-  margin: 0;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin : 0;
+  padding : 0;
+  clear : both;
+  font : 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 nav{
     margin : 0;
@@ -16,67 +17,66 @@ ul {
     list-style-type: none;
 }
 #logout {
-    position : fixed;
-    bottom : 5%;
     left : 5%;
+    bottom : 5%;
+    position : fixed;
 }
 #dev {
-    position : fixed;
-    bottom : 5%;
     right : 5%;
+    bottom : 5%;
+    position : fixed;
 }
-nav ul li a{
-    line-height : 40px;
+nav ul li a {
     width : 100%;
-    background-color: #000000;
     color : #FFFFFF;
     display : block;
+    line-height : 40px;
+    background-color: #000000;
+}
+footer nav ul li a {
+    line-height : 30px;
 }
 nav a:hover {
-    background-color : #8f8f8f;
     color : #000000;
+    background-color : #8f8f8f;
 }
 nav ul{
-    width : 100%;
     margin : 0;
-    padding : 0
+    padding : 0;
+    width : 100%;
 }
 nav ul li{
-    width : 16.6666666666667%;
+    float : left;
     text-align : center;
-    float : left
+    width : 16.6666666666667%;
+}
+footer nav ul li{
+    text-align : center;
+    width : 25%;
 }
 .center {
+    alignment: center;
     text-align: center;
+    align-self: center;
     align-items: center;
     align-content: center;
-    align-self: center;
-    alignment: center;
 }
 a{
     text-decoration: none;
-}
-.left{
-    float : left;
-    margin-left : 33%;
-}
-.right{
-    float : right;
-    margin-right : 33%;
 }
 tr {
     width : 100px;
 }
 h1 {
-    padding-top: 5%;
-    margin-top: 0;
+    margin: 0;
+    padding-top: 3.5%;
 }
 h2 {
-    padding-top: 2%;
     margin-top: 0;
+    padding-top: 2%;
 }
 table{
-    margin : 0 40% 0;
+    margin : 2.5% 40% 0;
     table-layout : fixed;
 }
 table th {
@@ -90,6 +90,101 @@ table td {
     background-color : #000000;
 }
 #inv {
-    background-color : #FFFFFF;
     color : #000000;
+    background-color : #FFFFFF;
+}
+#solved {
+    padding-top : 5%;
+    margin-bottom : 2.5%;
+}
+#contain {
+    text-align : left;
+    margin : 5% 15% 0 10%;
+}
+ol li{
+    margin : 1%;
+}
+footer {
+    bottom : 0;
+    margin : 0;
+    padding : 0;
+    width : 100%;
+    position: absolute;
+}
+.left{
+    float : left;
+    margin-left : 30%;
+    margin-right : 2.5%;
+}
+.right{
+    float : right;
+    margin-right : 30%;
+    margin-left : 2.5%;
+}
+#one{
+    top : 30%;
+    left : 35%;
+    width : 10%;
+    float : left;
+    padding : 2%;
+    color : #FFFFFF;
+    position : absolute;
+    background-color : #000000;
+}
+#two{
+    top : 30%;
+    width : 10%;
+    right : 35%;
+    padding : 2%;
+    float : right;
+    color : #FFFFFF;
+    position : absolute;
+    background-color : #000000;
+}
+#three{
+    top : 50%;
+    left : 35%;
+    width : 10%;
+    padding : 2%;
+    color : #FFFFFF;
+    position : absolute;
+    background-color : #000000;
+}
+#four{
+    top : 50%;
+    width : 10%;
+    right : 35%;
+    padding : 2%;
+    float : right;
+    color : #FFFFFF;
+    position : absolute;
+    background-color : #000000;
+}
+
+#one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #end:hover{
+    color : #000000;
+    background-color : #8f8f8f;
+}
+#start {
+    top : 27%;
+    left : 5%;
+    width : 10%;
+    padding : 2%;
+    float : left;
+    color : #FFFFFF;
+    position : absolute;
+    background-color : #000000;
+}
+#end {
+    top : 40%;
+    left : 5%;
+    width : 10%;
+    padding : 2%;
+    float : left;
+    color : #FFFFFF;
+    position : absolute;
+    background-color : #000000;
+}
+div {
+    float : left;
 }

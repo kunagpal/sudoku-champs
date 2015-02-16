@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html class="center">
-<head>
-    <title>Error | Sudoku Champs</title>
+  <head>
+    <title>Challenge | Sudoku Champs</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" href="/styles/style.css" type="text/css" />
-</head>
-<body>
+    <link rel="stylesheet" href="/styles/style.css" type="text/css"/>
+    <link rel="stylesheet" href="/styles/flipclock.css" type="text/css"/>
+    <script src="/scripts/jquery.min.js"></script>
+    <script src="/scripts/flipclock.js"></script>
+  </head>
+  <body>
     <nav>
         <ul>
             <li>
@@ -28,16 +31,17 @@
             </li>
         </ul>
     </nav>
-    <h1>That was odd, even for us.</h1>
-    <p>
-       It would appear that we have had a little bit of a technical issue, so let's double check. <br />
-       Yep, it's definitely a technical issue. <br /><br />
-       Rest assured, as our dedicated team of professional superheroes is toiling
-       night and day to get this back on track. <br /><br />
-       Or, perhaps you decided you were a whiz and tried out a route that doesn't exist. Well guess what ? You ended up
-       here :( <br /> In the meantime, why don't you go to a <a href="/">page</a> that works ?
-    </p>
-</body>
+    <h1>What's life without a little challenge ?</h1>
+    <div class="clock" style="margin:2em;"></div>
+    <div class="message"></div>
+    <script type="text/javascript">
+        var clock;
+        $(document).ready(function() {clock = $('.clock').FlipClock({clockFace: 'HourlyCounter' });});
+    </script>
+    <a id="start" onclick="">Start</a>
+    <a id="end" onclick="">Retire</a>
+    <table></table>
+  </body>
 <footer>
     <nav>
         <ul>

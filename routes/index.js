@@ -29,6 +29,10 @@ router.get('/developers', function(req, res, next) {
 router.get('/rules', function(req, res, next) {
     res.render('rules', { title: 'Express' });
 });
+//GET privacy
+router.get('/privacy', function(req, res, next) {
+    res.render('privacy', { title: 'Express' });
+});
 // GET forgot password page
 router.get('/forgot', function(req, res, next) {
     res.render('forgot', { title: 'Express' });
@@ -61,20 +65,81 @@ router.get('/solved', function(req, res, next) {
 router.get('/leader', function(req, res, next) {
     res.render('leader', { title: 'Express' });
 });
-// GET game page
-router.get('/play', function(req, res, next) {
+// GET guest page
+router.get('/guest', function(req, res, next) {
     if (req.signedCookies.name)
     {
-        res.render('game', { title: 'Express' });
+        res.render('play', {title: 'Express'})
     }
     else
     {
+        req.flash('info', 'You must login to play.');
+        res.render('guest', {title: 'Express'});
+    }
+});
+// GET play page
+router.get('/play', function(req, res, next) {
+    if (req.signedCookies.name)
+    {
+        res.render('play', { title: 'Express' });
+    }
+    else
+    {
+        req.flash('info', 'You must login to play.');
+        res.redirect('/login');
+    }
+});
+// GET practice page
+router.get('/play/practice', function(req, res, next) {
+    if (req.signedCookies.name)
+    {
+        res.render('practice', { title: 'Express' });
+    }
+    else
+    {
+        req.flash('info', 'You must login to play.');
+        res.redirect('/login');
+    }
+});
+// GET h2h page
+router.get('/play/h2h', function(req, res, next) {
+    if (req.signedCookies.name)
+    {
+        res.render('h2h', { title: 'Express' });
+    }
+    else
+    {
+        req.flash('info', 'You must login to play.');
+        res.redirect('/login');
+    }
+});
+// GET challenge page
+router.get('/play/challenge', function(req, res, next) {
+    if (req.signedCookies.name)
+    {
+        res.render('challenge', { title: 'Express' });
+    }
+    else
+    {
+        req.flash('info', 'You must login to play.');
+        res.redirect('/login');
+    }
+});
+// GET
+router.get('/play/solo', function(req, res, next) {
+    if (req.signedCookies.name)
+    {
+        res.render('solo', { title: 'Express' });
+    }
+    else
+    {
+        req.flash('info', 'You must login to play.');
         res.redirect('/login');
     }
 });
 // POST play page
 router.post('/play', function(req, res, next) {
-    res.render('game', { title: 'Express' });
+    res.render('play', { title: 'Express' });
 });
 // POST login page
 router.post('/login', function(req, res, next) {
@@ -98,7 +163,7 @@ router.post('/login', function(req, res, next) {
         {
             if (bcrypt.compareSync(req.body.password, doc['password_hash']))
             {
-                console.log("Login Successful" + req.body.name);
+                console.log("Login Successful " + req.body.name);
                 res.cookie('name', doc['_id'], {maxAge: 86400000, signed: true});
                 res.redirect('/play');
             }
@@ -132,7 +197,7 @@ router.post('/register', function(req, res, next) {
             console.log("Reached");
             if (req.body.password === req.body.confirm)
             {
-                var newUser =
+                var ob =
                 {
                     _id : req.body.name,
                     dob : new Date(),
@@ -153,12 +218,11 @@ router.post('/register', function(req, res, next) {
                     avg : 0,
                     rep : 0
                 };
-                users.insert(newUser, function (err, docs)
+                users.insert(ob, function (err, docs)
                 {
                     if (err)
                     {
                         console.log(err.message);
-                        // Make it more user friendly, output the error to the view
                         res.render('register', {response: "Please choose a different user name"});
                     }
                     else
@@ -222,7 +286,7 @@ router.post('/forgot', function(req, res, next) {
             var mailOptions = {
                 to: user.email,
                 from: 'sudokuchampster@gmail.com',
-                subject: 'Time to get back in the game',
+                subject: 'Time to get back in the play',
                 text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                 'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
                 'http://' + req.headers.host + '/reset/' + token + '\n\n' +

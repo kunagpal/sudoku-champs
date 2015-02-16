@@ -33,23 +33,18 @@
       <form method="POST" action="/register">
           <table>
             <tr>
-                <td>Name</td>
                 <td><input type="text" name="name" placeholder="User" autofocus="true"/></td>
             </tr>
             <tr>
-                <td>Email Address</td>
                 <td><input type="email" name="email" placeholder="Email"/></td>
             </tr>
             <tr>
-                <td>Phone</td>
                 <td><input type="number" name="phone" placeholder="Phone"/></td>
             </tr>
             <tr>
-                <td>Password</td>
                 <td><input type="password" name="password" placeholder="Password"/></td>
             </tr>
             <tr>
-                <td>Confirm password</td>
                 <td><input type="password" name="confirm" placeholder="Confirm"/></td>
             </tr>
             <tr>
@@ -61,7 +56,21 @@
       </form>
   </body>
   <footer>
-      <a href="/logout" id="logout">I wish to leave</a>
-      <a href="/developers" id="dev">Devlopers</a>
+      <nav>
+          <ul>
+              <li>
+                  <a href="/logout">I wish to leave</a>
+              </li>
+              <li>
+                  <a href="/privacy">Privacy</a>
+              </li>
+              <li>
+                  <a href="/contact">Get in touch</a>
+              </li>
+              <li>
+                  <a href="/developers">Developers</a>
+              </li>
+          </ul>
+      </nav>
   </footer>
 </html>

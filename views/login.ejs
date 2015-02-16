@@ -28,30 +28,44 @@
               </li>
           </ul>
       </nav>
-      <h1>
-          Already registered? Great.<br /> Not? No worries, go <a href="/register">here</a>
-      </h1>
+      <h1>Not registered? No worries, go <a href="/register" id="link">here</a><br /></h1>
+      <h2>Or, play as a guest <a href="/guest">here</a>.</h2>
+      <h3>You'll get no points, nor would you feature on our exclusive leaderboard :(</h3>
       <form method="POST" action="/login" class="center">
             <table>
                 <tr>
-                    <td>Name</td>
                     <td>
                         <input type="text" name="name" placeholder="User" autofocus="true"/>
                     </td>
                 </tr>
                 <tr>
-                    <td>Password</td>
                     <td>
                         <input type="password" name="password" placeholder="Password"/>
                     </td>
                 </tr>
             </table>
-            <input type="submit" value="Let's go!"/>
+            <br/>
+          <input type="submit" value="Let's go!"/>
       </form>
+      <br/>
       <a href="/forgot">I need help with my password</a>
   </body>
   <footer>
-      <a href="/logout" id="logout">I wish to leave</a>
-      <a href="/developers" id="dev">Devlopers</a>
+      <nav>
+            <ul>
+                <li>
+                    <a href="/logout">I wish to leave</a>
+                </li>
+                <li>
+                    <a href="/privacy">Privacy</a>
+                </li>
+                <li>
+                    <a href="/contact">Get in touch</a>
+                </li>
+                <li>
+                    <a href="/developers">Developers</a>
+                </li>
+            </ul>
+      </nav>
   </footer>
 </html>
