@@ -11,7 +11,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "postinstall": "node ./bin/www"
+    "postinstall": ""
   },
   "contributors": [
     {
