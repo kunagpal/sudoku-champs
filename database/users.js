@@ -1,10 +1,10 @@
 /**
  * Created by Kunal Nagpal <kunagpal@gmail.com> on 10-02-2015.
  */
-var mongo = require('mongodb').MongoClient;
-var col = 'users';
-var uri = process.env.MONGOLAB_URI || 'mongodb://localhost/project';
-var log;
+var mongo = require('mongodb').MongoClient,
+    col = 'users',
+    uri = process.env.MONGOLAB_URI || 'mongodb://localhost/project',
+    log;
 if (process.env.LOGENTRIES_TOKEN)
 {
     var logentries = require('node-logentries');

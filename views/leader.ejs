@@ -37,16 +37,20 @@
                 <th>Matches</th>
                 <th>Streak</th>
              </tr>
-             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+            <% for(i = 0; i < leader.length; ++i) { %>
+             <tr class="lead">
+                 <td><%= (i + 1) %></td>
+                 <td><%= leader[i]._id %></td>
+                 <td><%= leader[i].points %></td>
+                 <td><%= leader[i].played %></td>
+                 <td><%= leader[i].streak %></td>
              </tr>
+             <% } %>
         </table>
   </body>
   <footer>
       <nav>
-          <ul>
+          <ul id="foot">
               <li>
                   <a href="/logout">I wish to leave</a>
               </li>
@@ -60,5 +64,6 @@
                   <a href="/developers">Developers</a>
               </li>
           </ul>
-      </nav>  </footer>
+      </nav>
+  </footer>
 </html>

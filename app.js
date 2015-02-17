@@ -6,8 +6,8 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var flash = require('express-flash');
-var routes = require(path.join(__dirname,'routes', 'index'));
-var users = require(path.join(__dirname,'routes','users'));
+var routes = require(path.join(__dirname, 'routes', 'index'));
+var users = require(path.join(__dirname, 'routes', 'users'));
 
 var app = express();
 
@@ -20,7 +20,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser("secret"));
-//app.use(session({ secret : 'session secret key'}));
+app.use(session({ secret : 'session secret key', resave : '', saveUninitialized : ''}));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);

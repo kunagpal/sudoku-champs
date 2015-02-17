@@ -1,13 +1,12 @@
-var path = require('path');
-var async = require('async');
-var crypto = require('crypto');
-var flash = require('express-flash');
-var bcrypt = require('bcrypt-nodejs');
-var nodemailer = require('nodemailer');
-var router = require('express').Router();
-var mongo = require('mongodb').MongoClient;
-var uri = process.env.MONGOLAB_URI || 'mongodb://localhost/project';
-var users = require(path.join(__dirname, '..', 'database', 'users'));
+var path = require('path'),
+    async = require('async'),
+    crypto = require('crypto'),
+    bcrypt = require('bcrypt-nodejs'),
+    nodemailer = require('nodemailer'),
+    router = require('express').Router(),
+    mongo = require('mongodb').MongoClient,
+    uri = process.env.MONGOLAB_URI || 'mongodb://localhost/project',
+    users = require(path.join(__dirname, '..', 'database', 'users'));
 if (process.env.LOGENTRIES_TOKEN)
 {
     var log = require('node-logentries').logger({token: process.env.LOGENTRIES_TOKEN});
@@ -20,6 +19,10 @@ router.get('/', function(req, res, next)
 // GET login page
 router.get('/login', function(req, res, next) {
     res.render('login', { title: 'Express' });
+});
+// GET contact page
+router.get('/contact', function(req, res, next) {
+    res.render('contact', { title: 'Express' });
 });
 // GET developers page
 router.get('/developers', function(req, res, next) {
@@ -52,7 +55,7 @@ router.get('/reset/:token', function(req, res) {
                     req.flash('error', 'Password reset token is invalid or has expired.');
                     return res.redirect('/forgot');
                 }
-                res.render('reset', { user: req.user, title: 'Title' });
+                res.render('reset', {  user: req.user, title: 'Title' });
             });
         }
     });
@@ -63,7 +66,30 @@ router.get('/solved', function(req, res, next) {
 });
 // GET leaderboard
 router.get('/leader', function(req, res, next) {
-    res.render('leader', { title: 'Express' });
+    var leader = [],
+        op = {'_id' : 1, 'points' : 1, 'played' : 1, 'streak' : 1},
+        frame = {'sort' : [['points', -1], ['played' , 1], ['streak' , -1]], 'limit' : 20};
+    mongo.connect(uri, function(err, db) {
+        if(err)
+        {
+            console.log(err.message);
+            res.redirect('/');
+        }
+        else
+        {
+            db.collection('users').find({}, op, frame).toArray(function(err, doc) {
+                db.close();
+                if(err)
+                {
+                    console.log('Sorting error!: ', err.message);
+                }
+                else
+                {
+                    res.render('leader', { title: 'Express', leader : doc });
+                }
+            })
+        }
+    });
 });
 // GET guest page
 router.get('/guest', function(req, res, next) {

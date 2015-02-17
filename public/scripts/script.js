@@ -20,3 +20,6 @@ var uninit = function()
 {
     document.getElementById('end');
 };
+var log = function() {
+
+};
