@@ -5,7 +5,7 @@ var path = require('path'),
     nodemailer = require('nodemailer'),
     router = require('express').Router(),
     mongo = require('mongodb').MongoClient,
-    uri = process.env.MONGOLAB_URI || 'mongodb://localhost/project',
+    uri = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1:27017/project',
     users = require(path.join(__dirname, '..', 'database', 'users'));
 if (process.env.LOGENTRIES_TOKEN)
 {
@@ -14,7 +14,41 @@ if (process.env.LOGENTRIES_TOKEN)
 /* GET home page. */
 router.get('/', function(req, res, next)
 {
-    res.render('index', {response: "" });
+    var index = {
+      _id : 'Player',
+      win : 'Matches won',
+      loss : 'Matches lost',
+      tied : 'Matches tied',
+      played : 'Matches played',
+      points : 'Points',
+      ratio : 'Ratio',
+      streak : 'Streak',
+      worst: 'Worst',
+      best : 'Best',
+      avg: 'Average',
+      rep: 'Reputation'
+    };
+    mongo.connect(uri, function(err, db){
+        if(err)
+        {
+            console.log(err.message);
+        }
+        else
+        {
+            var op = {dob : 0, password_hash : 0, email : 0, phone : 0, resetPasswordToken : 0, resetPasswordExpires : 0, form : 0, team_no : 0};
+            db.collection('users').findOne({_id : req.signedCookies.name}, op, function(err, doc){
+               db.close();
+               if(err)
+               {
+                   console.log(err.message);
+               }
+               else
+               {
+                   res.render('index', {stats : doc, index : index});
+               }
+            });
+        }
+    });
 });
 // GET login page
 router.get('/login', function(req, res, next) {
@@ -176,14 +210,14 @@ router.post('/login', function(req, res, next) {
     //console.log('here');
     if (log)
     {
-        log.log(req.body.name + " " + req.body.password + "received");
+        console.log(req.body.name + " " + req.body.password + "received");
     }
     users.fetch({_id : req.body.name}, function (err, doc)
     {
         if (err)
         {
             console.log(err.message);
-            res.render('index', {response: "Incorrect Username"});
+            res.render('index', {response: "Incorrect credentials"});
         }
         else if (doc)
         {
@@ -227,7 +261,7 @@ router.post('/register', function(req, res, next) {
                 {
                     _id : req.body.name,
                     dob : new Date(),
-                    team_no : parseInt(number) + 1,
+                    num : parseInt(number) + 1,
                     password_hash : bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
                     email : req.body.email,
                     phone : req.body.phone,
@@ -290,8 +324,8 @@ router.post('/forgot', function(req, res, next) {
                             req.flash('error', 'No account with that email address exists.');
                             return res.redirect('/forgot');
                         }
-                        user.resetPasswordToken = token;
-                        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+                        user.token = token;
+                        user.expire = Date.now() + 3600000; // 1 hour
                         console.log(user);
                         db.collection('users').save(user, function(err) {
                                 done(err, token, user);
@@ -339,14 +373,14 @@ router.post('/reset/:token', function(req, res) {
                 }
                 else
                 {
-                    db.collection('users').findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+                    db.collection('users').findOne({ token: req.params.token, expire: { $gt: Date.now() } }, function(err, user) {
                         if (!user) {
                             req.flash('error', 'Password reset token is invalid or has expired.');
                             return res.redirect('back');
                         }
                         user.password = req.body.password;
-                        user.resetPasswordToken = undefined;
-                        user.resetPasswordExpires = undefined;
+                        user.token = undefined;
+                        user.expires = undefined;
                         user.save(function(err) {
                             req.logIn(user, function(err) {
                                 done(err, user);

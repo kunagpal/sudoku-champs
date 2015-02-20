@@ -1,6 +1,8 @@
 /**
  * Created by Kunal Nagpal <kunagpal@gmail.com> on 13-02-2015.
  */
+var visible = true;
+var started = false;
 var rand = function(arg)
 {
     if(arg)
@@ -12,14 +14,30 @@ var rand = function(arg)
         return Math.random();
     }
 };
-var init = function()
+var hide = function()
 {
-  document.getElementById('start');
+    document.getElementById('clock').style.visibility = visible ? 'hidden' : 'visible';
+    document.getElementById('clock').text = visible ? 'Bring it back' : 'Hide';
+    visible = !visible;
 };
-var uninit = function()
+
+var tick = function()
 {
-    document.getElementById('end');
+    var clock;
+    if(!started)
+    {
+        $(document).ready(function () {
+            clock = $('.clock').FlipClock({clockFace: 'HourlyCounter'});
+        });
+        $(document).ready(function(){
+                $('.start').text('Retire')}
+        );
+        started = true;
+        $(this).prev("a").attr("start", "end");
+    }
 };
-var log = function() {
+
+var log = function()
+{
 
 };

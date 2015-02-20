@@ -3,7 +3,7 @@
  */
 var mongo = require('mongodb').MongoClient,
     col = 'users',
-    uri = process.env.MONGOLAB_URI || 'mongodb://localhost/project',
+    uri = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1:27017/project',
     log;
 if (process.env.LOGENTRIES_TOKEN)
 {

@@ -79,12 +79,10 @@ h2 {
 table{
     margin : 2.5% 40% 0;
     table-layout : fixed;
+    border-collapse: collapse;
 }
 table th {
     width : 20%;
-}
-td {
-    margin : 0 50%;
 }
 #reg{
     color : #FFFFFF;
@@ -114,13 +112,11 @@ footer {
 }
 .left{
     left : 30%;
-    float : left;
-    position : absolute;
+    position : fixed;
 }
 .right{
     right : 30%;
-    float : right;
-    position : absolute;
+    position : fixed;
 }
 #one{
     top : 30%;
@@ -162,12 +158,12 @@ footer {
     background-color : #000000;
 }
 
-#one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #end:hover{
+#one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #hide:hover{
     color : #000000;
     background-color : #8f8f8f;
 }
-#start {
-    top : 27%;
+#start{
+    top : 30%;
     left : 5%;
     width : 10%;
     padding : 2%;
@@ -176,8 +172,8 @@ footer {
     position : absolute;
     background-color : #000000;
 }
-#end {
-    top : 40%;
+#hide {
+    top : 45%;
     left : 5%;
     width : 10%;
     padding : 2%;
@@ -192,11 +188,34 @@ div {
 #foot{
 
 }
-.lead:nth-child(2n + 2) {
+tr:nth-child(2n + 2) {
     background-color : #8f8f8f;
     color : #000000;
 }
-.lead:nth-child(2n + 3) {
+tr:nth-child(2n + 3) {
     background-color : #000000;
     color : #FFFFFF;
+}
+#clock{
+    width : 90%;
+    margin : 0 0 2em 2em;
+}
+#begin{
+    width : 10%;
+    padding : 1% 2%;
+    color : #FFFFFF;
+    background-color : #000000;
+    margin-top : 5px;
+    border : none;
+}
+#begin:hover {
+    color : #000000;
+    background-color : #8f8f8f;
+}
+#stats{
+    float : right;
+    position : absolute;
+    top : 25%;
+    right : 5%;
+    text-align : left;
 }

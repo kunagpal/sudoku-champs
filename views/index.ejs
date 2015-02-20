@@ -32,7 +32,16 @@
     <h2>Where the good compete to become the best of the rest.</h2>
     <img src="/images/main.jpg" />
     <h3>Because you just have to solve them all.</h3>
-    <a href="/register">Get Started</a>
+    <br/><br/>
+    <a href="/register" id="begin">Get Started</a>
+    <div id="stats">
+       <h3><%= 'Number crunching' %></h3>
+       <ul>
+            <% for(i in stats) {%>
+            <li><%= index[i] + ' : ' + stats[i] %></li>
+            <%}%>
+       </ul>
+    </div>
   </body>
   <footer>
       <nav>
