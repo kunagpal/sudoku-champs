@@ -37,13 +37,13 @@
                 <th>Matches</th>
                 <th>Streak</th>
              </tr>
-            <% for(i = 0; i < leader.length; ++i) { %>
+            <% for(i = 0; i < lead.length; ++i) { %>
              <tr>
-                 <td><%= (i + 1) %></td>
-                 <td><%= leader[i]._id %></td>
-                 <td><%= leader[i].points %></td>
-                 <td><%= leader[i].played %></td>
-                 <td><%= leader[i].streak %></td>
+                 <td><%= lead[i].rank || (i + 1) %></td>
+                 <td><%= lead[i]._id %></td>
+                 <td><%= lead[i].points %></td>
+                 <td><%= lead[i].played %></td>
+                 <td><%= lead[i].streak %></td>
              </tr>
              <% } %>
         </table>

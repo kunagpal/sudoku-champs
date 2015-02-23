@@ -24,7 +24,7 @@ app.use(session({ secret : 'session secret key', resave : '', saveUninitialized 
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
-app.use('/users', users);
+app.use('/', users);
 app.enable('trust proxy');
 
 // catch 404 and forward to error handler

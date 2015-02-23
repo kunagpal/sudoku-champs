@@ -6,7 +6,8 @@ var path = require('path'),
     router = require('express').Router(),
     mongo = require('mongodb').MongoClient,
     uri = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1:27017/project',
-    users = require(path.join(__dirname, '..', 'database', 'users'));
+    users = require(path.join(__dirname, '..', 'database', 'users')),
+    key = require(path.join(__dirname, '..', 'key'));
 if (process.env.LOGENTRIES_TOKEN)
 {
     var log = require('node-logentries').logger({token: process.env.LOGENTRIES_TOKEN});
@@ -32,47 +33,26 @@ router.get('/', function(req, res, next)
         if(err)
         {
             console.log(err.message);
+            res.render('index', {stats : {}});
         }
         else
         {
-            var op = {dob : 0, password_hash : 0, email : 0, phone : 0, resetPasswordToken : 0, resetPasswordExpires : 0, form : 0, team_no : 0};
+            var op = {dob : 0, password_hash : 0, email : 0, phone : 0, token : 0, expires : 0, form : 0, team_no : 0};
             db.collection('users').findOne({_id : req.signedCookies.name}, op, function(err, doc){
-               db.close();
                if(err)
                {
                    console.log(err.message);
                }
                else
                {
+                   db.close();
+                   doc = doc ? doc : 0;
+                   console.log(doc);
                    res.render('index', {stats : doc, index : index});
                }
             });
         }
     });
-});
-// GET login page
-router.get('/login', function(req, res, next) {
-    res.render('login', { title: 'Express' });
-});
-// GET contact page
-router.get('/contact', function(req, res, next) {
-    res.render('contact', { title: 'Express' });
-});
-// GET developers page
-router.get('/developers', function(req, res, next) {
-    res.render('developers', { title: 'Express' });
-});
-//GET rules
-router.get('/rules', function(req, res, next) {
-    res.render('rules', { title: 'Express' });
-});
-//GET privacy
-router.get('/privacy', function(req, res, next) {
-    res.render('privacy', { title: 'Express' });
-});
-// GET forgot password page
-router.get('/forgot', function(req, res, next) {
-    res.render('forgot', { title: 'Express' });
 });
 // GET reset token page
 router.get('/reset/:token', function(req, res) {
@@ -94,112 +74,85 @@ router.get('/reset/:token', function(req, res) {
         }
     });
 });
-// GET solved example
-router.get('/solved', function(req, res, next) {
-    res.render('solved', { title: 'Express' });
-});
 // GET leaderboard
 router.get('/leader', function(req, res, next) {
-    var leader = [],
+    console.log(req.signedCookies.name);
+    var i = 1,
+        lead = [],
+        flag = req.signedCookies.name ? false : true,
         op = {'_id' : 1, 'points' : 1, 'played' : 1, 'streak' : 1},
-        frame = {'sort' : [['points', -1], ['played' , 1], ['streak' , -1]], 'limit' : 20};
+        frame = {'sort' : [['points', -1], ['played' , 1], ['streak' , -1]], 'limit' : 2};
     mongo.connect(uri, function(err, db) {
         if(err)
         {
             console.log(err.message);
-            res.redirect('/');
         }
         else
         {
-            db.collection('users').find({}, op, frame).toArray(function(err, doc) {
-                db.close();
+            db.collection('users').find({}, op, frame).each(function(err, doc) {
                 if(err)
                 {
-                    console.log('Sorting error!: ', err.message);
+                    console.log(err.message);
+                }
+                else if(doc)
+                {
+                    lead.push(doc);
+                    if(doc._id == req.signedCookies.name)
+                    {
+                        flag = true;
+                    }
                 }
                 else
                 {
-                    res.render('leader', { title: 'Express', leader : doc });
+                    db.close(function(err){
+                        if(err)
+                        {
+                            console.log(err.message);
+                        }
+                        else
+                        {
+                            if(!flag && req.signedCookies.name)
+                            {
+                                mongo.connect(uri, function (err, db) {
+                                    if (err)
+                                    {
+                                        console.log(err.message);
+                                    }
+                                    else
+                                    {
+                                        db.collection('users').find({}, op, {sort : [['points', -1]]}).each(function (err, doc) {
+                                            if (err)
+                                            {
+                                                console.log(err.message);
+                                            }
+                                            else if(doc)
+                                            {
+                                                if(doc._id == req.signedCookies.name)
+                                                {
+                                                    db.close();
+                                                    doc.rank = i;
+                                                    lead.push(doc);
+                                                    res.render('leader', {lead: lead});
+                                                }
+                                                else
+                                                {
+                                                    ++i;
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    if(flag)
+                    {
+                        res.render('leader', {lead : lead});
+                    }
                 }
-            })
+            });
         }
     });
-});
-// GET guest page
-router.get('/guest', function(req, res, next) {
-    if (req.signedCookies.name)
-    {
-        res.render('play', {title: 'Express'})
-    }
-    else
-    {
-        req.flash('info', 'You must login to play.');
-        res.render('guest', {title: 'Express'});
-    }
-});
-// GET play page
-router.get('/play', function(req, res, next) {
-    if (req.signedCookies.name)
-    {
-        res.render('play', { title: 'Express' });
-    }
-    else
-    {
-        req.flash('info', 'You must login to play.');
-        res.redirect('/login');
-    }
-});
-// GET practice page
-router.get('/play/practice', function(req, res, next) {
-    if (req.signedCookies.name)
-    {
-        res.render('practice', { title: 'Express' });
-    }
-    else
-    {
-        req.flash('info', 'You must login to play.');
-        res.redirect('/login');
-    }
-});
-// GET h2h page
-router.get('/play/h2h', function(req, res, next) {
-    if (req.signedCookies.name)
-    {
-        res.render('h2h', { title: 'Express' });
-    }
-    else
-    {
-        req.flash('info', 'You must login to play.');
-        res.redirect('/login');
-    }
-});
-// GET challenge page
-router.get('/play/challenge', function(req, res, next) {
-    if (req.signedCookies.name)
-    {
-        res.render('challenge', { title: 'Express' });
-    }
-    else
-    {
-        req.flash('info', 'You must login to play.');
-        res.redirect('/login');
-    }
-});
-// GET
-router.get('/play/solo', function(req, res, next) {
-    if (req.signedCookies.name)
-    {
-        res.render('solo', { title: 'Express' });
-    }
-    else
-    {
-        req.flash('info', 'You must login to play.');
-        res.redirect('/login');
-    }
-});
-// POST play page
-router.post('/play', function(req, res, next) {
-    res.render('play', { title: 'Express' });
 });
 // POST login page
 router.post('/login', function(req, res, next) {
@@ -239,10 +192,6 @@ router.post('/login', function(req, res, next) {
             res.render('index', {response: "Invalid Username"});
         }
     });
-});
-// GET registration page
-router.get('/register', function(req, res, next) {
-        res.render('register', { response: "" });
 });
 // POST register page
 router.post('/register', function(req, res, next) {
@@ -346,11 +295,13 @@ router.post('/forgot', function(req, res, next) {
             var mailOptions = {
                 to: user.email,
                 from: 'sudokuchampster@gmail.com',
-                subject: 'Time to get back in the play',
+                subject: 'Time to get back in the game',
                 text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                 'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
                 'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-                'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+                'For the purposes of security, the above link is valid for sixty minutes only. ' +
+                'If you did not request this, please ignore this email and your password will remain unchanged.\n' +
+                'Regards,\nThe Sudoku Champs team'
             };
             smtpTransport.sendMail(mailOptions, function(err) {
                 req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
@@ -380,7 +331,7 @@ router.post('/reset/:token', function(req, res) {
                         }
                         user.password = req.body.password;
                         user.token = undefined;
-                        user.expires = undefined;
+                        user.expire = undefined;
                         user.save(function(err) {
                             req.logIn(user, function(err) {
                                 done(err, user);
@@ -395,7 +346,7 @@ router.post('/reset/:token', function(req, res) {
                 service: 'Gmail',
                 auth: {
                     user: 'sudokuchampster@gmail.com',
-                    pass: process.env.PASSWORD
+                    pass: process.env.PASSWORD || key
                 }
             });
             var mailOptions = {
@@ -403,7 +354,8 @@ router.post('/reset/:token', function(req, res) {
                 from: 'sudokuchampster@gmail.com',
                 subject: 'Your password has been changed',
                 text: 'Hello,\n\n' +
-                'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
+                'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n' +
+                'Regards,\nThe Sudoku Champs team'
             };
             smtpTransport.sendMail(mailOptions, function(err) {
                 req.flash('success', 'Success! Your password has been changed.');
@@ -414,12 +366,5 @@ router.post('/reset/:token', function(req, res) {
         res.redirect('/');
     });
 });
-// POST logout page
-router.get('/logout', function(req, res, next) {
-    if (req.signedCookies.name)
-    {
-        res.clearCookie('name', {});
-    }
-    res.redirect('/login');
-});
+
 module.exports = router;
