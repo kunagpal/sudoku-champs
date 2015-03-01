@@ -2,6 +2,7 @@
  * Created by Kunal Nagpal <kunagpal@gmail.com> on 01-03-2015.
  */
 var path = require('path'),
+    passport = require('passport'),
     router = require('express').Router,
     auth = require(path.join(__dirname, '..', 'database', 'auth'));
 
