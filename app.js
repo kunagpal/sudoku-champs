@@ -8,13 +8,14 @@ var bodyParser = require('body-parser');
 var flash = require('express-flash');
 var routes = require(path.join(__dirname, 'routes', 'index'));
 var users = require(path.join(__dirname, 'routes', 'users'));
-
+var social = require(path.join(__dirname, 'routes', 'social'));
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('port', process.env.PORT || 3000);
+app.set('case sensitive routes', true);
 app.use(favicon(__dirname + '/public/images/main.jpg'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -25,6 +26,7 @@ app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/', users);
+app.use('/', social);
 app.enable('trust proxy');
 
 // catch 404 and forward to error handler
