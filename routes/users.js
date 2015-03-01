@@ -1,126 +1,174 @@
-var router = require('express').Router(),
-    path = require('path'),
-    async = require('async'),
-    crypto = require('crypto'),
-    bcrypt = require('bcrypt-nodejs'),
-    nodemailer = require('nodemailer'),
-    mongo = require('mongodb').MongoClient,
-    uri = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1:27017/project',
-    users = require(path.join(__dirname, '..', 'database', 'users'));
+var path = require('path'),
+    passport = require('passport'),
+    router = require('express').Router(),
+    auth = require(path.join(__dirname, '..', 'database', 'auth'));
+
 // GET logout page
-router.get('/logout', function(req, res, next) {
+router.get('/logout', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.clearCookie('name', {});
+        res.clearCookie('name');
+        req.logout();
     }
     res.redirect('/login');
 });
 // GET login page
-router.get('/login', function(req, res, next) {
-    res.render('login', {});
+router.get('/login', function(req, res) {
+    res.render('login');
 });
 // GET contact page
-router.get('/contact', function(req, res, next) {
-    res.render('contact', {});
+router.get('/contact', function(req, res) {
+    res.render('contact');
 });
 // GET developers page
-router.get('/developers', function(req, res, next) {
-    res.render('developers', {});
+router.get('/developers', function(req, res) {
+    res.render('developers');
 });
 //GET rules
-router.get('/rules', function(req, res, next) {
-    res.render('rules', {});
+router.get('/rules', function(req, res) {
+    res.render('rules');
 });
 //GET privacy
-router.get('/privacy', function(req, res, next) {
-    res.render('privacy', {});
+router.get('/privacy', function(req, res) {
+    res.render('privacy');
 });
 // GET forgot password page
-router.get('/forgot', function(req, res, next) {
-    res.render('forgot', {});
+router.get('/forgot', function(req, res) {
+    res.render('forgot');
 });
 // GET solved example
-router.get('/solved', function(req, res, next) {
-    res.render('solved', {});
+router.get('/solved', function(req, res) {
+    res.render('solved');
 });
 // GET guest page
-router.get('/guest', function(req, res, next) {
+router.get('/guest', function(req, res) {
     if (req.signedCookies.name)
     {
         res.render('play', {title: 'Express'})
     }
     else
     {
-        req.flash('info', 'You must login to play.');
-        res.render('guest', {title: 'Express'});
+        res.render('guest');
     }
 });
 // GET play page
-router.get('/play', function(req, res, next) {
+router.get('/play', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.render('play', {});
+        res.render('play');
     }
     else
     {
-        req.flash('info', 'You must login to play.');
         res.redirect('/login');
     }
 });
 // GET practice page
-router.get('/play/practice', function(req, res, next) {
+router.get('/practice', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.render('practice', {});
+        res.render('practice');
     }
     else
     {
-        req.flash('info', 'You must login to play.');
         res.redirect('/login');
     }
 });
 // GET h2h page
-router.get('/play/h2h', function(req, res, next) {
+router.get('/h2h', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.render('h2h', {});
+        res.render('h2h');
     }
     else
     {
-        req.flash('info', 'You must login to play.');
         res.redirect('/login');
     }
 });
 // GET challenge page
-router.get('/play/challenge', function(req, res, next) {
+router.get('/challenge', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.render('challenge', {});
+        res.render('challenge');
     }
     else
     {
-        req.flash('info', 'You must login to play.');
         res.redirect('/login');
     }
 });
 // GET solo page
-router.get('/play/solo', function(req, res, next) {
+router.get('/solo', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.render('solo', {});
+        res.render('solo');
     }
     else
     {
-        req.flash('info', 'You must login to play.');
         res.redirect('/login');
     }
 });
 // POST play page
-router.post('/play', function(req, res, next) {
-    res.render('play', {});
+router.post('/play', function(req, res) {
+    res.render('play');
 });
 // GET registration page
-router.get('/register', function(req, res, next) {
+router.get('/register', function(req, res) {
     res.render('register', { response: "" });
+    
 });
+
+router.get('/fb', passport.authenticate('facebook', {scope : 'email'}));
+
+router.get('/FB', passport.authenticate('facebook', {
+        successRedirect : '/play',
+        failureRedirect : '/login'
+    }),
+    function(req, res){
+        res.redirect('/play');
+    }
+);
+
+router.get('/go', passport.authenticate('google'));
+
+router.get('/GO', passport.authenticate('google', {
+        successRedirect : '/play',
+        failureRedirect : '/login'
+    }),
+    function(req, res){
+        res.redirect('/play');
+    }
+);
+
+router.get('/gi', passport.authenticate('github'));
+
+router.get('/GI', passport.authenticate('github', {
+        successRedirect : '/play',
+        failureRedirect : '/login'
+    }),
+    function(req, res){
+        res.redirect('/play');
+    }
+);
+
+router.get('/tw', passport.authenticate('twitter'));
+
+router.get('/TW', passport.authenticate('twitter', {
+        successRedirect : '/play',
+        failureRedirect : '/login'
+    }),
+    function(req, res){
+        res.redirect('/play');
+    }
+);
+
+router.get('/li', passport.authenticate('linkedin', {scope : 'r_emailaddress'}));
+
+router.get('/LI', passport.authenticate('linkedin', {
+        successRedirect : '/play',
+        failureRedirect : '/login'
+    }),
+    function(req, res){
+        res.redirect('/play');
+    }
+);
+
 module.exports = router;
