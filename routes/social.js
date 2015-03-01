@@ -61,4 +61,8 @@ router.get('/LI', passport.authenticate('linkedin', {
     }
 );
 
+router.get('/error', function(req, res){
+    res.render('error');
+});
+
 module.exports = router;
