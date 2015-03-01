@@ -3,7 +3,7 @@
  */
 var path = require('path'),
     passport = require('passport'),
-    router = require('express').Router,
+    router = require('express').Router(),
     auth = require(path.join(__dirname, '..', 'database', 'auth'));
 
 router.get('/fb', passport.authenticate('facebook', {scope : 'email'}));
