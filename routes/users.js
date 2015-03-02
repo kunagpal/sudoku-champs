@@ -12,7 +12,14 @@ router.get('/logout', function(req, res) {
 });
 // GET login page
 router.get('/login', function(req, res) {
-    res.render('login');
+    if(req.signedCookies.name)
+    {
+        res.redirect('/');
+    }
+    else
+    {
+        res.render('login');
+    }
 });
 // GET contact page
 router.get('/contact', function(req, res) {
@@ -104,13 +111,9 @@ router.get('/solo', function(req, res) {
         res.redirect('/login');
     }
 });
-// POST play page
-router.post('/play', function(req, res) {
-    res.render('play');
-});
 // GET registration page
 router.get('/register', function(req, res) {
-    res.render('register');
+        res.render('register');
 });
 
 module.exports = router;

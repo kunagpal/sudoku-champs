@@ -5,7 +5,7 @@ var i,
     bcrypt = require('bcrypt-nodejs'),
     router = require('express').Router(),
     mongo = require('mongodb').MongoClient,
-    key = require(path.join(__dirname, '..', 'key')),
+    key = require(path.join(__dirname, '..', 'key')).key,
     uri = process.env.MONGO || 'mongodb://127.0.0.1:27017/project',
     users = require(path.join(__dirname, '..', 'database', 'users')),
     index = {
@@ -47,18 +47,16 @@ router.get('/', function(req, res)
         }
         else
         {
-            var op = {dob : 0, hash : 0, email : 0, token : 0, expires : 0, form : 0, team_no : 0};
+            var op = {dob : 0, hash : 0, email : 0, token : 0, expires : 0, form : 0, num : 0};
             db.collection('users').findOne({_id : req.signedCookies.name}, op, function(err, doc){
+               db.close();
                if(err)
                {
                    console.log(err.message);
                }
                else
                {
-                   db.close();
-                   doc = doc ? doc : 0;
-                   console.log(doc);
-                   res.render('index', {stats : doc, index : index});
+                   res.render('index', {stats : doc ? doc : 0, index : index});
                }
             });
         }
@@ -91,14 +89,12 @@ router.get('/reset/:token', function(req, res) {
             });
         }
     });
-   
 });
 // GET leaderboard
 router.get('/leader', function(req, res) {
     i = 1;
     lead = [];
     flag = req.signedCookies.name ? false : true;
-    console.log(req.signedCookies.name);
     mongo.connect(uri, function(err, db) {
         if(err)
         {
@@ -138,6 +134,7 @@ router.get('/leader', function(req, res) {
                                     else
                                     {
                                         db.collection('users').find({}, op, {sort : [['points', -1], ['played' , 1], ['steak', -1]]}).each(function (err, doc) {
+                                            db.close();
                                             if (err)
                                             {
                                                 console.log(err.message);
@@ -146,7 +143,6 @@ router.get('/leader', function(req, res) {
                                             {
                                                 if(doc._id == req.signedCookies.name)
                                                 {
-                                                    db.close();
                                                     doc.rank = i;
                                                     lead.push(doc);
                                                     res.render('leader', {lead: lead});
@@ -181,37 +177,39 @@ router.post('/login', function(req, res) {
     {
         console.log(req.body.name + " " + req.body.password + "received");
     }
-    users.fetch({_id : req.body.name}, function (err, doc)
-    {
-        if (err)
+    mongo.connect(uri, function(err, db){
+        if(err)
         {
             console.log(err.message);
-            res.render('index', {response: "Incorrect credentials"});
-        }
-        else if (doc)
-        {
-            if (bcrypt.compareSync(req.body.password, doc['hash']))
-            {
-                console.log("Login Successful " + req.body.name);
-                res.cookie('name', doc['_id'], {maxAge: 86400000, signed: true});
-                res.redirect('/play');
-            }
-            else
-            {
-                console.log('Incorrect Credentials');
-                res.render('index', {response: "Incorrect Password"});
-            }
         }
         else
         {
-            console.log('No such user exists');
-            res.render('index', {response: "Invalid Username"});
+            db.collection('users').findOne({_id : req.body.name}, function(err, doc){
+                db.close();
+                if(err)
+                {
+                    console.log(err.message);
+                }
+                else if(!doc)
+                {
+                    console.log('Incorrect credentials!');
+                    res.redirect('/login');
+                }
+                else
+                {
+                    if (bcrypt.compareSync(req.body.password, doc.hash))
+                    {
+                        res.cookie('name', req.body.name, {maxAge: 86400000, signed: true});
+                        res.redirect('/play');
+                    }
+                }
+            });
         }
     });
 });
 // POST register page
 router.post('/register', function(req, res) {
-    users.getCount(function (err, number)
+    users.getCount(function (err, num)
     {
         if (err)
         {
@@ -222,27 +220,13 @@ router.post('/register', function(req, res) {
             console.log("Reached");
             if (req.body.password === req.body.confirm)
             {
-                var ob =
-                {
-                    _id : req.body.name,
-                    dob : new Date(),
-                    num : parseInt(number) + 1,
-                    hash : bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
-                    email : req.body.email,
-                    win : 0,
-                    loss : 0,
-                    tied : 0,
-                    played : 0,
-                    points : 0,
-                    ratio : 0.0,
-                    form : 1,
-                    streak: 0,
-                    worst : -1,
-                    best : Number.MAX_VALUE,
-                    avg : 0,
-                    rep : 0
-                };
-                users.insert(ob, function (err, docs)
+                var user = require(path.join(__dirname, '..', 'database', 'user'));
+                user._id = req.body.name;
+                user.dob = new Date();
+                user.num = parseInt(num) + 1;
+                user.hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+                user.email = req.body.email;
+                users.insert(user, function (err, docs)
                 {
                     if (err)
                     {
@@ -338,9 +322,9 @@ router.post('/reset/:token', function(req, res) {
                 {
                     var options = {
                         to : doc.email,
-                        subject : 'Password chage successful !',
+                        subject : 'Password change successful !',
                         text : 'Hey there, ' + doc.email.split('@')[0] + ' we\'re just writing in to let you know that the recent password change for your account with Sudoku Champs was successful.' +
-                        '\nRegards,\nThe Sudoku Champs team'
+                        '\nRegards,\nThe Sudoku Champs team.'
                     };
                     email.sendMail(options, function(err, doc) {
                         if(err)

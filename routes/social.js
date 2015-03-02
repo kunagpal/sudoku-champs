@@ -13,6 +13,11 @@ router.get('/FB', passport.authenticate('facebook', {
         failureRedirect : '/login'
     }),
     function(req, res){
+        if (req.signedCookies.name)
+        {
+            res.clearCookie('name', { });
+        }
+        res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
         res.redirect('/play');
     }
 );
@@ -24,6 +29,11 @@ router.get('/GO', passport.authenticate('google', {
         failureRedirect : '/login'
     }),
     function(req, res){
+        if (req.signedCookies.name)
+        {
+            res.clearCookie('name', { });
+        }
+        res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
         res.redirect('/play');
     }
 );
@@ -35,6 +45,11 @@ router.get('/GI', passport.authenticate('github', {
         failureRedirect : '/login'
     }),
     function(req, res){
+        if (req.signedCookies.name)
+        {
+            res.clearCookie('name', { });
+        }
+        res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
         res.redirect('/play');
     }
 );
@@ -46,17 +61,27 @@ router.get('/TW', passport.authenticate('twitter', {
         failureRedirect : '/login'
     }),
     function(req, res){
+        if (req.signedCookies.name)
+        {
+            res.clearCookie('name', { });
+        }
+        res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
         res.redirect('/play');
     }
 );
 
-router.get('/li', passport.authenticate('linkedin', {scope : 'r_emailaddress'}));
+router.get('/li', passport.authenticate('linkedin', {scope : ['r_emailaddress', 'r_basicprofile']}));
 
 router.get('/LI', passport.authenticate('linkedin', {
         successRedirect : '/play',
         failureRedirect : '/login'
     }),
     function(req, res){
+        if (req.signedCookies.name)
+        {
+            res.clearCookie('name', { });
+        }
+        res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
         res.redirect('/play');
     }
 );

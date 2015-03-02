@@ -1,19 +1,20 @@
-/**
- * Created by Kunal Nagpal on 28-02-2015.
- */
-var passport = require('passport'),
+// Created by Kunal Nagpal <kunagpal@gmail.com> on 28-02-2015.
+var path = require('path'),
+    passport = require('passport'),
     mongo = require('mongodb').MongoClient,
+    user = require(path.join(__dirname, 'user')),
     github = require('passport-github').Strategy,
     google = require('passport-google').Strategy,
     twitter = require('passport-twitter').Strategy,
     linkedin = require('passport-linkedin').Strategy,
     facebook = require('passport-facebook').Strategy,
+    key = require(path.join(__dirname, '..', 'key')),
     uri = process.env.MONGO || 'mongodb://127.0.0.1:27017/project';
 
-    passport.use(new facebook({
-    clientID : 'clientID',
-    clientSecret : 'clientSecret',
-    callbackURL : 'callbackURL'
+passport.use(new facebook({
+    clientID : key.fb_id || process.env.FB_ID,
+    clientSecret : key.fb_key || process.env.FB_KEY,
+    callbackURL : 'https://127.0.0.1:3000/FB'
     },
     function(token, refreshToken, profile, done) {
             process.nextTick(function() {
@@ -24,7 +25,8 @@ var passport = require('passport'),
                     }
                     else
                     {
-                        db.collection('users').findOne({ 'facebook.id' : profile.id }, function(err, doc) {
+                        db.collection('users').findOne({ _id : profile.name.givenName + ' ' + profile.name.familyName }, function(err, doc) {
+                            db.close();
                             if (err)
                             {
                                 console.log(err.message);
@@ -35,31 +37,28 @@ var passport = require('passport'),
                             }
                             else
                             {
-                                var newUser            = new User();
-                                newUser.facebook.id    = profile.id;
-                                newUser.facebook.token = token;
-                                newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
-                                newUser.facebook.email = profile.emails[0].value;
-                                newUser.save(function(err) {
+                                user._id = profile.name.givenName + ' ' + profile.name.familyName;
+                                user.dob = new Date();
+                                user.token = token;
+                                user.email = profile.emails[0].value;
+                                user.save(function(err) {
                                     if (err)
                                     {
                                         throw err;
                                     }
-                                    return done(null, newUser);
+                                    return done(null, user);
                                 });
                             }
-                            db.close();
                         });
                     }
                 });
-
         });
     })
 );
 passport.use(new twitter({
-    consumerKey : 'consumerKey',
-    consumerSecret : 'consumerSecret',
-    callbackURL : 'callbackURL'
+    consumerKey : key.fb_id || process.env.TW_ID,
+    consumerSecret : key.fb_key || process.env.TW_KEY,
+    callbackURL : 'https://127.0.0.1:3000/TW'
     },
     function(token, refreshToken, profile, done){
         process.nextTick(function() {
@@ -70,7 +69,8 @@ passport.use(new twitter({
                 }
                 else
                 {
-                    db.collection('users').findOne({ 'twitter.id' : profile.id }, function(err, doc) {
+                    db.collection('users').findOne({ _id : profile.username }, function(err, doc) {
+                        db.close();
                         if (err)
                         {
                             console.log(err.message);
@@ -81,20 +81,16 @@ passport.use(new twitter({
                         }
                         else
                         {
-                            var newUser                 = new User();
-                            newUser.twitter.id          = profile.id;
-                            newUser.twitter.token       = token;
-                            newUser.twitter.username    = profile.username;
-                            newUser.twitter.displayName = profile.displayName;
-                            newUser.save(function(err) {
+                            user._id = profile.username;
+                            user.token = profile.token;
+                            user.save(function(err) {
                                 if (err)
                                 {
                                     throw err;
                                 }
-                                return done(null, newUser);
+                                return done(null, user);
                             });
                         }
-                        db.close();
                     });
                 }
             });
@@ -102,8 +98,8 @@ passport.use(new twitter({
     }
 ));
 passport.use(new google({
-        realm : 'realm',
-        returnURL : 'returnURL'
+        realm : key.go_id || process.env.GO_ID,
+        returnURL : 'https://127.0.0.1:3000/GO'
     },
     function(accessToken, refreshToken, profile, done){
         process.nextTick(function() {
@@ -114,7 +110,8 @@ passport.use(new google({
                 }
                 else
                 {
-                    db.collection('users').findOne({ oauthID: profile.id }, function(err, doc) {
+                    db.collection('users').findOne({ _id: profile.displayName }, function(err, doc) {
+                        db.close();
                         if(err)
                         {
                             console.log(err.message);
@@ -125,11 +122,8 @@ passport.use(new google({
                         }
                         else
                         {
-                            var user = new User({
-                                oauthID: profile.id,
-                                name: profile.displayName,
-                                created: Date.now()
-                            });
+                            user._id = profile.displayName;
+                            user.dob = Date.now();
                             user.save(function(err) {
                                 if(err)
                                 {
@@ -142,7 +136,6 @@ passport.use(new google({
                                 }
                             });
                         }
-                        db.close();
                     });
                 }
             });
@@ -150,9 +143,9 @@ passport.use(new google({
     }
 ));
 passport.use(new github({
-        clientID : 'clientID',
-        clientSecret : 'clientSecret',
-        callbackURL : 'callbackURL'
+        clientID : key.gi_id || process.env.GI_ID,
+        clientSecret : key.gi_key || process.env.GI_KEY,
+        callbackURL : 'https://127.0.0.1:3000/GI'
     },
     function(accessToken, refreshToken, profile, done){
         process.nextTick(function() {
@@ -163,7 +156,8 @@ passport.use(new github({
                 }
                 else
                 {
-                    db.collection('users').findOne({ oauthID: profile.id }, function(err, doc) {
+                    db.collection('users').findOne({ _id: profile.displayName }, function(err, doc) {
+                        db.close();
                         if(err)
                         {
                             console.log(err.message);
@@ -174,11 +168,8 @@ passport.use(new github({
                         }
                         else
                         {
-                            var user = new User({
-                                oauthID: profile.id,
-                                name: profile.displayName,
-                                created: Date.now()
-                            });
+                            user._id = profile.displayName;
+                            user.dob = Date.now();
                             user.save(function(err) {
                                 if(err)
                                 {
@@ -191,7 +182,6 @@ passport.use(new github({
                                 }
                             });
                         }
-                        db.close();
                     });
                 }
             });
@@ -199,9 +189,9 @@ passport.use(new github({
     }
 ));
 passport.use(new linkedin({
-        consumerKey : 'consumerKey',
-        consumerSecret : 'consumerSecret',
-        callbackURL : 'callbackURL'
+        consumerKey : key.li_id || process.env.LI_ID,
+        consumerSecret : key.li_key || process.env.LI_KEY,
+        callbackURL : 'https://127.0.0.1:3000/LI'
     },
     function(token, tokenSecret, profile, done){
         process.nextTick(function() {
@@ -212,7 +202,8 @@ passport.use(new linkedin({
                 }
                 else
                 {
-                    db.collection('users').findOrCreate({ linkedinId: profile.id }, function (err, doc) {
+                    db.collection('users').find({ _id: profile.displayName }, function (err, doc) {
+                        db.close();
                         if(err)
                         {
                             console.log(err.message);
@@ -223,11 +214,8 @@ passport.use(new linkedin({
                         }
                         else
                         {
-                            var user = new User({
-                                oauthID: profile.id,
-                                name: profile.displayName,
-                                created: Date.now()
-                            });
+                            user._id = profile.displayName;
+                            user.dob = Date.now();
                             user.save(function(err) {
                                 if(err)
                                 {
@@ -239,7 +227,6 @@ passport.use(new linkedin({
                                 }
                             });
                         }
-                        db.close();
                     });
                 }
             });
