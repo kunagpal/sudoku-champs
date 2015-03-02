@@ -8,3 +8,4 @@ The source code repository for the sudoku-champs initiative.
 * Install the latest version of Node.Js from [here] (http://nodejs.org/dist/v0.12.0/x64/node-v0.12.0-x64.msi)
 * Navigate to the project directory, and install all dependencies using 'npm install'
 * Run the server using 'npm start'
+* View the website [here] (localhost:3000/)
