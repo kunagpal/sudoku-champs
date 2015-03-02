@@ -5,7 +5,6 @@ var logger = require('morgan');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var flash = require('express-flash');
 var routes = require(path.join(__dirname, 'routes', 'index'));
 var users = require(path.join(__dirname, 'routes', 'users'));
 var social = require(path.join(__dirname, 'routes', 'social'));
