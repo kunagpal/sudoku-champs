@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="center">
   <head>
-    <title>Play | Sudoku Champs</title>
+    <title>Reset | Sudoku Champs</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="/styles/style.css" type="text/css" />
   </head>
@@ -9,13 +9,12 @@
       <nav>
           <ul>
               <li>
-                  <a href="/">HOME</a>
-              </li>
+                  <a href="/">HOME</a></li>
               <li>
                   <a href="/login">LOGIN</a>
               </li>
               <li>
-                  <a id="inv">PLAY</a>
+                  <a href="/play">PLAY</a>
               </li>
               <li>
                   <a href="/register">REGISTER</a>
@@ -28,13 +27,13 @@
               </li>
           </ul>
       </nav>
-      <br /><br />
-      <h1>Let the games begin !</h1>
-      <h2>May the numbers be with you, in more ways than one. <br /> But first, select a game mode...</h2>
-      <a href="practice" id="one">PRACTICE</a>
-      <a href="challenge" id="two">CHALLENGE</a>
-      <a href="/solo" id="three">SOLO</a>
-      <a href="h2h" id="four">HEAD TO HEAD</a>
+      <h1>Reset Password ?</h1>
+      <h2>The closest thing to resurrection in today's digital world.</h2>
+      <form method="POST">
+                         <input type = "password" placeholder="Password" name = "pass" autofocus = "true"/> <br /> <br />
+                         <input type = "password" placeholder="Confirm password" name = "confirm"/> <br /> <br />
+                         <input type="submit" value="Bring me back!" id="begin"/>
+      </form>
   </body>
   <footer>
       <nav>

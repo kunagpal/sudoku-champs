@@ -7,7 +7,6 @@ router.get('/logout', function(req, res) {
     if (req.signedCookies.name)
     {
         res.clearCookie('name');
-        req.logout();
     }
     res.redirect('/login');
 });
@@ -43,7 +42,7 @@ router.get('/solved', function(req, res) {
 router.get('/guest', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.render('play', {title: 'Express'})
+        res.render('play')
     }
     else
     {
@@ -111,8 +110,7 @@ router.post('/play', function(req, res) {
 });
 // GET registration page
 router.get('/register', function(req, res) {
-    res.render('register', { response: "" });
-    
+    res.render('register');
 });
 
 module.exports = router;

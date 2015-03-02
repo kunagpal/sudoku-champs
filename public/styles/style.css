@@ -239,6 +239,7 @@ tr:nth-child(2n + 3) {
 #begin{
     width : 10%;
     border : none;
+    outline : none;
     padding : 1% 2%;
     color : #FFFFFF;
     margin-top : 5px;

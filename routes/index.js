@@ -2,11 +2,10 @@ var i,
     lead,
     path = require('path'),
     crypto = require('crypto'),
-    email = require('nodemailer'),
     bcrypt = require('bcrypt-nodejs'),
     router = require('express').Router(),
     mongo = require('mongodb').MongoClient,
-    key = require(path.join(__dirname, '..', 'key')).password,
+    key = require(path.join(__dirname, '..', 'key')),
     uri = process.env.MONGO || 'mongodb://127.0.0.1:27017/project',
     users = require(path.join(__dirname, '..', 'database', 'users')),
     index = {
@@ -23,6 +22,13 @@ var i,
         tied : 'Matches tied',
         played : 'Matches played'
     },
+    email = require('nodemailer').createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'sudokuchampster@gmail.com',
+            pass: process.env.PASSWORD || key
+        }
+    }),
     op = {'_id' : 1, 'points' : 1, 'played' : 1, 'streak' : 1},
     frame = {'sort' : [['points', -1], ['played' , 1], ['streak' , -1]], 'limit' : 2};
 
@@ -63,21 +69,25 @@ router.get('/reset/:token', function(req, res) {
     mongo.connect(uri, function(err, db) {
         if(err)
         {
-            throw err;
+            console.log(err.message);
         }
         else
         {
-            db.collection('users').findOne({ token: req.params.token, expire: { $gt: Date.now() } }, function(err, user) {
+            db.collection('users').findOne({ token: req.params.token, expire: { $gt: Date.now() } }, function(err, doc) {
                 db.close();
                 if(err)
                 {
                     console.log(err.message);
                 }
-                else if (!user)
+                else if (!doc)
                 {
-                    return res.redirect('/forgot');
+                    res.redirect('/forgot');
                 }
-                res.render('reset', {  user: req.user, title: 'Title' });
+                else
+                {
+                    console.log('Found!');
+                    res.render('reset');
+                }
             });
         }
     });
@@ -263,72 +273,41 @@ router.post('/forgot', function(req, res) {
         }
         else
         {
-            db.collection('users').findOne({email : req.body.email}, function(err, doc){
-                if(err)
-                {
-                    console.log(err.message);
-                }
-                else if(!doc)
-                {
-                    console.log('Oh No !');
+            crypto.randomBytes(20, function(err, buf) {
+                var token = buf.toString('hex');
+                var options = {
+                    from: 'sudokuchampster@gmail.com',
+                    to : req.body.email,
+                    subject: 'Time to get back in the game',
+                    text: 'Hey there, ' + req.body.email.split('@')[0] + '\n' + 'A little birdie told us that you were having troubles with your Sudoku champs password.\n'
+                    + "That really hurts us, so please click on http://" + req.headers.host + '/reset/' + token + " in order to reset your password.\nWe"
+                    + ' would love to have you back as a user.\n In the event that this password reset was not requested by you,'
+                    + ' please ignore this message and your password shall remain intact.\n\nRegards, \nThe Sudoku Champs team.'
+                };
+                db.collection('users').findAndModify({email : req.body.email}, [], {$set:{token : token, expire : Date.now() + 3600000}}, {new : false}, function(err, doc){
                     db.close();
-                }
-                else
-                {
-                    var smtpTransport = email.createTransport('SMTP', {
-                        service: 'Gmail',
-                        auth: {
-                            user: 'sudokuchampster@gmail.com',
-                            pass: process.env.PASSWORD || key
-                        }
-                    });
-                    var token;
-                    crypto.randomBytes(20, function(err, buf) {
-                        token = buf.toString('hex');
-                        var mailOptions = {
-                            from: 'sudokuchampster@gmail.com',
-                            subject: 'Time to get back in the game',
-                            text: 'Hey there, ' + doc.email.split('@')[0] + '\n' + 'A little birdie told us that you were having troubles with your Sudoku champs password.\n'
-                            + "That really hurts us, so please click on http://" + req.headers.host + '/reset/' + token + " in order to reset your password. We \n"
-                            +  'would love to have you back as a user.\n In the event that this password reset was not requested by you,'
-                            + ' please ignore this message and your password shall remain intact.\n\nRegards, The Sudoku Champs team.'
-                        };
-                        db.close(function(err){
+                    if(err)
+                    {
+                        console.log(err.message);
+                    }
+                    else if(!doc)
+                    {
+                        console.log('Oh No !');
+                    }
+                    else
+                    {
+                        email.sendMail(options, function(err) {
                             if(err)
                             {
                                 console.log(err.message);
                             }
                             else
                             {
-                                mongo.connect(uri, function(err, db){
-                                    if(err)
-                                    {
-                                        console.log(err.message);
-                                    }
-                                    else
-                                    {
-                                        db.collection('users').update({}, {$set : {token : token, expire : Date.now()}}, function (err, doc){
-                                            db.close();
-                                            if(err)
-                                            {
-                                                console.log(err.message);
-                                            }
-                                            else
-                                            {
-                                                console.log(doc);
-                                            }
-                                        });
-                                    }
-                                });
+                                res.redirect('/login');
                             }
                         });
-                        mailOptions.to = doc.email;
-                        smtpTransport.sendMail(mailOptions, function(err) {
-                            console.log('okay');
-                            res.redirect('/login');
-                        });
-                    });
-                }
+                    }
+                });
             });
         }
     });
@@ -338,67 +317,43 @@ router.post('/reset/:token', function(req, res) {
     mongo.connect(uri, function(err, db){
         if(err)
         {
-            throw err;
+            console.log(err.message);
         }
         else
         {
-            db.collection('users').findOne({ token: req.params.token, expire: { $gt: Date.now() } }, function(err, user) {
-                 if(err)
-                 {
-                         console.log(err.message);
-                 }
-                 else if (!user)
-                 {
-                       db.close();
-                       return res.redirect('back');
-                 }
-                 else
-                 {
-                       db.close(function(err){
-                           if(err)
-                           {
-                                console.log(err.message);
-                           }
-                           else
-                           {
-                                mongo.connect(uri, function(err, db){
-                                   if(err)
-                                   {
-                                        console.log(err.message);
-                                   }
-                                   else
-                                   {
-                                       db.collection('users').update({_id : user._id},{$set : {hash : bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))}, $unset : {token : '', expire : ''}}, function(err){
-                                          if(err)
-                                          {
-                                              console.log(err.message);
-                                          }
-                                          else
-                                          {
-                                              db.close(function(err) {
-                                                  if (err)
-                                                  {
-                                                      console.log(err.message);
-                                                  }
-                                                  else
-                                                  {
-                                                      mailOptions.to = user.email;
-                                                      mailOptions.subject = 'Password chage succeful !';
-                                                      mailOptions.text = 'Hey there, ' + user.email.split('@')[0] + ' we\'re just writing in to let you know that the recent password change for your account with Sudoku Champs was successful.' +
-                                                                         '\nRegards,\nThe Sudoku Champs team';
-                                                      smtpTransport.sendMail(mailOptions, function(err) {
-                                                          done(err);
-                                                      });
-                                                  }
-                                              });
-                                              console.log('Updated successfully!');
-                                          }
-                                       });
-                                   }
-                                });
-                           }
-                       });
-                 }
+            var query = {token : req.params.token, expire : {$gt: Date.now()}},
+                op = {$set : {hash : bcrypt.hashSync(req.body.pass, bcrypt.genSaltSync(10))}, $unset : {token : '', expire : ''}};
+            db.collection('users').findAndModify(query, [], op, {new : true}, function(err, doc) {
+                db.close();
+                if(err)
+                {
+                    console.log(err.message);
+                }
+                else if(!doc)
+                {
+                    console.log('No matches!');
+                    res.redirect('/forgot');
+                }
+                else
+                {
+                    var options = {
+                        to : doc.email,
+                        subject : 'Password chage successful !',
+                        text : 'Hey there, ' + doc.email.split('@')[0] + ' we\'re just writing in to let you know that the recent password change for your account with Sudoku Champs was successful.' +
+                        '\nRegards,\nThe Sudoku Champs team'
+                    };
+                    email.sendMail(options, function(err, doc) {
+                        if(err)
+                        {
+                            console.log(err.message);
+                        }
+                        else
+                        {
+                            console.log('Updated successfully!');
+                            res.redirect('/login');
+                        }
+                    });
+                }
             });
         }
     });
