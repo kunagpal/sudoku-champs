@@ -26,7 +26,7 @@ var i,
         service: 'Gmail',
         auth: {
             user: 'sudokuchampster@gmail.com',
-            pass: process.env.PASSWORD || key
+            pass: process.env.PASSWORD || (key ? key : 0)
         }
     }),
     op = {'_id' : 1, 'points' : 1, 'played' : 1, 'streak' : 1},
