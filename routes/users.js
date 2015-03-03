@@ -1,7 +1,6 @@
 var path = require('path'),
     router = require('express').Router(),
     auth = require(path.join(__dirname, '..', 'database', 'auth'));
-
 // GET logout page
 router.get('/logout', function(req, res) {
     if (req.signedCookies.name)
@@ -115,5 +114,4 @@ router.get('/solo', function(req, res) {
 router.get('/register', function(req, res) {
         res.render('register', {token : req.csrfToken()});
 });
-
 module.exports = router;

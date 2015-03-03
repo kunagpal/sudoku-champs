@@ -1,5 +1,6 @@
 // Created by Kunal Nagpal <kunagpal@gmail.com> on 28-02-2015.
-var path = require('path'),
+var key,
+    path = require('path'),
     passport = require('passport'),
     mongo = require('mongodb').MongoClient,
     user = require(path.join(__dirname, 'user')),
@@ -11,10 +12,22 @@ var path = require('path'),
     uri = process.env.MONGO || 'mongodb://127.0.0.1:27017/project';
 
 try{
-    var key = require(path.join(__dirname, '..', 'key'));
+    key = require(path.join(__dirname, '..', 'file'));
 }
 catch(err){
     console.log(err.message);
+    key = {
+        fb_id : 0,
+        fb_key: 0,
+        gi_id : 0,
+        gi_key: 0,
+        tw_id : 0,
+        tw_key: 0,
+        li_id : 0,
+        li_key: 0,
+        go_id : 0,
+        go_key: 0
+    }
 }
 
 passport.use(new facebook({
