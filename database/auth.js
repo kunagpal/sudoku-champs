@@ -12,7 +12,7 @@ var key,
     uri = process.env.MONGO || 'mongodb://127.0.0.1:27017/project';
 
 try{
-    key = require(path.join(__dirname, '..', 'file'));
+    key = require(path.join(__dirname, '..', 'key'));
 }
 catch(err){
     console.log(err.message);
