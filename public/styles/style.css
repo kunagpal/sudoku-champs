@@ -27,22 +27,22 @@ ul {
     position : fixed;
 }
 nav ul li a {
-    -webkit-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    transition : color 0.5s ease-out, background-color 0.5s ease-out;
+    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
     width : 100%;
     color : #FFFFFF;
     display : block;
     line-height : 40px;
-    background-color: #000000;
+    background: #000000;
 }
 footer nav ul li a {
     line-height : 30px;
 }
 nav a:hover {
     color : #000000;
-    background-color : #8f8f8f;
+    background : #8f8f8f;
 }
 nav ul{
     margin : 0;
@@ -90,11 +90,11 @@ table th {
 }
 #reg{
     color : #FFFFFF;
-    background-color : #000000;
+    background : #000000;
 }
 #inv {
     color : #000000;
-    background-color : #FFFFFF;
+    background : #FFFFFF;
 }
 #solved {
     padding-top : 5%;
@@ -120,7 +120,7 @@ footer {
     padding : 1% 0;
     color : #FFFFFF;
     position : fixed;
-    background-color : #000000;
+    background : #000000;
 }
 .right{
     right : 30%;
@@ -128,7 +128,7 @@ footer {
     padding : 1% 0;
     color : #FFFFFF;
     position : fixed;
-    background-color : #000000;
+    background : #000000;
 }
 #one{
     top : 30%;
@@ -138,11 +138,11 @@ footer {
     padding : 2%;
     color : #FFFFFF;
     position : absolute;
-    background-color : #000000;
-    -webkit-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    transition : color 0.5s ease-out, background-color 0.5s ease-out;
+    background : #000000;
+    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
 }
 #two{
     top : 30%;
@@ -152,11 +152,11 @@ footer {
     float : right;
     color : #FFFFFF;
     position : absolute;
-    background-color : #000000;
-    -webkit-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    transition : color 0.5s ease-out, background-color 0.5s ease-out;
+    background : #000000;
+    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
 }
 #three{
     top : 50%;
@@ -165,11 +165,11 @@ footer {
     padding : 2%;
     color : #FFFFFF;
     position : absolute;
-    background-color : #000000;
-    -webkit-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    transition : color 0.5s ease-out, background-color 0.5s ease-out;
+    background : #000000;
+    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
 }
 #four{
     top : 50%;
@@ -179,16 +179,16 @@ footer {
     float : right;
     color : #FFFFFF;
     position : absolute;
-    background-color : #000000;
-    -webkit-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    transition : color 0.5s ease-out, background-color 0.5s ease-out;
+    background : #000000;
+    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
 }
 
 #one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #hide:hover{
     color : #000000;
-    background-color : #8f8f8f;
+    background : #8f8f8f;
 }
 #start{
     top : 30%;
@@ -198,11 +198,11 @@ footer {
     float : left;
     color : #FFFFFF;
     position : absolute;
-    background-color : #000000;
-    -webkit-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    transition : color 0.5s ease-out, background-color 0.5s ease-out;
+    background : #000000;
+    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
 }
 #hide {
     top : 45%;
@@ -212,11 +212,11 @@ footer {
     float : left;
     color : #FFFFFF;
     position : absolute;
-    background-color : #000000;
-    -webkit-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    transition : color 0.5s ease-out, background-color 0.5s ease-out;
+    background : #000000;
+    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
 }
 div {
     float : left;
@@ -225,11 +225,11 @@ div {
 
 }
 tr:nth-child(2n + 2) {
-    background-color : #8f8f8f;
+    background : #8f8f8f;
     color : #000000;
 }
 tr:nth-child(2n + 3) {
-    background-color : #000000;
+    background : #000000;
     color : #FFFFFF;
 }
 #clock{
@@ -243,15 +243,15 @@ tr:nth-child(2n + 3) {
     padding : 1% 2%;
     color : #FFFFFF;
     margin-top : 5px;
-    background-color : #000000;
-    -webkit-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background-color 0.5s ease-out;
-    transition : color 0.5s ease-out, background-color 0.5s ease-out;
+    background : #000000;
+    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
 }
 #begin:hover {
     color : #000000;
-    background-color : #8f8f8f;
+    background : #8f8f8f;
 }
 #stats{
     float : right;
@@ -287,4 +287,32 @@ tr:nth-child(2n + 3) {
     right : 40%;
     bottom : 25%;
     position : absolute;
+}
+::-webkit-input-placeholder {
+    color:    #000000;
+    text-align : center;
+}
+:-moz-placeholder {
+    color:    #000000;
+    opacity:  1;
+    text-align : center;
+}
+::-moz-placeholder {
+    color:    #000000;
+    opacity:  1;
+    text-align : center;
+}
+:-ms-input-placeholder {
+    color:    #000000;
+    text-align : center;
+}
+::selection {
+    background: #000000;
+    color : #FFFFFF;
+    text-align : center;
+}
+::-moz-selection {
+    background: #000000;
+    color : #FFFFFF;
+    text-align : center;
 }

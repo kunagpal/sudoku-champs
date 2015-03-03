@@ -1,27 +1,28 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var routes = require(path.join(__dirname, 'routes', 'index'));
-var users = require(path.join(__dirname, 'routes', 'users'));
-var social = require(path.join(__dirname, 'routes', 'social'));
-var app = express();
-
+var csurf = require('csurf'),
+    path = require('path'),
+    logger = require('morgan'),
+    express = require('express'),
+    favicon = require('serve-favicon'),
+    bodyParser = require('body-parser'),
+    session = require('express-session'),
+    cookieParser = require('cookie-parser'),
+    users = require(path.join(__dirname, 'routes', 'users')),
+    routes = require(path.join(__dirname, 'routes', 'index')),
+    social = require(path.join(__dirname, 'routes', 'social')),
+    app = express();
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.set('port', process.env.PORT || 3000);
 app.set('case sensitive routing', true);
-app.use(favicon(__dirname + '/public/images/main.jpg'));
+app.set('port', process.env.PORT || 3000);
+app.set('views', path.join(__dirname, 'views'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser("secret"));
-app.use(session({ secret : 'session secret key', resave : '', saveUninitialized : ''}));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(favicon(__dirname + '/public/images/main.jpg'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({ secret : 'session secret key', resave : '', saveUninitialized : ''}));
+app.use(csurf());
 app.use('/', routes);
 app.use('/', users);
 app.use('/', social);
@@ -33,9 +34,7 @@ app.use(function(req, res, next) {
     err.status = 404;
     next(err);
 });
-
 // error handlers
-
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
@@ -47,7 +46,6 @@ if (app.get('env') === 'development') {
         });
     });
 }
-
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
@@ -57,6 +55,4 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-
 module.exports = app;

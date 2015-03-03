@@ -1,7 +1,13 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
 var path = require('path'),
-    http = require('http'),
+    app = require(path.join(__dirname, '..', 'app')),
     debug = require('debug')('sudokuchamps'),
-    app = require(path.join(__dirname, '..', 'app'));
+    http = require('http');
 
 /**
  * Get port from environment and store in Express.

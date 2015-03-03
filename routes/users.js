@@ -18,7 +18,7 @@ router.get('/login', function(req, res) {
     }
     else
     {
-        res.render('login');
+        res.render('login', {token : req.csrfToken()});
     }
 });
 // GET contact page
@@ -113,7 +113,7 @@ router.get('/solo', function(req, res) {
 });
 // GET registration page
 router.get('/register', function(req, res) {
-        res.render('register');
+        res.render('register', {token : req.csrfToken()});
 });
 
 module.exports = router;
