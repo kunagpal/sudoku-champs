@@ -8,11 +8,17 @@ var path = require('path'),
     twitter = require('passport-twitter').Strategy,
     linkedin = require('passport-linkedin').Strategy,
     facebook = require('passport-facebook').Strategy,
-    key = require(path.join(__dirname, '..', 'key')),
     uri = process.env.MONGO || 'mongodb://127.0.0.1:27017/project';
 
+try{
+    var key = require(path.join(__dirname, '..', 'file'));
+}
+catch(err){
+    console.log(err.message);
+}
+
 passport.use(new facebook({
-    clientID :  process.env.FB_ID|| key.fb_id,
+    clientID :  process.env.FB_ID || key.fb_id,
     clientSecret : process.env.FB_KEY || key.fb_key,
     callbackURL : 'https://127.0.0.1:3000/FB'
     },
