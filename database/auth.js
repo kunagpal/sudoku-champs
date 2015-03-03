@@ -12,8 +12,8 @@ var path = require('path'),
     uri = process.env.MONGO || 'mongodb://127.0.0.1:27017/project';
 
 passport.use(new facebook({
-    clientID : key.fb_id || process.env.FB_ID,
-    clientSecret : key.fb_key || process.env.FB_KEY,
+    clientID :  process.env.FB_ID|| key.fb_id,
+    clientSecret : process.env.FB_KEY || key.fb_key,
     callbackURL : 'https://127.0.0.1:3000/FB'
     },
     function(token, refreshToken, profile, done) {
@@ -56,8 +56,8 @@ passport.use(new facebook({
     })
 );
 passport.use(new twitter({
-    consumerKey : key.fb_id || process.env.TW_ID,
-    consumerSecret : key.fb_key || process.env.TW_KEY,
+    consumerKey : process.env.TW_ID || key.fb_id,
+    consumerSecret : process.env.TW_KEY || key.fb_key,
     callbackURL : 'https://127.0.0.1:3000/TW'
     },
     function(token, refreshToken, profile, done){
@@ -98,7 +98,7 @@ passport.use(new twitter({
     }
 ));
 passport.use(new google({
-        realm : key.go_id || process.env.GO_ID,
+        realm : process.env.GO_ID || key.go_id,
         returnURL : 'https://127.0.0.1:3000/GO'
     },
     function(accessToken, refreshToken, profile, done){
@@ -143,8 +143,8 @@ passport.use(new google({
     }
 ));
 passport.use(new github({
-        clientID : key.gi_id || process.env.GI_ID,
-        clientSecret : key.gi_key || process.env.GI_KEY,
+        clientID :  process.env.GI_ID ||  key.gi_id ,
+        clientSecret :  process.env.GI_KEY || key.gi_key,
         callbackURL : 'https://127.0.0.1:3000/GI'
     },
     function(accessToken, refreshToken, profile, done){
@@ -189,8 +189,8 @@ passport.use(new github({
     }
 ));
 passport.use(new linkedin({
-        consumerKey : key.li_id || process.env.LI_ID,
-        consumerSecret : key.li_key || process.env.LI_KEY,
+        consumerKey : process.env.LI_ID || key.li_id,
+        consumerSecret : process.env.LI_KEY || key.li_key,
         callbackURL : 'https://127.0.0.1:3000/LI'
     },
     function(token, tokenSecret, profile, done){
