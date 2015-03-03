@@ -309,10 +309,8 @@ tr:nth-child(2n + 3) {
 ::selection {
     background: #000000;
     color : #FFFFFF;
-    text-align : center;
 }
 ::-moz-selection {
     background: #000000;
     color : #FFFFFF;
-    text-align : center;
 }
