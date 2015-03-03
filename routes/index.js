@@ -25,7 +25,7 @@ var i,
     frame = {'sort' : [['points', -1], ['played' , 1], ['streak' , -1]], 'limit' : 2};
 
 try{
-    var key = require(path.join(_dirname, '..', 'key')).key;
+    var key = require(path.join(__dirname, '..', 'key')).key;
 }
 catch(err){
     console.log(err.message);
