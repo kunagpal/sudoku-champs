@@ -5,7 +5,6 @@ var i,
     bcrypt = require('bcrypt-nodejs'),
     router = require('express').Router(),
     mongo = require('mongodb').MongoClient,
-    key = require(path.join(__dirname, '..', 'key')).key,
     uri = process.env.MONGO || 'mongodb://127.0.0.1:27017/project',
     users = require(path.join(__dirname, '..', 'database', 'users')),
     index = {
@@ -22,15 +21,23 @@ var i,
         tied : 'Matches tied',
         played : 'Matches played'
     },
-    email = require('nodemailer').createTransport({
-        service: 'Gmail',
-        auth: {
-            user: 'sudokuchampster@gmail.com',
-            pass: process.env.PASSWORD || (key ? key : 0)
-        }
-    }),
     op = {'_id' : 1, 'points' : 1, 'played' : 1, 'streak' : 1},
     frame = {'sort' : [['points', -1], ['played' , 1], ['streak' , -1]], 'limit' : 2};
+
+try{
+    var key = require(path.join(_dirname, '..', 'key')).key;
+}
+catch(err){
+    console.log(err.message);
+    key = 0;
+}
+var email = require('nodemailer').createTransport({
+    service: 'Gmail',
+    auth: {
+        user: 'sudokuchampster@gmail.com',
+        pass: process.env.PASSWORD || key
+    }
+});
 
 if (process.env.LOGENTRIES_TOKEN)
 {
@@ -326,7 +333,7 @@ router.post('/reset/:token', function(req, res) {
                         text : 'Hey there, ' + doc.email.split('@')[0] + ' we\'re just writing in to let you know that the recent password change for your account with Sudoku Champs was successful.' +
                         '\nRegards,\nThe Sudoku Champs team.'
                     };
-                    email.sendMail(options, function(err, doc) {
+                    email.sendMail(options, function(err) {
                         if(err)
                         {
                             console.log(err.message);
