@@ -1,5 +1,5 @@
-var csurf = require('csurf'),
-    path = require('path'),
+var path = require('path'),
+    csurf = require('csurf'),
     logger = require('morgan'),
     express = require('express'),
     favicon = require('serve-favicon'),

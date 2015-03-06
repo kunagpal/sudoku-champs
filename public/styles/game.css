@@ -1,0 +1,193 @@
+﻿html,body {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    overflow: auto;
+}
+body {
+    font-family: Arial;
+    font-size: 12px;
+}
+body,tr,td,div {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+table {
+    border : 1px black solid;
+}
+b {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+#Wrapper {
+    min-height: 720px;
+    clear : left;
+    visibility : hidden;
+}
+#Main,#Content,#Footer {
+    width: 980px;
+    margin: 0 auto;
+}
+#Content {
+    float: left;
+}
+#Column1 {
+    width: 300px;
+    float: left;
+}
+#sudokuBoard {
+    width: 426px;
+    margin-left: 40px;
+    float: left;
+}
+#col2 {
+    width: 174px;
+    right: 90%;
+    float: right;
+}
+td.alpha,td.beta {
+    background-color: #000000;
+}
+td.alpha td.cell, td.beta td.cell {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #FFFFFF;
+    background-color: #000000;
+}
+.staticValue {
+    font-family: Segoe UI, Arial;
+    text-align: center;
+    font-size: 30px;
+    color: #FFFFFF;
+    background : #000000;
+}
+.staticValue,.editValue {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #FFFFFF;
+}
+.editValue {
+    background: #FFFFFF;
+}
+.editValue:hover {
+    background: #8F8F8F;
+}
+label {
+    position: relative;
+    top: 3px;
+    line-height: 24px;
+    font-size: 15px;
+    color: #000000;
+}
+select {
+    font-family: Arial;
+    color: #999999;
+    font-weight: normal;
+    font-size: 12px;
+    border-top: solid 1px #CCCCCC;
+    border-left: solid 1px #E2E3EA;
+    border-bottom: solid 1px #FFFFFF;
+    border-right: solid 1px #E2E3EA;
+    margin: 3px 0;
+    min-width: 100px;
+    background: #FDFDFD;
+}
+.editValue input {
+    font-family: Segoe UI, Arial;
+    font-size: 30px;
+    color: #000000;
+    width: 44px;
+    /*height: 44px;*/
+    padding: 0;
+    border: 0;
+    background: none !important;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+    left: -1px;
+}
+input[type="submit"] {
+    font-family: Arial;
+    font-size: 18px;
+    color: #FFFFFF;
+    background : #000000;
+    text-transform: uppercase;
+    border: 0;
+    min-width: 162px;
+    min-height: 34px;
+    margin: 8px 0;
+    cursor: pointer;
+}
+input[type="submit"].gameControls {
+    font-family: Arial;
+    font-size: 16px;
+    text-transform: uppercase;
+    border: 0;
+    min-width: 28px;
+    min-height: 28px;
+    margin: 8px 0;
+    padding: 2px 16px;
+    cursor: pointer;
+}
+.game {
+    position : absolute;
+    float : right;
+    right : 40%;
+    top : 10%;
+}
+#buttonSolve {
+    margin-top: 119px;
+    color: #FFAEAE;
+}
+#youWon {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+}
+#youWon div {
+    width: 400px;
+    background: #000000;
+    font-size: 40px;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 40px;
+    margin: 100px auto 0 auto;
+}
+small {
+    font-size: 14px;
+}
+.noErrors, .errorsFound {
+    font-size: 18px;
+    color: #000000;
+    display : none;
+}
+.error {
+    border: 1px solid red;
+}
+input {
+    outline: none;
+}
+select, option {
+    color : #FFFFFF;
+    text-align : center;
+    background : #000000;
+}
+option:hover {
+    color : #000000;
+    background : #FFFFFF;
+}
+#checkButton{
+    top : 20%;
+}
+#newGameButton{
+    top : 30%;
+}
+#difficulty{
+    top : -50%;
+}

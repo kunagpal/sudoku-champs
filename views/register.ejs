@@ -8,62 +8,32 @@
   <body>
       <nav>
         <ul>
-            <li>
-                <a href="/">HOME</a>
-            </li>
-            <li>
-                <a href="/login">LOGIN</a>
-            </li>
-            <li>
-                <a href="/play">PLAY</a>
-            </li>
-            <li>
-                <a id="inv">REGISTER</a>
-            </li>
-            <li>
-                <a href="/rules">RULES</a>
-            </li>
-            <li>
-                <a href="/leader">LEADERBOARD</a>
-            </li>
+            <li><a href="/">HOME</a></li>
+            <li><a href="/login">LOGIN</a></li>
+            <li><a href="/play">PLAY</a></li>
+            <li><a id="inv">REGISTER</a></li>
+            <li><a href="/rules">RULES</a></li>
+            <li><a href="/leader">LEADERBOARD</a></li>
         </ul>
       </nav>
       <h1>Let's get started</h1>
       <h2>Registration is completely free and takes only a minute. <br />(Depending on your internet connection, of course)<br /> Already registered ? Login <a href="/login" class="link">here</a></h2>
       <form method="POST" action="/register">
                 <input type="hidden" name="_csrf" value=<%= token %>>
-                <input type="text" name="name" placeholder="User" autofocus="true"/>
-                <br /><br />
-                <input type="email" name="email" placeholder="Email"/>
-                <br /><br />
-                <input type="password" name="password" placeholder="Password"/>
-                <br /><br />
-                <input type="password" name="confirm" placeholder="Confirm"/>
-                <br /><br />
+                <input type="text" name="name" placeholder="User" autofocus="true"/> <br /><br />
+                <input type="email" name="email" placeholder="Email"/> <br /><br />
+                <input type="password" name="password" placeholder="Password"/> <br /><br />
+                <input type="password" name="confirm" placeholder="Confirm"/> <br /><br />
                 <input type="submit" id="begin" value="I am ready"/>
       </form>
-      <h3>Or, if you wish, you can login through one of your other accounts.</h3>
-      <a href="/fb"><img src="/images/social/fb.png" class="flip"/></a>
-      <a href="/gi"><img src="/images/social/gi.png" class="flip" /></a>
-      <a href="/go"><img src="/images/social/go.png" class="flip" /></a>
-      <a href="/li"><img src="/images/social/li.png" class="flip" /></a>
-      <a href="/tw"><img src="/images/social/tw.jpg" class="flip" /></a>
   </body>
   <footer>
       <nav>
           <ul>
-              <li>
-                  <a href="/logout">I wish to leave</a>
-              </li>
-              <li>
-                  <a href="/privacy">Privacy</a>
-              </li>
-              <li>
-                  <a href="/contact">Get in touch</a>
-              </li>
-              <li>
-                  <a href="/developers">Developers</a>
-              </li>
+              <li><a href="/logout">I wish to leave</a></li>
+              <li><a href="/privacy">Privacy</a></li>
+              <li><a href="/contact">Get in touch</a></li>
+              <li><a href="/developers">Developers</a></li>
           </ul>
       </nav>
   </footer>

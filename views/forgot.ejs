@@ -8,52 +8,35 @@
   <body>
       <nav>
           <ul>
-              <li>
-                  <a href="/">HOME</a></li>
-              <li>
-                  <a href="/login">LOGIN</a>
-              </li>
-              <li>
-                  <a href="/play">PLAY</a>
-              </li>
-              <li>
-                  <a href="/register">REGISTER</a>
-              </li>
-              <li>
-                  <a href="/rules">RULES</a>
-              </li>
-              <li>
-                  <a href="/leader">LEADERBOARD</a>
-              </li>
+              <li><a href="/">HOME</a></li>
+              <li><a href="/login">LOGIN</a></li>
+              <li><a href="/play">PLAY</a></li>
+              <li><a href="/register">REGISTER</a></li>
+              <li><a href="/rules">RULES</a></li>
+              <li><a href="/leader">LEADERBOARD</a></li>
           </ul>
       </nav>
       <h1>Forgot Password ?</h1>
       <h2>Never worry, you can still be a sudoku champ.</h2>
       <p>
-          Please supply the email address associated with your Sudoku Champs account in the field provided below, and a
+          Please supply the username and email address associated with your Sudoku Champs account in the field provided below, and a
           password reset email will be sent to your email address. <br /> Follow the instructions therein to reset your
           password.
       </p>
       <form method="POST" action="/forgot">
-                         <input type = "email" name = "email" placeholder = "Email Address" autofocus = "true"/> <br />
-                         <input type = "submit" value = "Submit" id = "begin"/>
+          <input type="hidden" name="_csrf" value=<%= token %>>
+          <input type="text" name="name" placeholder="Username" autofocus = "true" /> <br /> <br />
+          <input type = "email" name = "email" placeholder = "Email Address" autofocus = "true"/> <br /> <br />
+          <input type = "submit" value = "Submit" id = "begin"/>
       </form>
   </body>
   <footer>
       <nav>
           <ul>
-              <li>
-                  <a href="/logout">I wish to leave</a>
-              </li>
-              <li>
-                  <a href="/privacy">Privacy</a>
-              </li>
-              <li>
-                  <a href="/contact">Get in touch</a>
-              </li>
-              <li>
-                  <a href="/developers">Developers</a>
-              </li>
+              <li><a href="/logout">I wish to leave</a></li>
+              <li><a href="/privacy">Privacy</a></li>
+              <li><a href="/contact">Get in touch</a></li>
+              <li><a href="/developers">Developers</a></li>
           </ul>
       </nav>
   </footer>

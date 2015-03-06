@@ -8,55 +8,39 @@
   <body>
       <nav>
           <ul>
-              <li>
-                  <a href="/">HOME</a>
-              </li>
-              <li>
-                  <a id="inv">LOGIN</a>
-              </li>
-              <li>
-                  <a href="/play">PLAY</a>
-              </li>
-              <li>
-                  <a href="/register">REGISTER</a>
-              </li>
-              <li>
-                  <a href="/rules">RULES</a>
-              </li>
-              <li>
-                  <a href="/leader">LEADERBOARD</a>
-              </li>
+              <li><a href="/">HOME</a></li>
+              <li><a id="inv">LOGIN</a></li>
+              <li><a href="/play">PLAY</a></li>
+              <li><a href="/register">REGISTER</a></li>
+              <li><a href="/rules">RULES</a></li>
+              <li><a href="/leader">LEADERBOARD</a></li>
           </ul>
       </nav>
       <h1>Not registered? No worries, go <a href="/register" class="link">here</a><br /></h1>
       <h2>Or, play as a guest <a href="/guest" class="link">here</a>.</h2>
       <h3>You'll get no points, nor would you feature on our exclusive leaderboard :(</h3>
-      <form method="POST" action="/login" class="center">
-            <input type="hidden" name="_csrf" value=<%= token%>>
-            <input type="text" name="name" placeholder="User" autofocus="true"/>
-            <br /><br />
-            <input type="password" name="password" placeholder="Password"/>
-            <br/><br />
+      <form method="POST" action="/login">
+            <input type="hidden" name="_csrf" value=<%= token %>>
+            <input type="text" name="name" placeholder="User" autofocus="true"/> <br /><br />
+            <input type="password" name="password" placeholder="Password"/> <br/><br />
             <input type="submit" id="begin" value="Let's go!"/>
       </form>
       <br/>
       <a href="/forgot" class="link">I need help with my password</a>
+      <h3>Or, if you wish, you can login through one of your other accounts.</h3>
+      <a href="/fb"><img src="/images/social/fb.png" class="flip"/></a>
+      <a href="/gi"><img src="/images/social/gi.png" class="flip" /></a>
+      <a href="/go"><img src="/images/social/go.png" class="flip" /></a>
+      <a href="/li"><img src="/images/social/li.png" class="flip" /></a>
+      <a href="/tw"><img src="/images/social/tw.jpg" class="flip" /></a>
   </body>
   <footer>
       <nav>
             <ul>
-                <li>
-                    <a href="/logout">I wish to leave</a>
-                </li>
-                <li>
-                    <a href="/privacy">Privacy</a>
-                </li>
-                <li>
-                    <a href="/contact">Get in touch</a>
-                </li>
-                <li>
-                    <a href="/developers">Developers</a>
-                </li>
+                <li><a href="/logout">I wish to leave</a></li>
+                <li><a href="/privacy">Privacy</a></li>
+                <li><a href="/contact">Get in touch</a></li>
+                <li><a href="/developers">Developers</a></li>
             </ul>
       </nav>
   </footer>

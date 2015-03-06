@@ -1,12 +1,13 @@
 var i,
     lead,
+    flag,
     path = require('path'),
     crypto = require('crypto'),
     bcrypt = require('bcrypt-nodejs'),
     router = require('express').Router(),
     mongo = require('mongodb').MongoClient,
+    user = require(path.join(__dirname, '..', 'database', 'user')),
     uri = process.env.MONGO || 'mongodb://127.0.0.1:27017/project',
-    users = require(path.join(__dirname, '..', 'database', 'users')),
     index = {
         best : 'Best',
         _id : 'Player',
@@ -50,7 +51,7 @@ router.get('/', function(req, res)
         if(err)
         {
             console.log(err.message);
-            res.render('index', {stats : {}});
+            res.render('index', {stats : 0});
         }
         else
         {
@@ -75,6 +76,7 @@ router.get('/reset/:token', function(req, res) {
         if(err)
         {
             console.log(err.message);
+            res.render('forgot');
         }
         else
         {
@@ -106,6 +108,7 @@ router.get('/leader', function(req, res) {
         if(err)
         {
             console.log(err.message);
+            res.render('leader', {lead : []});
         }
         else
         {
@@ -137,6 +140,7 @@ router.get('/leader', function(req, res) {
                                     if (err)
                                     {
                                         console.log(err.message);
+                                        res.render('leader', {lead : lead});
                                     }
                                     else
                                     {
@@ -188,6 +192,7 @@ router.post('/login', function(req, res) {
         if(err)
         {
             console.log(err.message);
+            res.render('home');
         }
         else
         {
@@ -216,42 +221,61 @@ router.post('/login', function(req, res) {
 });
 // POST register page
 router.post('/register', function(req, res) {
-    users.getCount(function (err, num)
-    {
-        if (err)
+    mongo.connect(uri, function(err, db){
+        if(err)
         {
             console.log(err.message);
         }
         else
         {
-            console.log("Reached");
-            if (req.body.password === req.body.confirm)
-            {
-                var user = require(path.join(__dirname, '..', 'database', 'user'));
-                user._id = req.body.name;
-                user.dob = new Date();
-                user.num = parseInt(num) + 1;
-                user.hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
-                user.email = req.body.email;
-                users.insert(user, function (err, docs)
+            db.collection('users').count(function(err, num){
+                if(err)
                 {
-                    if (err)
-                    {
-                        console.log(err.message);
-                        res.render('register', {response: "Please choose a different user name"});
-                    }
-                    else
-                    {
-                        res.cookie('name', docs[0]['_id'], {maxAge: 86400000, signed: true});
-                        res.redirect('/play');
-                    }
-                });
-            }
-            else
-            {
-                console.log("Incorrect Password");
-                res.render('register', {response: "Passwords do not match"});
-            }
+                    console.log(err.message);
+                }
+                else
+                {
+                    console.log(num);
+                    db.close(function(err, db){
+                        if (req.body.password === req.body.confirm)
+                        {
+                            user._id = req.body.name;
+                            user.dob = new Date();
+                            user.num = parseInt(num) + 1;
+                            user.hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+                            user.email = req.body.email;
+                            mongo.connect(uri, function(err, db){
+                                if(err)
+                                {
+                                    console.log(err.message);
+                                }
+                                else
+                                {
+                                    db.collection('users').insert(user, {w : 1}, function(err, docs){
+                                        db.close();
+                                        if(err)
+                                        {
+                                            console.log(err.message);
+                                            res.render('register', {response: "That username is already taken, please choose a different one"});
+                                        }
+                                        else
+                                        {
+                                            console.log(docs);
+                                            res.cookie('name', docs[0]._id, {maxAge: 86400000, signed: true});
+                                            res.redirect('/play');
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else
+                        {
+                            console.log("Incorrect Password");
+                            res.render('register', {response: "Passwords do not match"});
+                        }
+                    });
+                }
+            });
         }
     });
 });
@@ -261,6 +285,7 @@ router.post('/forgot', function(req, res) {
         if(err)
         {
             console.log(err.message);
+            res.render('home');
         }
         else
         {
@@ -270,12 +295,12 @@ router.post('/forgot', function(req, res) {
                     from: 'sudokuchampster@gmail.com',
                     to : req.body.email,
                     subject: 'Time to get back in the game',
-                    text: 'Hey there, ' + req.body.email.split('@')[0] + '\n' + 'A little birdie told us that you were having troubles with your Sudoku champs password.\n'
-                    + "That really hurts us, so please click on http://" + req.headers.host + '/reset/' + token + " in order to reset your password.\nWe"
-                    + ' would love to have you back as a user.\n In the event that this password reset was not requested by you,'
-                    + ' please ignore this message and your password shall remain intact.\n\nRegards, \nThe Sudoku Champs team.'
+                    text: 'Hey there, ' + req.body.name + '\n' + 'A little birdie told us that you were having troubles with your Sudoku champs password.\n'
+                    + "That really hurts us, so please click on http://" + req.headers.host + '/reset/' + token + " within sixty minutes of seeing this message in order to" +
+                    ' reset your password.\nWe would love to have you back as a user.\n In the event that this password reset was not requested by you, please ignore this' +
+                    ' message and your password shall remain intact.\n\nRegards, \nThe Sudoku Champs team.'
                 };
-                db.collection('users').findAndModify({email : req.body.email}, [], {$set:{token : token, expire : Date.now() + 3600000}}, {new : false}, function(err, doc){
+                db.collection('users').findAndModify({email : req.body.email, _id : req.body.name}, [], {$set:{token : token, expire : Date.now() + 3600000}}, {}, function(err, doc){
                     db.close();
                     if(err)
                     {
@@ -309,43 +334,52 @@ router.post('/reset/:token', function(req, res) {
         if(err)
         {
             console.log(err.message);
+            res.render('home');
         }
         else
         {
-            var query = {token : req.params.token, expire : {$gt: Date.now()}},
-                op = {$set : {hash : bcrypt.hashSync(req.body.pass, bcrypt.genSaltSync(10))}, $unset : {token : '', expire : ''}};
-            db.collection('users').findAndModify(query, [], op, {new : true}, function(err, doc) {
-                db.close();
-                if(err)
-                {
-                    console.log(err.message);
-                }
-                else if(!doc)
-                {
-                    console.log('No matches!');
-                    res.redirect('/forgot');
-                }
-                else
-                {
-                    var options = {
-                        to : doc.email,
-                        subject : 'Password change successful !',
-                        text : 'Hey there, ' + doc.email.split('@')[0] + ' we\'re just writing in to let you know that the recent password change for your account with Sudoku Champs was successful.' +
-                        '\nRegards,\nThe Sudoku Champs team.'
-                    };
-                    email.sendMail(options, function(err) {
-                        if(err)
-                        {
-                            console.log(err.message);
-                        }
-                        else
-                        {
-                            console.log('Updated successfully!');
-                            res.redirect('/login');
-                        }
-                    });
-                }
-            });
+            if(req.body.password === req.body.confirm)
+            {
+                var query = {token : req.params.token, expire : {$gt: Date.now()}},
+                    op = {$set : {hash : bcrypt.hashSync(req.body.pass, bcrypt.genSaltSync(10))}, $unset : {token : '', expire : ''}};
+                db.collection('users').findAndModify(query, [], op, {new : true}, function(err, doc) {
+                    db.close();
+                    if(err)
+                    {
+                        console.log(err.message);
+                    }
+                    else if(!doc)
+                    {
+                        console.log('No matches!');
+                        res.redirect('/forgot');
+                    }
+                    else
+                    {
+                        var options = {
+                            to : doc.email,
+                            subject : 'Password change successful !',
+                            text : 'Hey there, ' + doc.email.split('@')[0] + ' we\'re just writing in to let you know that the recent password change for your account with Sudoku Champs was successful.' +
+                            '\nRegards,\nThe Sudoku Champs team.'
+                        };
+                        email.sendMail(options, function(err) {
+                            if(err)
+                            {
+                                console.log(err.message);
+                            }
+                            else
+                            {
+                                console.log('Updated successfully!');
+                                res.redirect('/login');
+                            }
+                        });
+                    }
+                });
+            }
+            else
+            {
+                console.log("Passwords do not match !");
+                res.redirect('/reset/'+req.params.token);
+            }
         }
     });
 });

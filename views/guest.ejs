@@ -5,54 +5,103 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="/styles/style.css" type="text/css"/>
     <link rel="stylesheet" href="/styles/flipclock.css" type="text/css"/>
+    <link rel="stylesheet" href="/styles/game.css" type="text/css"/>
     <script src="/scripts/jquery.min.js"></script>
     <script src="/scripts/flipclock.js"></script>
     <script src="/scripts/script.js"></script>
-    <script src="/scripts/sec.js"></script>
+    <script src="/scripts/game.js"></script>
   </head>
   <body>
   <nav>
         <ul>
-            <li>
-                <a href="/">HOME</a>
-            </li>
-            <li>
-                <a href="/login">LOGIN</a>
-            </li>
-            <li>
-                <a href="/play">PLAY</a>
-            </li>
-            <li>
-                <a href="/register">REGISTER</a>
-            </li>
-            <li>
-                <a href="/rules">RULES</a>
-            </li>
-            <li>
-                <a href="/leader">LEADERBOARD</a>
-            </li>
+            <li><a href="/">HOME</a></li>
+            <li><a href="/login">LOGIN</a></li>
+            <li><a href="/play">PLAY</a></li>
+            <li><a href="/register">REGISTER</a></li>
+            <li><a href="/rules">RULES</a></li>
+            <li><a href="/leader">LEADERBOARD</a></li>
         </ul>
     </nav>
-    <h1>Welcome, guest</h1>
+    <br><br><br><br><br><br>
     <div class="clock" id="clock"></div>
     <a id="start" onclick="tick()">Start</a>
     <a id="hide" onclick="hide()">Hide</a>
+    <div id="Wrapper">
+      <div id="Main">
+          <div id="Content">
+            <br/><br/><br/>
+            <div id="Column1">
+                <input id="amazeButton" type="hidden" />
+            </div>
+            <div id="sudokuBoard">
+                <table cellspacing="0" cellpadding="0">
+                    <% for(i = 0; i < 3; ++i){ %>
+                       <tr>
+                            <% for(j = 0; j < 3; ++j){ %>
+                                <td class="alpha">
+                                    <table cellspacing="1" cellpadding="0">
+                                        <% for(k = 0; k < 3; ++k){ %>
+                                            <tr>
+                                                <% for(l = 0; l < 3; ++l){ %>
+                                                    <td class="cell">
+                                                        <div id=<%= (k + 3 * i).toString() + (l + 3 * j).toString()%> class="staticValue">
+                                                            <input/>
+                                                        </div>
+                                                    </td>
+                                                <% } %>
+                                            </tr>
+                                        <% } %>
+                                    </table>
+                                </td>
+                            <% } %>
+                        </tr>
+                    <% } %>
+                </table>
+            </div>
+              <div id="col2">
+                  <div class="validate">
+                      <input id="checkButton" type="submit" value="CHECK" class="gameControls"/><br/>
+                      <span id="errorsFound" class="errorsFound" role="tab" aria-selected="true" aria-controls="ErrorsFound" tabindex="300">MISTAKE FOUND</span>
+                      <span id="noErrors" class="noErrors" role="tab" aria-selected="true" aria-controls="NoErrorsFound" tabindex="400">LOOKIN GOOD</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div class="game">
+        <input id="newGameButton" type="submit" value="NEW GAME" class="gameControls"/>
+        <br/>
+        <label>Level:</label>&nbsp;&nbsp;
+        <select id="difficulty">
+            <option value="1" selected>KID MODE</option>
+            <option value="2">RECRUIT</option>
+            <option value="3">SEASONED</option>
+            <option value="4">VETERAN</option>
+            <option value="5">GOD MODE</option>
+        </select>
+    </div>
+    <div id="youWon">
+          <div>
+              <span role="alert" aria-selected="true" aria-controls="youWin" tabindex="500">YOU WIN!</span>
+              <br/>
+              <small role="tab" aria-selected="true" aria-controls="youWinText" tabindex="600">
+                  Great job. Can you do it again?
+              </small>
+              <br/>
+              <br/>
+              <input id="winNewGameButton" type="submit" value="NEW GAME" class="gameControls"/>
+              <input id="winCloseButton" type="submit" value="CLOSE" class="gameControls"/>
+        </div>
+    </div>
   </body>
 <footer>
     <nav>
         <ul>
-            <li>
-                <a href="/logout">I wish to leave</a>
-            </li>
-            <li>
-                <a href="/privacy">Privacy</a>
-            </li>
-            <li>
-                <a href="/contact">Get in touch</a>
-            </li>
-            <li>
-                <a href="/developers">Developers</a>
-            </li>
+            <li><a href="/logout">I wish to leave</a></li>
+            <li><a href="/privacy">Privacy</a></li>
+            <li><a href="/contact">Get in touch</a></li>
+            <li><a href="/developers">Developers</a></li>
         </ul>
-    </nav></footer>
+    </nav>
+</footer>
 </html>

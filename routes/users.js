@@ -38,7 +38,7 @@ router.get('/privacy', function(req, res) {
 });
 // GET forgot password page
 router.get('/forgot', function(req, res) {
-    res.render('forgot');
+    res.render('forgot', {token : req.csrfToken()});
 });
 // GET solved example
 router.get('/solved', function(req, res) {

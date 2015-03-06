@@ -44,7 +44,11 @@ passport.use(new facebook({
                     }
                     else
                     {
-                        db.collection('users').findOne({ _id : profile.name.givenName + ' ' + profile.name.familyName }, function(err, doc) {
+                        user._id = profile.name.givenName + ' ' + profile.name.familyName;
+                        user.dob = new Date();
+                        user.token = token;
+                        user.email = profile.emails[0].value;
+                        db.collection('users').findAndModify({ _id : profile.name.givenName + ' ' + profile.name.familyName }, [], {$setOnInsert : user}, {upsert : true}, function(err, doc) {
                             db.close();
                             if (err)
                             {
@@ -53,20 +57,6 @@ passport.use(new facebook({
                             else if (doc)
                             {
                                 return done(null, doc);
-                            }
-                            else
-                            {
-                                user._id = profile.name.givenName + ' ' + profile.name.familyName;
-                                user.dob = new Date();
-                                user.token = token;
-                                user.email = profile.emails[0].value;
-                                user.save(function(err) {
-                                    if (err)
-                                    {
-                                        throw err;
-                                    }
-                                    return done(null, user);
-                                });
                             }
                         });
                     }
@@ -88,27 +78,17 @@ passport.use(new twitter({
                 }
                 else
                 {
-                    db.collection('users').findOne({ _id : profile.username }, function(err, doc) {
+                    user._id = profile.username;
+                    user.token = profile.token;
+                    db.collection('users').findAndModify({ _id : profile.username }, [], {$setOnInsert : user}, {upsert : true}, function(err, doc) {
                         db.close();
                         if (err)
                         {
                             console.log(err.message);
                         }
-                        else if (doc)
-                        {
-                            return done(null, doc);
-                        }
                         else
                         {
-                            user._id = profile.username;
-                            user.token = profile.token;
-                            user.save(function(err) {
-                                if (err)
-                                {
-                                    throw err;
-                                }
-                                return done(null, user);
-                            });
+                            return done(null, doc ? doc : user);
                         }
                     });
                 }
@@ -129,31 +109,17 @@ passport.use(new google({
                 }
                 else
                 {
-                    db.collection('users').findOne({ _id: profile.displayName }, function(err, doc) {
+                    user._id = profile.displayName;
+                    user.dob = Date.now();
+                    db.collection('users').findAndModify({ _id: profile.displayName }, [], {$setOnInsert : user}, {upsert : true}, function(err, doc) {
                         db.close();
                         if(err)
                         {
                             console.log(err.message);
                         }
-                        else if (doc)
-                        {
-                            done(null, doc);
-                        }
                         else
                         {
-                            user._id = profile.displayName;
-                            user.dob = Date.now();
-                            user.save(function(err) {
-                                if(err)
-                                {
-                                    console.log(err.message);
-                                }
-                                else
-                                {
-                                    console.log("saving user ...");
-                                    done(null, user);
-                                }
-                            });
+                            done(null, doc ? doc : user);
                         }
                     });
                 }
@@ -175,31 +141,17 @@ passport.use(new github({
                 }
                 else
                 {
-                    db.collection('users').findOne({ _id: profile.displayName }, function(err, doc) {
+                    user._id = profile.displayName;
+                    user.dob = Date.now();
+                    db.collection('users').findAndModify({ _id: profile.displayName }, [], {$setOnInsert : user}, {upsert : true}, function(err, doc) {
                         db.close();
                         if(err)
                         {
                             console.log(err.message);
                         }
-                        else if (doc)
-                        {
-                            done(null, doc);
-                        }
                         else
                         {
-                            user._id = profile.displayName;
-                            user.dob = Date.now();
-                            user.save(function(err) {
-                                if(err)
-                                {
-                                    console.log(err.message);
-                                }
-                                else
-                                {
-                                    console.log("saving user ...");
-                                    done(null, user);
-                                }
-                            });
+                            done(null, doc ? doc : user);
                         }
                     });
                 }
@@ -221,30 +173,17 @@ passport.use(new linkedin({
                 }
                 else
                 {
-                    db.collection('users').find({ _id: profile.displayName }, function (err, doc) {
+                    user._id = profile.displayName;
+                    user.dob = Date.now();
+                    db.collection('users').findAndModify({ _id: profile.displayName }, [], {$setOnInsert : user}, {upsert : true}, function (err, doc) {
                         db.close();
                         if(err)
                         {
                             console.log(err.message);
                         }
-                        else if (doc)
-                        {
-                            done(null, doc);
-                        }
                         else
                         {
-                            user._id = profile.displayName;
-                            user.dob = Date.now();
-                            user.save(function(err) {
-                                if(err)
-                                {
-                                    console.log(err.message);
-                                }
-                                else
-                                {
-                                    done(null, user);
-                                }
-                            });
+                            done(null, doc ? doc : user);
                         }
                     });
                 }
