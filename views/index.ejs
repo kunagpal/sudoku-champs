@@ -8,18 +8,10 @@
   <body>
     <nav>
       <ul>
-          <li><a id="inv">HOME</a>
-          </li>
-          <li><a href="/login">LOGIN</a>
-          </li>
-          <li><a href="/play">PLAY</a>
-          </li>
-          <li><a href="/register">REGISTER</a>
-          </li>
-          <li><a href="/rules">RULES</a>
-          </li>
-          <li><a href="/leader">LEADERBOARD</a>
-          </li>
+          <li><a id="inv">HOME</a></li>
+          <li><a href="/play">PLAY</a></li>
+          <li><a href="/rules">RULES</a></li>
+          <li><a href="/leader">LEADERBOARD</a></li>
       </ul>
     </nav>
     <h1>Sudoku Champs</h1>
@@ -27,15 +19,15 @@
     <img src="/images/main.jpg" class="flip"/>
     <h3>Because you just have to solve them all.</h3>
     <br/><br/>
-    <a href="/register" id="begin">Get Started</a>
+    <a href="/login" id="begin">Get Started</a>
     <%if(stats) {%>
         <div id="stats">
             <h3><%= 'Number crunching...' %></h3>
-            <ul>
+            <ol>
                  <% for(i in stats) {%>
                  <li><%= index[i] + ' : ' + stats[i] %></li>
                  <%}%>
-            </ul>
+            </ol>
         </div>
     <%}%>
   </body>

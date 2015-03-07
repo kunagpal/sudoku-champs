@@ -218,7 +218,7 @@ router.post('/login', function(req, res) {
                     if (bcrypt.compareSync(req.body.password, doc.hash))
                     {
                         res.cookie('name', req.body.name, {maxAge: 86400000, signed: true});
-                        res.redirect(ref[req.headers.referer.split('?')[1]]);
+                        res.redirect(ref[req.headers.referer.split('?')[1]] || '/play');
                     }
                 }
             });

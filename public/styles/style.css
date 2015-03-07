@@ -52,10 +52,6 @@ nav ul{
 nav ul li{
     float : left;
     text-align : center;
-    width : 16.6666666666667%;
-}
-footer nav ul li{
-    text-align : center;
     width : 25%;
 }
 .center {
@@ -307,4 +303,7 @@ footer {
 }
 input {
     outline-color: #000000;
+}
+ol {
+    list-style : none;
 }
