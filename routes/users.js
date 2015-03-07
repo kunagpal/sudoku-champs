@@ -63,7 +63,7 @@ router.get('/play', function(req, res) {
     }
     else
     {
-        res.redirect('/login');
+        res.redirect('/login?pl');
     }
 });
 // GET practice page
@@ -74,7 +74,7 @@ router.get('/practice', function(req, res) {
     }
     else
     {
-        res.redirect('/login');
+        res.redirect('/login?pr');
     }
 });
 // GET h2h page
@@ -85,7 +85,7 @@ router.get('/h2h', function(req, res) {
     }
     else
     {
-        res.redirect('/login');
+        res.redirect('/login?h');
     }
 });
 // GET challenge page
@@ -96,7 +96,7 @@ router.get('/challenge', function(req, res) {
     }
     else
     {
-        res.redirect('/login');
+        res.redirect('/login?c');
     }
 });
 // GET solo page
@@ -107,7 +107,7 @@ router.get('/solo', function(req, res) {
     }
     else
     {
-        res.redirect('/login');
+        res.redirect('/login?s');
     }
 });
 // GET registration page

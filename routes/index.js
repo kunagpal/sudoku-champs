@@ -1,6 +1,13 @@
 var i,
     lead,
     flag,
+    ref = {
+        'h':'/h2h',
+        's':'/solo',
+        'pl':'/play',
+        'pr':'/practice',
+        'c':'/challenge'
+    },
     path = require('path'),
     crypto = require('crypto'),
     bcrypt = require('bcrypt-nodejs'),
@@ -30,16 +37,15 @@ try{
 }
 catch(err){
     console.log(err.message);
-    key = 0;
+    key.key = 0;
 }
 var email = require('nodemailer').createTransport({
     service: 'Gmail',
     auth: {
         user: 'sudokuchampster@gmail.com',
         pass: process.env.PASSWORD || key
-    }
-});
-
+        }
+    });
 if (process.env.LOGENTRIES_TOKEN)
 {
     var log = require('node-logentries').logger({token: process.env.LOGENTRIES_TOKEN});
@@ -192,7 +198,7 @@ router.post('/login', function(req, res) {
         if(err)
         {
             console.log(err.message);
-            res.render('home');
+            res.redirect('/login');
         }
         else
         {
@@ -212,7 +218,7 @@ router.post('/login', function(req, res) {
                     if (bcrypt.compareSync(req.body.password, doc.hash))
                     {
                         res.cookie('name', req.body.name, {maxAge: 86400000, signed: true});
-                        res.redirect('/play');
+                        res.redirect(ref[req.headers.referer.split('?')[1]]);
                     }
                 }
             });
@@ -236,7 +242,7 @@ router.post('/register', function(req, res) {
                 else
                 {
                     console.log(num);
-                    db.close(function(err, db){
+                    db.close(function(){
                         if (req.body.password === req.body.confirm)
                         {
                             user._id = req.body.name;

@@ -5,9 +5,9 @@
  */
 
 var path = require('path'),
-    app = require(path.join(__dirname, '..', 'app')),
+    io = require('socket.io'),
     debug = require('debug')('sudokuchamps'),
-    http = require('http');
+    app = require(path.join(__dirname, '..', 'app'));
 
 /**
  * Get port from environment and store in Express.
@@ -20,7 +20,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = require('http').createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.

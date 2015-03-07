@@ -4,12 +4,21 @@ var path = require('path'),
     express = require('express'),
     favicon = require('serve-favicon'),
     bodyParser = require('body-parser'),
+    ua = require('universal-analytics'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
     users = require(path.join(__dirname, 'routes', 'users')),
     routes = require(path.join(__dirname, 'routes', 'index')),
     social = require(path.join(__dirname, 'routes', 'social')),
     app = express();
+
+try{
+    var key = require(path.join(__dirname, 'key')).ua_id;
+}
+catch(err){
+    console.log(err.message);
+    key = 0;
+}
 // view engine setup
 app.set('view engine', 'ejs');
 app.set('case sensitive routing', true);
@@ -18,11 +27,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser("secret"));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(favicon(__dirname + '/public/images/main.jpg'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret : 'session secret key', resave : '', saveUninitialized : ''}));
 app.use(csurf());
+app.use(ua.middleware(process.env.UA_ID || key.ua_id, {cookieName: '_ga'}));
 app.use('/', routes);
 app.use('/', users);
 app.use('/', social);
