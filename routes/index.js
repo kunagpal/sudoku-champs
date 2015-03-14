@@ -30,7 +30,7 @@ var i,
         played : 'Matches played'
     },
     op = {'_id' : 1, 'points' : 1, 'played' : 1, 'streak' : 1},
-    frame = {'sort' : [['points', -1], ['played' , 1], ['streak' , -1]], 'limit' : 2};
+    frame = {'sort' : [['points', -1], ['played' , 1], ['streak' , -1]], 'limit' : 5};
 
 try{
     var key = require(path.join(__dirname, '..', 'key')).key;
@@ -94,7 +94,7 @@ router.get('/reset/:token', function(req, res) {
                 }
                 else if (!doc)
                 {
-                    res.redirect('/forgot');
+                    res.redirect('/forgot', {msg : "The link is invalid or has expired."});
                 }
                 else
                 {
@@ -109,7 +109,7 @@ router.get('/reset/:token', function(req, res) {
 router.get('/leader', function(req, res) {
     i = 1;
     lead = [];
-    flag = req.signedCookies.name ? false : true;
+    flag = !req.signedCookies.name;
     mongo.connect(uri, function(err, db) {
         if(err)
         {
@@ -122,6 +122,7 @@ router.get('/leader', function(req, res) {
                 if(err)
                 {
                     console.log(err.message);
+                    res.render('leader', {lead : []});
                 }
                 else if(doc)
                 {
@@ -137,47 +138,46 @@ router.get('/leader', function(req, res) {
                         if(err)
                         {
                             console.log(err.message);
+                            res.render('leader', {lead : lead, name : ""});
                         }
-                        else
+                        else if(!flag && req.signedCookies.name)
                         {
-                            if(!flag && req.signedCookies.name)
-                            {
-                                mongo.connect(uri, function (err, db) {
-                                    if (err)
-                                    {
-                                        console.log(err.message);
-                                        res.render('leader', {lead : lead});
-                                    }
-                                    else
-                                    {
-                                        db.collection('users').find({}, op, {sort : [['points', -1], ['played' , 1], ['steak', -1]]}).each(function (err, doc) {
-                                            db.close();
-                                            if (err)
+                            mongo.connect(uri, function (err, db) {
+                                if (err)
+                                {
+                                    console.log(err.message);
+                                    res.render('leader', {lead : []});
+                                }
+                                else
+                                {
+                                    db.collection('users').find({}, op, {sort : [['points', -1], ['played' , 1], ['steak', -1]]}).each(function (err, doc) {
+                                        db.close();
+                                        if (err)
+                                        {
+                                            console.log(err.message);
+                                            res.render('leader', {lead : []});
+                                        }
+                                        else if(doc)
+                                        {
+                                            if(doc._id == req.signedCookies.name)
                                             {
-                                                console.log(err.message);
+                                                doc.rank = i;
+                                                lead.push(doc);
+                                                res.render('leader', {lead: lead, name : req.signedCookies.name});
                                             }
-                                            else if(doc)
+                                            else
                                             {
-                                                if(doc._id == req.signedCookies.name)
-                                                {
-                                                    doc.rank = i;
-                                                    lead.push(doc);
-                                                    res.render('leader', {lead: lead});
-                                                }
-                                                else
-                                                {
-                                                    ++i;
-                                                }
+                                                ++i;
                                             }
-                                        });
-                                    }
-                                });
-                            }
+                                        }
+                                    });
+                                }
+                            });
                         }
                     });
                     if(flag)
                     {
-                        res.render('leader', {lead : lead});
+                        res.render('leader', {lead : lead, name : req.signedCookies.name});
                     }
                 }
             });
@@ -189,10 +189,6 @@ router.post('/login', function(req, res) {
     if (req.signedCookies.name)
     {
         res.clearCookie('name', { });
-    }
-    if (log)
-    {
-        console.log(req.body.name + " " + req.body.password + "received");
     }
     mongo.connect(uri, function(err, db){
         if(err)
@@ -219,6 +215,10 @@ router.post('/login', function(req, res) {
                     {
                         res.cookie('name', req.body.name, {maxAge: 86400000, signed: true});
                         res.redirect(ref[req.headers.referer.split('?')[1]] || '/play');
+                    }
+                    else
+                    {
+                        res.redirect('/login');
                     }
                 }
             });
@@ -262,7 +262,7 @@ router.post('/register', function(req, res) {
                                         if(err)
                                         {
                                             console.log(err.message);
-                                            res.render('register', {response: "That username is already taken, please choose a different one"});
+                                            res.render('register', {msg: "That username is already taken, please choose a different one"});
                                         }
                                         else
                                         {
@@ -277,7 +277,7 @@ router.post('/register', function(req, res) {
                         else
                         {
                             console.log("Incorrect Password");
-                            res.render('register', {response: "Passwords do not match"});
+                            res.render('register', {msg: "Passwords do not match"});
                         }
                     });
                 }
@@ -357,14 +357,14 @@ router.post('/reset/:token', function(req, res) {
                     else if(!doc)
                     {
                         console.log('No matches!');
-                        res.redirect('/forgot');
+                        res.redirect('/forgot', {msg : "Incorrect details !"});
                     }
                     else
                     {
                         var options = {
                             to : doc.email,
                             subject : 'Password change successful !',
-                            text : 'Hey there, ' + doc.email.split('@')[0] + ' we\'re just writing in to let you know that the recent password change for your account with Sudoku Champs was successful.' +
+                            text : 'Hey there, ' + doc._id + ' we\'re just writing in to let you know that the recent password change for your account with Sudoku Champs was successful.' +
                             '\nRegards,\nThe Sudoku Champs team.'
                         };
                         email.sendMail(options, function(err) {
@@ -375,7 +375,7 @@ router.post('/reset/:token', function(req, res) {
                             else
                             {
                                 console.log('Updated successfully!');
-                                res.redirect('/login');
+                                res.redirect('/login', {msg : "Congratulations ! Your Password change was successful !"});
                             }
                         });
                     }
@@ -384,7 +384,7 @@ router.post('/reset/:token', function(req, res) {
             else
             {
                 console.log("Passwords do not match !");
-                res.redirect('/reset/'+req.params.token);
+                res.redirect('/reset/' + req.params.token);
             }
         }
     });

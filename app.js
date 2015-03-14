@@ -8,8 +8,8 @@ var path = require('path'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
     users = require(path.join(__dirname, 'routes', 'users')),
-    routes = require(path.join(__dirname, 'routes', 'index')),
     social = require(path.join(__dirname, 'routes', 'social')),
+    routes = require(path.join(__dirname, 'routes', 'index')),
     app = express();
 
 try{
@@ -34,8 +34,8 @@ app.use(session({ secret : 'session secret key', resave : '', saveUninitialized 
 app.use(csurf());
 app.use(ua.middleware(process.env.UA_ID || key.ua_id, {cookieName: '_ga'}));
 app.use('/', routes);
-app.use('/', users);
 app.use('/', social);
+app.use('/', users);
 app.enable('trust proxy');
 
 // catch 404 and forward to error handler
@@ -48,7 +48,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
+    app.use(function(err, req, res) {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
@@ -58,7 +58,7 @@ if (app.get('env') === 'development') {
 }
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,

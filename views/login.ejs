@@ -2,7 +2,7 @@
 <html class="center">
   <head>
     <title>Login | Sudoku Champs</title>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8"/>
     <link rel="stylesheet" href="/styles/style.css" type="text/css" />
   </head>
   <body>
@@ -19,25 +19,25 @@
       <h3>You'll get no points, nor would you feature on our exclusive leaderboard :(</h3>
       <form method="POST" action="/login">
             <input type="hidden" name="_csrf" value=<%= token %>>
-            <input type="text" name="name" placeholder="User" autofocus="true"/> <br /><br />
-            <input type="password" name="password" placeholder="Password"/> <br/><br />
+            <input type="text" name="name" placeholder="User" autofocus="true" required/> <br /><br />
+            <input type="password" name="password" placeholder="Password" required/> <br/><br />
             <input type="submit" id="begin" value="Let's go!"/>
       </form>
       <br/>
       <a href="/forgot" class="link">I need help with my password</a>
       <h3>Or, if you wish, you can login through one of your other accounts.</h3>
-      <a href="/fb"><img src="/images/social/fb.png" class="flip"/></a>
-      <a href="/gi"><img src="/images/social/gi.png" class="flip" /></a>
-      <a href="/go"><img src="/images/social/go.png" class="flip" /></a>
-      <a href="/li"><img src="/images/social/li.png" class="flip" /></a>
-      <a href="/tw"><img src="/images/social/tw.jpg" class="flip" /></a>
+      <a href="/fb"><img src="/images/social/fb.png" /></a>
+      <a href="/gi"><img src="/images/social/gi.png" /></a>
+      <a href="/go"><img src="/images/social/go.png" /></a>
+      <a href="/li"><img src="/images/social/li.png" /></a>
+      <a href="/tw"><img src="/images/social/tw.jpg" /></a>
   </body>
   <footer>
       <nav>
             <ul>
                 <li><a href="/logout">I wish to leave</a></li>
                 <li><a href="/privacy">Privacy</a></li>
-                <li><a href="/contact">Get in touch</a></li>
+                <li><a href="/forum">Forum</a></li>
                 <li><a href="/developers">Developers</a></li>
             </ul>
       </nav>

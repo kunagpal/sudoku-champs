@@ -21,10 +21,10 @@ router.get('/login', function(req, res) {
     }
 });
 // GET contact page
-router.get('/contact', function(req, res) {
-    res.render('contact');
+router.get('/forum', function(req, res) {
+    res.render('forum');
 });
-// GET developers page
+// GET dev page
 router.get('/developers', function(req, res) {
     res.render('developers');
 });
@@ -113,5 +113,9 @@ router.get('/solo', function(req, res) {
 // GET registration page
 router.get('/register', function(req, res) {
         res.render('register', {token : req.csrfToken()});
+});
+//GET generic route
+router.get(/\/.*/, function(req, res){
+    res.redirect('/');
 });
 module.exports = router;

@@ -36,10 +36,22 @@ b {
     width: 300px;
     float: left;
 }
-#sudokuBoard {
+#sudokuBoard, #cover{
+    position : absolute;
     width: 426px;
     margin-left: 40px;
     float: left;
+    z-index : 0;
+}
+#cover{
+    height : auto;
+    filter : blur(10px);
+    -moz-filter : blur(10px);
+    -ms-filter : blur(10px);
+    -o-filter : blur(10px);
+    -webkit-filter : blur(10px);
+    visibility : hidden;
+    z-index : 1;
 }
 #col2 {
     width: 174px;
@@ -186,6 +198,7 @@ option:hover {
     top : 20%;
 }
 #newGameButton{
+    visibility : hidden;
     top : 30%;
 }
 #difficulty{

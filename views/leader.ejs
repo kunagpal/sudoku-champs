@@ -2,7 +2,7 @@
 <html class="center">
   <head>
     <title>Leaderboard | Sudoku Champs</title>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8"/>
     <link rel="stylesheet" href="/styles/style.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@
                 <th>Streak</th>
              </tr>
             <% for(i = 0; i < lead.length; ++i) { %>
-             <tr>
+             <tr id=<%=(lead[i]._id == name) ? "inv" : ""%>>
                  <td><%= lead[i].rank || (i + 1) %></td>
                  <td><%= lead[i]._id %></td>
                  <td><%= lead[i].points %></td>
@@ -36,10 +36,10 @@
   </body>
   <footer>
       <nav>
-          <ul id="foot">
+          <ul>
               <li><a href="/logout">I wish to leave</a></li>
               <li><a href="/privacy">Privacy</a></li>
-              <li><a href="/contact">Get in touch</a></li>
+              <li><a href="/forum">Forum</a></li>
               <li><a href="/developers">Developers</a></li>
           </ul>
       </nav>

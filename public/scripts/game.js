@@ -1,5 +1,5 @@
 function solveSudoku(inputBoard, stats) {
-  
+  var started = false;
   var stats = stats || {};
   stats['easy'] = true;
   var board = JSON.parse(JSON.stringify(inputBoard));
@@ -302,15 +302,15 @@ function shuffleArray(array)
     var next = (a * last + c) % m;
     last = next;
     return next / m;
-  }
+  };
   
   Math.enableFakeRandom = function() {
     Math.random = fakeRandom;
-  }
+  };
   
   Math.disableFakeRandom = function() {
     Math.random = randomBackup;
-  }
+  };
   
   Math.fakeRandomSeed = function(seed) {
     last = seed;
@@ -706,7 +706,7 @@ function initialize() {
       currentErrors[i].setAttribute('class', currentErrors[i].getAttribute('class').replace(" error", ''))
     }
     currentErrors = [];
-  }
+  };
   
   amazeButton.addEventListener('click', function() {
     if(!amazing)
@@ -789,24 +789,38 @@ function initialize() {
     }
   }, false);
   
-  var winCloseButton = document.getElementById('winCloseButton');
-  winCloseButton.addEventListener('click', function() {
+  document.getElementById('winCloseButton').addEventListener('click', function() {
     winBlock.style.display = 'none';
   }, false);
-  var winNewGameButton = document.getElementById('winNewGameButton');
-  winNewGameButton.addEventListener('click', function() {
+  document.getElementById('winNewGameButton').addEventListener('click', function() {
     clearErrors();
     var value = parseInt(difficulty.options[difficulty.selectedIndex].value);
     currentPuzzle = generatePuzzle(value);
     renderBoard(currentPuzzle);
     winBlock.style.display = 'none';
   }, false);
-  var newGameButton = document.getElementById('newGameButton');
-  newGameButton.addEventListener('click', function() {
-    clearErrors();
-    var value = parseInt(difficulty.options[difficulty.selectedIndex].value);
-    currentPuzzle = generatePuzzle(value);
-    renderBoard(currentPuzzle);
+  document.getElementById('newGameButton').addEventListener('click', function() {
+    if(!started)
+    {
+        clearErrors();
+        var value = parseInt(difficulty.options[difficulty.selectedIndex].value);
+        currentPuzzle = generatePuzzle(value);
+        renderBoard(currentPuzzle);
+        started = true;
+    }
+    else
+    {
+        document.getElementById('sudokuBoard').style.visibility = 'hidden';
+        if(confirm('This will commence a new game. Are you sure you want to proceed ?'))
+        {
+            started = false;
+            location.reload(true);
+        }
+        else
+        {
+            document.getElementById('sudokuBoard').style.visibility = 'visible';
+        }
+    }
   }, false);
    addEventListener('mouseup', function(event) {
     if(event.which === 1) {
