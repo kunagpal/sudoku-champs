@@ -46,10 +46,6 @@ var email = require('nodemailer').createTransport({
         pass: process.env.PASSWORD || key
         }
     });
-if (process.env.LOGENTRIES_TOKEN)
-{
-    var log = require('node-logentries').logger({token: process.env.LOGENTRIES_TOKEN});
-}
 /* GET home page. */
 router.get('/', function(req, res)
 {
