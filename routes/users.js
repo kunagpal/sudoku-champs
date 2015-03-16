@@ -1,4 +1,5 @@
-var path = require('path'),
+var temp,
+    path = require('path'),
     router = require('express').Router(),
     auth = require(path.join(__dirname, '..', 'database', 'auth'));
 // GET logout page
@@ -17,7 +18,9 @@ router.get('/login', function(req, res) {
     }
     else
     {
-        res.render('login', {token : req.csrfToken()});
+        temp = req.session.msg ? req.session.msg : 0;
+        delete req.session.msg;
+        res.render('login', {token : req.csrfToken(), msg : temp});
     }
 });
 // GET contact page
@@ -38,7 +41,9 @@ router.get('/privacy', function(req, res) {
 });
 // GET forgot password page
 router.get('/forgot', function(req, res) {
-    res.render('forgot', {token : req.csrfToken()});
+    temp = req.session.msg ? req.session.msg : 0;
+    delete req.session.msg;
+    res.render('forgot', {token : req.csrfToken(), msg : temp});
 });
 // GET solved example
 router.get('/solved', function(req, res) {
@@ -112,7 +117,9 @@ router.get('/solo', function(req, res) {
 });
 // GET registration page
 router.get('/register', function(req, res) {
-        res.render('register', {token : req.csrfToken()});
+    temp = req.session.msg ? req.session.msg : 0;
+    delete req.session.msg;
+    res.render('register', {token : req.csrfToken(), msg : temp});
 });
 //GET generic route
 router.get(/\/.*/, function(req, res){
