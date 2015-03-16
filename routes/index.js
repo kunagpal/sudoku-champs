@@ -37,7 +37,7 @@ try{
 }
 catch(err){
     console.log(err.message);
-    key.key = 0;
+    key = 0;
 }
 var email = require('nodemailer').createTransport({
     service: 'Gmail',
