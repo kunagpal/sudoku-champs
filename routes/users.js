@@ -1,7 +1,8 @@
-var temp,
+var temp = [],
     path = require('path'),
     router = require('express').Router(),
     auth = require(path.join(__dirname, '..', 'database', 'auth'));
+
 // GET logout page
 router.get('/logout', function(req, res) {
     if (req.signedCookies.name)
@@ -10,6 +11,7 @@ router.get('/logout', function(req, res) {
     }
     res.redirect('/login');
 });
+
 // GET login page
 router.get('/login', function(req, res) {
     if(req.signedCookies.name)
@@ -18,37 +20,48 @@ router.get('/login', function(req, res) {
     }
     else
     {
-        temp = req.session.msg ? req.session.msg : 0;
+        temp[0] = req.session.msg ? req.session.msg : 0;
         delete req.session.msg;
-        res.render('login', {token : req.csrfToken(), msg : temp});
+        temp[1] = req.session.info ? req.session.info : 0;
+        delete req.session.info;
+        res.render('login', {token : req.csrfToken(), msg : temp[0], info : temp[1]});
     }
 });
+
 // GET contact page
 router.get('/forum', function(req, res) {
     res.render('forum');
 });
+
 // GET dev page
 router.get('/developers', function(req, res) {
     res.render('developers');
 });
+
 //GET rules
 router.get('/rules', function(req, res) {
     res.render('rules');
 });
+
 //GET privacy
 router.get('/privacy', function(req, res) {
     res.render('privacy');
 });
+
 // GET forgot password page
 router.get('/forgot', function(req, res) {
-    temp = req.session.msg ? req.session.msg : 0;
+    temp[0] = req.session.msg ? req.session.msg : 0;
     delete req.session.msg;
-    res.render('forgot', {token : req.csrfToken(), msg : temp});
+    temp[1] = req.session.info ? req.session.info : 0;
+    delete req.session.info;
+    res.render('forgot', {token : req.csrfToken(), msg : temp[0], info : temp[1]});
 });
+
 // GET solved example
 router.get('/solved', function(req, res) {
     res.render('solved');
 });
+
 // GET guest page
 router.get('/guest', function(req, res) {
     if (req.signedCookies.name)
@@ -60,6 +73,7 @@ router.get('/guest', function(req, res) {
         res.render('guest');
     }
 });
+
 // GET play page
 router.get('/play', function(req, res) {
     if (req.signedCookies.name)
@@ -71,6 +85,7 @@ router.get('/play', function(req, res) {
         res.redirect('/login?pl');
     }
 });
+
 // GET practice page
 router.get('/practice', function(req, res) {
     if (req.signedCookies.name)
@@ -82,6 +97,7 @@ router.get('/practice', function(req, res) {
         res.redirect('/login?pr');
     }
 });
+
 // GET h2h page
 router.get('/h2h', function(req, res) {
     if (req.signedCookies.name)
@@ -93,6 +109,7 @@ router.get('/h2h', function(req, res) {
         res.redirect('/login?h');
     }
 });
+
 // GET challenge page
 router.get('/challenge', function(req, res) {
     if (req.signedCookies.name)
@@ -104,6 +121,7 @@ router.get('/challenge', function(req, res) {
         res.redirect('/login?c');
     }
 });
+
 // GET solo page
 router.get('/solo', function(req, res) {
     if (req.signedCookies.name)
@@ -115,14 +133,19 @@ router.get('/solo', function(req, res) {
         res.redirect('/login?s');
     }
 });
+
 // GET registration page
 router.get('/register', function(req, res) {
-    temp = req.session.msg ? req.session.msg : 0;
+    temp[0] = req.session.msg ? req.session.msg : 0;
     delete req.session.msg;
-    res.render('register', {token : req.csrfToken(), msg : temp});
+    temp[1] = req.session.info ? req.session.info : 0;
+    delete req.session.info;
+    res.render('register', {token : req.csrfToken(), msg : temp[0], info : temp[1]});
 });
+
 //GET generic route
 router.get(/\/.*/, function(req, res){
     res.redirect('/');
 });
+
 module.exports = router;

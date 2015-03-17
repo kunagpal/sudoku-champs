@@ -14,13 +14,14 @@
               <li><a href="/leader">LEADERBOARD</a></li>
           </ul>
       </nav>
-      <%= msg ? msg : ''%>
+      <br /><br />
+      <h3 id="reg"><%= info ? info : ''%></h3>
       <h1>Reset Password ?</h1>
       <h2>The closest thing to resurrection in today's digital world.</h2>
       <form method="POST">
           <input type="hidden" name="_csrf" value=<%= token %>>
           <input type = "password" placeholder="Password" name = "password" autofocus = "true"/> <br /> <br />
-          <input type = "password" placeholder="Confirm password" name = "confirm"/> <br /> <br />
+          <input type = "password" placeholder="Confirm password" name = "confirm"/> <p id="reg"><%= msg ? msg : ''%></p> <br /> <br />
           <input type="submit" value="Bring me back!" id="begin"/>
       </form>
   </body>

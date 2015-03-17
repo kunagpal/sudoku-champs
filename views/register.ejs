@@ -14,15 +14,16 @@
             <li><a href="/leader">LEADERBOARD</a></li>
         </ul>
       </nav>
-      <%= msg ? msg : ''%>
+      <br /> <br />
+      <h3 id="reg"><%= info ? info : ''%></h3>
       <h1>Let's get started</h1>
       <h2>Registration is completely free and takes only a minute. <br />(Depending on your internet connection, of course)<br /> Already registered ? Login <a href="/login" class="link">here</a></h2>
       <form method="POST" action="/register">
                 <input type="hidden" name="_csrf" value=<%= token %>>
-                <input type="text" name="name" placeholder="User" autofocus="true" required/> <br /><br />
-                <input type="email" name="email" placeholder="Email" required/> <br /><br />
+                <input type="text" name="name" placeholder="User" autofocus="true" autocomplete="true" required /> <br /><br />
+                <input type="email" name="email" placeholder="Email"  autocomplete="true" required/> <br /><br />
                 <input type="password" name="password" placeholder="Password" required/> <br /><br />
-                <input type="password" name="confirm" placeholder="Confirm" required/> <br /><br />
+                <input type="password" name="confirm" placeholder="Confirm" required/> <p id="reg"><%= msg ? msg : ''%></p> <br /><br />
                 <input type="submit" id="begin" value="I am ready"/>
       </form>
   </body>

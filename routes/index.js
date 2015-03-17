@@ -46,7 +46,8 @@ var email = require('nodemailer').createTransport({
         pass: process.env.PASSWORD || key
         }
     });
-/* GET home page. */
+
+// GET home page.
 router.get('/', function(req, res)
 {
     mongo.connect(uri, function(err, db){
@@ -72,17 +73,19 @@ router.get('/', function(req, res)
         }
     });
 });
+
 // GET reset token page
 router.get('/reset/:token', function(req, res) {
     mongo.connect(uri, function(err, db) {
         if(err)
         {
             console.log(err.message);
-            res.render('forgot', {token : req.csrfToken()});
+            req.session.info = 'An unexpected error has occurred. Please retry.';
+            res.redirect('/forgot');
         }
         else
         {
-            db.collection('users').findOne({ token: req.params.token, expire: { $gt: Date.now() } }, function(err, doc) {
+            db.collection('users').findOne({token: req.params.token, expire: {$gt: Date.now()}}, function(err, doc) {
                 db.close();
                 if(err)
                 {
@@ -91,19 +94,19 @@ router.get('/reset/:token', function(req, res) {
                 else if (!doc)
                 {
                     console.log('No matches found !');
-                    req.session.msg = 'No matches found!';
+                    req.session.info = 'No matches found!';
                     res.redirect('/forgot');
                 }
                 else
                 {
-                    res.render('reset', {token : req.csrfToken(), msg : req.session.msg ? req.session.msg : 0});
-                    delete req.session.msg;
+                    res.redirect('/reset');
                     console.log('Found!');
                 }
             });
         }
     });
 });
+
 // GET leaderboard
 router.get('/leader', function(req, res) {
     i = 1;
@@ -183,6 +186,7 @@ router.get('/leader', function(req, res) {
         }
     });
 });
+
 // POST login page
 router.post('/login', function(req, res) {
     if (req.signedCookies.name)
@@ -193,6 +197,7 @@ router.post('/login', function(req, res) {
         if(err)
         {
             console.log(err.message);
+            req.session.info = 'An unexpected error has occurred, please try again.';
             res.redirect('/login');
         }
         else
@@ -205,7 +210,8 @@ router.post('/login', function(req, res) {
                 }
                 else if(!doc)
                 {
-                    res.render('login', {token : req.csrfToken(), msg : 'Incorrect credentials!'});
+                    req.session.info = 'Incorrect credentials!';
+                    res.redirect('/login');
                 }
                 else
                 {
@@ -216,7 +222,7 @@ router.post('/login', function(req, res) {
                     }
                     else
                     {
-                        req.session.msg = 'Incorrect credentials!';
+                        req.session.info = 'Incorrect credentials!';
                         res.redirect('/login');
                     }
                 }
@@ -224,6 +230,7 @@ router.post('/login', function(req, res) {
         }
     });
 });
+
 // POST register page
 router.post('/register', function(req, res) {
     if(req.body.password === req.body.confirm)
@@ -232,6 +239,8 @@ router.post('/register', function(req, res) {
             if(err)
             {
                 console.log(err.message);
+                req.session.msg = 'An unexpected error has occurred. Please retry.';
+                res.redirect('/register');
             }
             else
             {
@@ -239,6 +248,8 @@ router.post('/register', function(req, res) {
                     if(err)
                     {
                         console.log(err.message);
+                        req.session.msg = 'An unexpected error has occurred. Please retry.';
+                        res.redirect('/register');
                     }
                     else
                     {
@@ -261,7 +272,8 @@ router.post('/register', function(req, res) {
                                         if(err)
                                         {
                                             console.log(err.message);
-                                            res.render('register', {msg: 'That username is already taken, please choose a different one', token : req.csrfToken()});
+                                            req.session.info = 'That username is already taken, please choose a different one.';
+                                            res.redirect('/register');
                                         }
                                         else
                                         {
@@ -279,16 +291,18 @@ router.post('/register', function(req, res) {
     }
     else
     {
-        res.render('register', {token : req.csrfToken(), msg : 'Passwords do not match!'});
+        req.session.msg = 'Passwords do not match!';
+        res.redirect('/register');
     }
 });
+
 // POST forgot password page
 router.post('/forgot', function(req, res) {
     mongo.connect(uri, function(err, db){
         if(err)
         {
             console.log(err.message);
-            res.render('index', {stats : []});
+            res.redirect('/');
         }
         else
         {
@@ -308,10 +322,14 @@ router.post('/forgot', function(req, res) {
                     if(err)
                     {
                         console.log(err.message);
+                        req.session.info = 'An unexpected error has occurred. Please retry.';
+                        res.redirect('/forgot');
                     }
                     else if(!doc)
                     {
                         console.log('Oh No !');
+                        req.session.info = 'No matches found!';
+                        res.redirect('/forgot');
                     }
                     else
                     {
@@ -322,9 +340,9 @@ router.post('/forgot', function(req, res) {
                             }
                             else
                             {
-                                req.session.msg = 'An email has been sent to ' + options.to + ' with further instructions.';
-                                res.redirect('/login');
+                                req.session.info = 'An email has been sent to ' + options.to + ' with further instructions.';
                             }
+                            res.redirect('/login');
                         });
                     }
                 });
@@ -332,6 +350,7 @@ router.post('/forgot', function(req, res) {
         }
     });
 });
+
 // POST reset token page
 router.post('/reset/:token', function(req, res) {
     if(req.body.password === req.body.confirm)
@@ -348,14 +367,10 @@ router.post('/reset/:token', function(req, res) {
                     op = {$set : {hash : bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))}, $unset : {token : '', expire : ''}};
                 db.collection('users').findAndModify(query, [], op, {}, function(err, doc) {
                     db.close();
-                    if(err)
+                    if(err || !doc)
                     {
                         console.log(err.message);
-                    }
-                    else if(!doc)
-                    {
-                        console.log('No matches!');
-                        req.session.msg = 'An unexpected error has occurred. Please retry.';
+                        req.session.info = 'An unexpected error has occurred. Please retry.';
                         res.redirect('/forgot');
                     }
                     else
@@ -374,9 +389,9 @@ router.post('/reset/:token', function(req, res) {
                             else
                             {
                                 console.log('Updated successfully!');
-                                req.session.msg = 'Updated successfully!';
-                                res.redirect('/login');
+                                req.session.info = 'Updated successfully!';
                             }
+                            res.redirect('/login');
                         });
                     }
                 });
