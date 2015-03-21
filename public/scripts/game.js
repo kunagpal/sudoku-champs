@@ -685,7 +685,7 @@ function solveTestHelper(puzzle, iterations)
   return timeElapsed;
 }
 
-function initialize() {
+function init() {
   var currentPuzzle = generatePuzzle();
   renderBoard(currentPuzzle);
   var amazeButton = document.getElementById('amazeButton');
@@ -725,10 +725,8 @@ function initialize() {
     }
   }, false);
   
-  var checkButton = document.getElementById('checkButton');
-  checkButton.addEventListener('click', function() {
+  document.getElementById('checkButton').addEventListener('click', function() {
     clearErrors();
-    
     var board = getCurrentBoard();
     var result = verifySolution(board);
     if(result['valid'])
@@ -811,13 +809,16 @@ function initialize() {
     else
     {
         document.getElementById('sudokuBoard').style.visibility = 'hidden';
-        if(confirm('This will commence a new game. Are you sure you want to proceed ?'))
+        var cd = setTimeout(function(){window.location = '/'}, 5000);
+        var res = confirm('This will commence a new game. Are you sure you want to proceed ? (The game will automatically abort in five seconds)');
+        if(res)
         {
             started = false;
             location.reload(true);
         }
         else
         {
+            clearTimeout(cd);
             document.getElementById('sudokuBoard').style.visibility = 'visible';
         }
     }
@@ -829,4 +830,4 @@ function initialize() {
   }, false);
 }
 
-addEventListener('DOMContentLoaded', initialize, false);
+addEventListener('DOMContentLoaded', init, false);

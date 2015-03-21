@@ -24,7 +24,7 @@
                 <th>Streak</th>
              </tr>
             <% for(i = 0; i < lead.length; ++i) { %>
-             <tr id=<%=(lead[i]._id == name) ? "inv" : ""%>>
+             <tr id=<%=(lead[i]._id == name) ? "reg" : ""%>>
                  <td><%= lead[i].rank || (i + 1) %></td>
                  <td><%= lead[i]._id %></td>
                  <td><%= lead[i].points %></td>

@@ -24,11 +24,11 @@ nav ul li a {
     width : 100%;
     color : #FFFFFF;
     display : block;
-    line-height : 40px;
+    line-height : 250%;
     background: #000000;
 }
 footer nav ul li a {
-    line-height : 30px;
+    line-height : 188%;
 }
 nav a:hover {
     color : #000000;
@@ -55,8 +55,8 @@ a{
     text-decoration: none;
 }
 tr {
-    width : 10%;
-    height : 20px;
+    width : 20%;
+    height : 2%;
 }
 h1 {
     margin: 0;
@@ -68,11 +68,11 @@ h2 {
 }
 #lead{
     margin : 2.5% 40% 0;
-    //table-layout : fixed;
     border-collapse: collapse;
 }
 #lead th {
     width : 20%;
+    border-bottom: 1px solid black;
 }
 #reg{
     color : #FFFFFF;
@@ -180,11 +180,11 @@ footer {
     transition : color 0.5s ease-out, background 0.5s ease-out;
 }
 
-#one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #hide:hover{
+#one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #hide:hover, #quit:hover{
     color : #000000;
     background : #8f8f8f;
 }
-#start{
+#start, #quit{
     top : 30%;
     left : 5%;
     width : 10%;
@@ -212,14 +212,8 @@ footer {
     -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
     transition : color 0.5s ease-out, background 0.5s ease-out;
 }
-
 #lead tr:nth-child(2n + 2) {
-    background : #8f8f8f;
-    color : #000000;
-}
-#lead tr:nth-child(2n + 3) {
-    background : #000000;
-    color : #FFFFFF;
+    background : #dddddd;
 }
 #clock{
     width : 90%;
@@ -310,6 +304,7 @@ ul {
     width : auto;
     height : 40%;
 }
-select option{
-    text-align : center;
+.err {
+    height : 15%;
+    width : 10%;
 }

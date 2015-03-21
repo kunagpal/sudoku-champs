@@ -10,18 +10,17 @@ var id,
     ref = ['37', '38', '39', '40'];
 
 addEventListener('DOMContentLoaded', function() {
-    window.onbeforeunload  = function() {
+
+    window.onpagehide  = function() {
         if(started)
         {
             document.getElementById('sudokuBoard').style.visibility = 'hidden';
+            return 'This action will result in the current game being lost.';
         }
-    };
-    window.unload = function() {
-        exit = true;
     };
     document.getElementById('hide').addEventListener('click', function () {
         document.getElementById('clock').style.visibility = visible && started ? 'hidden' : 'visible';
-        document.getElementById('hide').value = visible && started ? 'Bring it back' : 'Hide';
+        document.getElementById('hide').innerText = visible && started ? 'Bring it back' : 'Hide';
         visible = !visible;
     });
     document.getElementById('start').addEventListener('click', function () {
@@ -29,9 +28,13 @@ addEventListener('DOMContentLoaded', function() {
             document.getElementById('newGameButton').style.visibility = 'visible';
             document.getElementById('newGameButton').click();
             document.getElementById('game').style.visibility = 'hidden';
-            document.getElementById('Wrapper').style.visibility = "visible";
+            document.getElementById('Wrapper').style.visibility = 'visible';
             clock = $('.clock').FlipClock({clockFace: 'MinuteCounter'});
-            document.getElementById('start').style.visibility = "hidden";
+            document.getElementById('start').innerText = 'Quit';
+            document.getElementById('start').id = 'quit';
+            document.getElementById('quit').addEventListener('click', function () {
+                document.getElementById('quit').href = '/';
+            });
             started = true;
         }
     });
