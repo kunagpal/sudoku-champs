@@ -669,22 +669,8 @@ function printBoard(board)
   }
 }
 
-function solveTestHelper(puzzle, iterations)
-{
-  var solution = null;
-  var start = new Date();
-  for(var i = 0; i < iterations; i++)
-  {
-    solution = solveSudoku(puzzle);
-  }
-  var end = new Date();
-  renderBoard(puzzle);
-  renderSolvedBoard(solution);
-  var timeElapsed = (end.getTime() - start.getTime()) / 1000;
-  return timeElapsed;
-}
-
 function init() {
+  document.getElementById('youWon').style.display = 'none';
   var currentPuzzle = generatePuzzle();
   renderBoard(currentPuzzle);
   var amazeButton = document.getElementById('amazeButton');
@@ -736,9 +722,15 @@ function init() {
       {
         started = false;
         clock.stop(function(){
-            var temp = clock.getTime().time;
-            winBlock.innerHTML = 'Solved in ' + parseInt(temp/60) + ':' + (temp % 60) + '. Play again?' + winBlock.innerHTML;
+            var temp = clock.getTime().time - 1;
+            winBlock.innerHTML = 'Solved in ' + parseInt(temp/60) + ' minutes ' + (temp % 60) + ' seconds.' + winBlock.innerHTML;
             winBlock.style.display = 'block';
+            document.getElementById('close').addEventListener('click', function() {
+                winBlock.style.display = 'none';
+            }, false);
+            document.getElementById('new').addEventListener('click', function() {
+                location.reload(true);
+            }, false);
         });
       }
       else
@@ -791,16 +783,6 @@ function init() {
     }
   }, false);
   
-  document.getElementById('winCloseButton').addEventListener('click', function() {
-    winBlock.style.display = 'none';
-  }, false);
-  document.getElementById('winNewGameButton').addEventListener('click', function() {
-    clearErrors();
-    var value = parseInt(difficulty.options[difficulty.selectedIndex].value);
-    currentPuzzle = generatePuzzle(value);
-    renderBoard(currentPuzzle);
-    winBlock.style.display = 'none';
-  }, false);
   document.getElementById('newGameButton').addEventListener('click', function() {
     if(!started)
     {
@@ -812,7 +794,7 @@ function init() {
     }
     else
     {
-        location.reload(true);
+        window.location = '/guest';
     }
   }, false);
    addEventListener('mouseup', function(event) {

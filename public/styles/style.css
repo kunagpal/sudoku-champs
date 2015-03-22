@@ -60,7 +60,7 @@ tr {
 }
 h1 {
     margin: 0;
-    padding-top: 3.5%;
+    padding-top: 4%;
 }
 h2 {
     margin-top: 0;
@@ -254,7 +254,7 @@ ul {
 }
 #main{
     width : auto;
-    height : 40%;
+    height : 45%;
 }
 #forum {
     width : 15%;
@@ -263,7 +263,6 @@ ul {
     margin-left : 2.5%;
     margin-right : 2.5%;
     position : absolute;
-    vertical-align: middle;
 }
 #forum li{
     margin : 20% 0;
