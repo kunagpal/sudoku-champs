@@ -21,7 +21,7 @@
       <form method="POST">
           <input type="hidden" name="_csrf" value=<%= token %>>
           <input type = "password" placeholder="Password" name = "password" autofocus = "true"/> <br /> <br />
-          <input type = "password" placeholder="Confirm password" name = "confirm"/>&nbsp;<p id="reg" class="err"><%= msg ? msg : ''%></p> <br /> <br />
+          <input type = "password" placeholder="Confirm password" name = "confirm"/>&nbsp;<p id="reg"><%= msg ? msg : ''%></p> <br /> <br />
           <input type="submit" value="Bring me back!" id="begin"/>
       </form>
   </body>

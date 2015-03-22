@@ -16,21 +16,21 @@ nav{
     margin : 0;
     padding : 0;
 }
-nav ul li a {
-    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
-    transition : color 0.5s ease-out, background 0.5s ease-out;
+nav ul li a, #forum li a {
     width : 100%;
     color : #FFFFFF;
     display : block;
     line-height : 250%;
     background: #000000;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
+    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
 }
-footer nav ul li a {
+footer nav ul li a{
     line-height : 188%;
 }
-nav a:hover {
+nav ul li a:hover, #forum li a:hover {
     color : #000000;
     background : #8f8f8f;
 }
@@ -66,17 +66,13 @@ h2 {
     margin-top: 0;
     padding-top: 2%;
 }
-#lead{
+.lead{
     margin : 2.5% 40% 0;
     border-collapse: collapse;
 }
-#lead th {
+.lead th {
     width : 20%;
     border-bottom: 1px solid black;
-}
-#reg{
-    color : #FFFFFF;
-    background : #000000;
 }
 #inv, #inv td{
     color : #000000;
@@ -95,10 +91,10 @@ h2 {
 }
 footer {
     bottom : 0;
-    margin : 100% 0 0 0;
     padding : 0;
     width : 100%;
     position: absolute;
+    margin : 100% 0 0 0;
 }
 .left{
     right : 55%;
@@ -124,96 +120,52 @@ footer {
     width : 100%;
     height : auto;
 }
-#one{
+#one, #two {
     top : 30%;
+}
+#one, #three {
     left : 35%;
-    width : 10%;
     float : left;
-    padding : 2%;
-    color : #FFFFFF;
-    position : absolute;
-    background : #000000;
-    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
-    transition : color 0.5s ease-out, background 0.5s ease-out;
 }
-#two{
-    top : 30%;
-    width : 10%;
+#two, #four {
     right : 35%;
-    padding : 2%;
     float : right;
-    color : #FFFFFF;
-    position : absolute;
-    background : #000000;
-    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
-    transition : color 0.5s ease-out, background 0.5s ease-out;
 }
-#three{
+#three, #four {
     top : 50%;
-    left : 35%;
+}
+#one, #two, #three, #four, #start, #quit, #hide{
     width : 10%;
     padding : 2%;
     color : #FFFFFF;
     position : absolute;
     background : #000000;
-    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
     -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
     -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
-    transition : color 0.5s ease-out, background 0.5s ease-out;
-}
-#four{
-    top : 50%;
-    width : 10%;
-    right : 35%;
-    padding : 2%;
-    float : right;
-    color : #FFFFFF;
-    position : absolute;
-    background : #000000;
     -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
-    transition : color 0.5s ease-out, background 0.5s ease-out;
 }
-
 #one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #hide:hover, #quit:hover{
     color : #000000;
     background : #8f8f8f;
 }
+#start, #quit, #hide{
+    left : 5%;
+    float : left;
+}
 #start, #quit{
     top : 30%;
-    left : 5%;
-    width : 10%;
-    padding : 2%;
-    float : left;
-    color : #FFFFFF;
-    position : absolute;
-    background : #000000;
-    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
-    transition : color 0.5s ease-out, background 0.5s ease-out;
 }
 #hide {
     top : 45%;
-    left : 5%;
-    width : 10%;
-    padding : 2%;
-    float : left;
-    color : #FFFFFF;
-    position : absolute;
-    background : #000000;
-    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
-    transition : color 0.5s ease-out, background 0.5s ease-out;
+    visibility : hidden;
 }
-#lead tr:nth-child(2n + 2) {
+.lead tr:nth-child(2n + 2) {
     background : #dddddd;
+}
+#reg, #forum li{
+    color : #FFFFFF;
+    background : #000000;
 }
 #clock{
     width : 90%;
@@ -227,48 +179,48 @@ footer {
     color : #FFFFFF;
     margin-top : 5px;
     background : #000000;
-    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
     -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
     -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
-    transition : color 0.5s ease-out, background 0.5s ease-out;
+    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
 }
 #begin:hover {
     color : #000000;
     background : #8f8f8f;
 }
 #stats{
-    float : right;
-    position : absolute;
     top : 25%;
     right : 5%;
+    float : right;
     text-align : left;
+    position : absolute;
 }
 img {
-    -webkit-filter : grayscale(1);
-    -moz-filter : grayscale(1);
-    -ms-filter : grayscale(1);
-    filter : grayscale(1);
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    transition: all 0.5s ease;
+    border : 0;
     margin : 0;
     padding : 0;
-    border : 0;
+    filter : grayscale(1);
+    -ms-filter : grayscale(1);
+    -moz-filter : grayscale(1);
+    -webkit-filter : grayscale(1);
+    transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -webkit-transition: all 1s ease;
 }
 img:hover {
-    -webkit-filter : grayscale(0);
-    -moz-filter : grayscale(0);
-    -ms-filter : grayscale(0);
     filter : grayscale(0);
+    -ms-filter : grayscale(0);
+    -moz-filter : grayscale(0);
+    -webkit-filter : grayscale(0);
 }
 .link {
     color : #8f8f8f;
 }
 #drop {
+    top : 70%;
     left : 35%;
     right : 35%;
-    top : 70%;
     clear : both;
     position : absolute;
 }
@@ -287,12 +239,12 @@ img:hover {
     text-align : center;
 }
 ::selection {
-    background: #000000;
     color : #FFFFFF;
+    background: #000000;
 }
 ::-moz-selection {
-    background: #000000;
     color : #FFFFFF;
+    background: #000000;
 }
 input {
     outline-color: #000000;
@@ -304,7 +256,15 @@ ul {
     width : auto;
     height : 40%;
 }
-.err {
-    height : 15%;
-    width : 10%;
+#forum {
+    width : 15%;
+    height : 45%;
+    float : left;
+    margin-left : 2.5%;
+    margin-right : 2.5%;
+    position : absolute;
+    vertical-align: middle;
+}
+#forum li{
+    margin : 20% 0;
 }

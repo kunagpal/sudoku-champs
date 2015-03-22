@@ -4,20 +4,12 @@ var id,
     clock,
     ver = 0,
     hor = 0,
-    exit = false,
     visible = true,
     started = false,
     ref = ['37', '38', '39', '40'];
 
 addEventListener('DOMContentLoaded', function() {
 
-    window.onpagehide  = function() {
-        if(started)
-        {
-            document.getElementById('sudokuBoard').style.visibility = 'hidden';
-            return 'This action will result in the current game being lost.';
-        }
-    };
     document.getElementById('hide').addEventListener('click', function () {
         document.getElementById('clock').style.visibility = visible && started ? 'hidden' : 'visible';
         document.getElementById('hide').innerText = visible && started ? 'Bring it back' : 'Hide';
@@ -28,18 +20,31 @@ addEventListener('DOMContentLoaded', function() {
             document.getElementById('newGameButton').style.visibility = 'visible';
             document.getElementById('newGameButton').click();
             document.getElementById('game').style.visibility = 'hidden';
+            document.getElementById('hide').style.visibility = 'visible';
             document.getElementById('Wrapper').style.visibility = 'visible';
             clock = $('.clock').FlipClock({clockFace: 'MinuteCounter'});
             document.getElementById('start').innerText = 'Quit';
             document.getElementById('start').id = 'quit';
-            document.getElementById('quit').addEventListener('click', function () {
-                document.getElementById('quit').href = '/';
+            document.getElementById('quit').addEventListener('click', function(){
+                var cd = setTimeout(function() {window.location = '/';}, 0);
+                document.getElementById('sudokuBoard').style.visibility = 'hidden';
+                var res = confirm('This action will result in a loss. Are you sure you want to proceed? (The game will automatically terminate in five seconds)');
+                if(res)
+                {
+                    window.location = '/';
+                }
+                else
+                {
+                    clearTimeout(cd);
+                    document.getElementById('sudokuBoard').style.visibility = 'visible';
+                }
             });
             started = true;
         }
     });
     window.onkeydown = function nav() {
         id = document.activeElement.id;
+        console.log(id);
         if(id.match(/^[0-8]{2}$/))
         {
             temp = window.event.keyCode;
@@ -58,7 +63,7 @@ addEventListener('DOMContentLoaded', function() {
             }
             ver = ver.toString();
             hor = hor.toString();
-            document.getElementById((temp[0] + ver).toString() + (temp[1] + hor).toString()).parentElement.focus();
+            document.getElementById((temp[0] + ver).toString() + (temp[1] + hor).toString()).focus();
         }
     };
 }, false);
