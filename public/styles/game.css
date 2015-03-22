@@ -155,22 +155,19 @@ input[type="submit"].gameControls {
     color: #FFAEAE;
 }
 #youWon {
-    width: 100%;
-    height: 100%;
+    width: 50%;
+    height: 50%;
+    left : 25%;
+    right : 25%;
+    padding : 10% 0;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 25%;
+    bottom : 25%
     display: none;
+    color : #FFFFFF;
+    background : #000000;
 }
-#youWon div {
-    width: 400px;
-    background: #000000;
-    font-size: 40px;
-    color: #FFFFFF;
-    text-align: center;
-    padding: 40px;
-    margin: 100px auto 0 auto;
-}
+
 small {
     font-size: 14px;
 }

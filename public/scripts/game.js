@@ -1,5 +1,4 @@
 function solveSudoku(inputBoard, stats) {
-  var started = false;
   var stats = stats || {};
   stats['easy'] = true;
   var board = JSON.parse(JSON.stringify(inputBoard));
@@ -735,7 +734,12 @@ function init() {
         "NICE", "SWEET", "LOOKS GOOD TO ME"];
       if(verifySolution(board, true)['valid'])
       {
-        winBlock.style.display = 'block';
+        started = false;
+        clock.stop(function(){
+            var temp = clock.getTime().time;
+            winBlock.innerHTML = 'Solved in ' + parseInt(temp/60) + ':' + (temp % 60) + '. Play again?' + winBlock.innerHTML;
+            winBlock.style.display = 'block';
+        });
       }
       else
       {
@@ -808,19 +812,7 @@ function init() {
     }
     else
     {
-        document.getElementById('sudokuBoard').style.visibility = 'hidden';
-        var cd = setTimeout(function(){window.location = '/'}, 5000);
-        var res = confirm('This will commence a new game. Are you sure you want to proceed ? (The game will automatically abort in five seconds)');
-        if(res)
-        {
-            started = false;
-            location.reload(true);
-        }
-        else
-        {
-            clearTimeout(cd);
-            document.getElementById('sudokuBoard').style.visibility = 'visible';
-        }
+        location.reload(true);
     }
   }, false);
    addEventListener('mouseup', function(event) {

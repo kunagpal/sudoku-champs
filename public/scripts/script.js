@@ -1,5 +1,6 @@
 // Created by Kunal Nagpal <kunagpal@gmail.com> on 13-02-2015.
 var id,
+    time,
     temp,
     clock,
     ver = 0,
@@ -9,7 +10,27 @@ var id,
     ref = ['37', '38', '39', '40'];
 
 addEventListener('DOMContentLoaded', function() {
-
+    window.onbeforeunload = function() {
+        time = Date.now();
+        if(started)
+        {
+            document.getElementById('sudokuBoard').style.visibility = 'hidden';
+            setTimeout(function() {
+                setTimeout(function() {
+                    if(Date.now() - time > 10000)
+                    {
+                        window.onbeforeunload = null;
+                        window.location = '/';
+                    }
+                    else
+                    {
+                        document.getElementById('sudokuBoard').style.visibility = 'visible';
+                    }
+                }, 0);
+            },0);
+            return "This action will result in a loss. (The game will be lost automatically in ten seconds.)";
+        }
+    };
     document.getElementById('hide').addEventListener('click', function () {
         document.getElementById('clock').style.visibility = visible && started ? 'hidden' : 'visible';
         document.getElementById('hide').innerText = visible && started ? 'Bring it back' : 'Hide';
@@ -24,20 +45,8 @@ addEventListener('DOMContentLoaded', function() {
             document.getElementById('Wrapper').style.visibility = 'visible';
             clock = $('.clock').FlipClock({clockFace: 'MinuteCounter'});
             document.getElementById('start').innerText = 'Quit';
-            document.getElementById('start').id = 'quit';
-            document.getElementById('quit').addEventListener('click', function(){
-                var cd = setTimeout(function() {window.location = '/';}, 0);
-                document.getElementById('sudokuBoard').style.visibility = 'hidden';
-                var res = confirm('This action will result in a loss. Are you sure you want to proceed? (The game will automatically terminate in five seconds)');
-                if(res)
-                {
-                    window.location = '/';
-                }
-                else
-                {
-                    clearTimeout(cd);
-                    document.getElementById('sudokuBoard').style.visibility = 'visible';
-                }
+            document.getElementById('start').addEventListener('click', function(){
+                window.location = '/';
             });
             started = true;
         }
