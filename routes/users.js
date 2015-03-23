@@ -7,7 +7,7 @@ var temp = [],
 router.get('/logout', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.clearCookie('name');
+        res.clearCookie('name', {});
     }
     res.redirect('/login');
 });
@@ -90,7 +90,7 @@ router.get('/play', function(req, res) {
 router.get('/practice', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.render('practice');
+        res.render('practice', {token : req.csrfToken()});
     }
     else
     {
@@ -102,7 +102,7 @@ router.get('/practice', function(req, res) {
 router.get('/h2h', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.render('h2h');
+        res.render('h2h', {token : req.csrfToken()});
     }
     else
     {
@@ -114,7 +114,7 @@ router.get('/h2h', function(req, res) {
 router.get('/challenge', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.render('challenge');
+        res.render('challenge', {token : req.csrfToken()});
     }
     else
     {
@@ -126,7 +126,7 @@ router.get('/challenge', function(req, res) {
 router.get('/solo', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.render('solo');
+        res.render('solo', {token : req.csrfToken()});
     }
     else
     {

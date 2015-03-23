@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/styles/game.css" type="text/css"/>
     <link rel="stylesheet" href="/styles/style.css" type="text/css"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/scripts/game.js"></script>
     <script src="/scripts/flipclock.js"></script>
     <script src="/scripts/script.js"></script>
   </head>
@@ -23,7 +24,68 @@
     <div class="clock" id="clock"></div>
     <a id="start">Start</a>
     <a id="hide">Hide</a>
-    <table></table>
+    <form method="POST" action="/solo">
+        <input type="hidden" name="_csrf" value="<%= token %>" />
+        <div id="Wrapper">
+            <div id="Main">
+                <div id="Content">
+                    <br/><br/><br/>
+                    <div id="Column1"><input id="amazeButton" type="hidden" /></div>
+                    <div id="sudokuBoard">
+                        <table cellspacing="0" cellpadding="0">
+                            <% for(var i = 0; i < 3; ++i){ %>
+                                <tr>
+                                    <% for(var j = 0; j < 3; ++j){ %>
+                                        <td class="alpha">
+                                            <table cellspacing="1" cellpadding="0">
+                                                <% for(var k = 0; k < 3; ++k){ %>
+                                                    <tr>
+                                                        <% for(var l = 0; l < 3; ++l){ %>
+                                                            <td class="cell">
+                                                                <div id="<%= (k + 3 * i).toString() + (l + 3 * j).toString()%>" class="staticValue">
+                                                                    <input/>
+                                                                </div>
+                                                            </td>
+                                                        <% } %>
+                                                    </tr>
+                                                <% } %>
+                                            </table>
+                                        </td>
+                                    <% } %>
+                                </tr>
+                            <% } %>
+                        </table>
+                    </div>
+                    <div id="col2">
+                        <div class="validate">
+                            <input id="checkButton" type="submit" value="CHECK" class="gameControls" /><br/>
+                            <span id="errorsFound" class="errorsFound" role="tab" aria-selected="true" aria-controls="ErrorsFound" tabindex="300">MISTAKE FOUND</span>
+                            <span id="noErrors" class="noErrors" role="tab" aria-selected="true" aria-controls="NoErrorsFound" tabindex="400">LOOKIN GOOD</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="game" id="game">
+            <input id="newGameButton" type="submit" value="NEW GAME" class="gameControls" />
+            <br/>
+            <label>Level:</label>&nbsp;&nbsp;
+            <select id="difficulty">
+                <option value="1" selected>KID MODE</option>
+                <option value="2">RECRUIT</option>
+                <option value="3">SEASONED</option>
+                <option value="4">VETERAN</option>
+                <option value="5">GOD MODE</option>
+            </select>
+        </div>
+        <div id="youWon">
+            <br>
+            <h2>Play Again?</h2>
+            <br>
+            <input id="new" type="submit" value="NEW GAME" class="gameControls" />
+            <input id="close" type="submit" value="CLOSE" class="gameControls" />
+        </div>
+    </form>
   </body>
 <footer>
     <nav>
