@@ -116,7 +116,7 @@ router.get('/leader', function(req, res) {
         if(err)
         {
             console.log(err.message);
-            res.render('leader', {lead : []});
+            res.render('leader', {lead : 0});
         }
         else
         {
@@ -124,7 +124,7 @@ router.get('/leader', function(req, res) {
                 if(err)
                 {
                     console.log(err.message);
-                    res.render('leader', {lead : []});
+                    res.render('leader', {lead : 0});
                 }
                 else if(doc)
                 {
@@ -148,7 +148,7 @@ router.get('/leader', function(req, res) {
                                 if (err)
                                 {
                                     console.log(err.message);
-                                    res.render('leader', {lead : []});
+                                    res.render('leader', {lead : 0});
                                 }
                                 else
                                 {
@@ -157,7 +157,7 @@ router.get('/leader', function(req, res) {
                                         if (err)
                                         {
                                             console.log(err.message);
-                                            res.render('leader', {lead : []});
+                                            res.render('leader', {lead : 0});
                                         }
                                         else if(doc)
                                         {
