@@ -72,6 +72,7 @@ h2 {
 }
 .lead th {
     width : 20%;
+    padding-bottom: 5%;
     border-bottom: 1px solid black;
 }
 #inv, #inv td{
@@ -266,4 +267,9 @@ ul {
 }
 #forum li{
     margin : 20% 0;
+}
+.err {
+    color : #FFFFFF;
+//    padding : 0.45%;
+    background : #000000;
 }

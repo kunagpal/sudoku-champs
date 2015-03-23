@@ -292,6 +292,8 @@ router.post('/register', function(req, res) {
     else
     {
         req.session.msg = 'Passwords do not match!';
+        req.session.name = req.body.name;
+        req.session.email = req.body.email;
         res.redirect('/register');
     }
 });

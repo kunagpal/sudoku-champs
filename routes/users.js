@@ -140,7 +140,11 @@ router.get('/register', function(req, res) {
     delete req.session.msg;
     temp[1] = req.session.info ? req.session.info : 0;
     delete req.session.info;
-    res.render('register', {token : req.csrfToken(), msg : temp[0], info : temp[1]});
+    temp[2] = req.session.name ? req.session.name : 0;
+    delete req.session.name;
+    temp[3] = req.session.email ? req.session.email : 0;
+    delete req.session.email;
+    res.render('register', {token : req.csrfToken(), msg : temp[0], info : temp[1], name : temp[2], email : temp[3]});
 });
 
 //GET generic route
