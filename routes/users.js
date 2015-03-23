@@ -1,15 +1,28 @@
 var temp = [],
     path = require('path'),
     router = require('express').Router(),
-    auth = require(path.join(__dirname, '..', 'database', 'auth'));
+    auth = require(path.join(__dirname, '..', 'database', 'auth')),
+    quote = require(path.join(__dirname, '..', 'database', 'quote')),
+    rand = function(arg){
+        return arg[parseInt(Math.random() * 10000000000000000) % arg.length];
+    };
 
 // GET logout page
 router.get('/logout', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.clearCookie('name', {});
+        res.render('logout', {head : rand(quote.title), quit : rand(quote.away), stay : rand(quote.stay), token : req.csrfToken()});
     }
-    res.redirect('/login');
+    else
+    {
+        res.redirect('/login');
+    }
+});
+
+// POST logout page
+router.post('/logout', function(req, res){
+    res.clearCookie('name', {});
+    res.redirect('/');
 });
 
 // GET login page
@@ -66,11 +79,11 @@ router.get('/solved', function(req, res) {
 router.get('/guest', function(req, res) {
     if (req.signedCookies.name)
     {
-        res.render('play')
+        res.redirect('/play')
     }
     else
     {
-        res.render('guest');
+        res.render('guest', {token : req.csrfToken()});
     }
 });
 

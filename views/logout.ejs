@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html class="center">
+<head>
+    <title>Logout | Sudoku Champs</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="/styles/style.css" type="text/css" />
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">HOME</a></li>
+            <li><a href="/play">PLAY</a></li>
+            <li><a href="/rules">RULES</a></li>
+            <li><a href="/leader">LEADERBOARD</a></li>
+        </ul>
+    </nav>
+    <h1><%= head %></h1>
+    <form method="POST" action="/logout">
+        <input type="hidden" name="_csrf" value="<%= token %>"/>
+        <input class="logout" type="submit" value="<%= quit %>" />
+    </form>
+    <a class="logout" href="/"><%= stay %> </a>
+</body>
+<footer>
+    <nav>
+        <ul>
+            <li><a href="/logout">I wish to leave</a></li>
+            <li><a href="/privacy">Privacy</a></li>
+            <li><a href="/forum">Forum</a></li>
+            <li><a href="/developers">Developers</a></li>
+        </ul>
+    </nav>
+</footer>
+</html>

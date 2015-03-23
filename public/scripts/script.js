@@ -31,17 +31,27 @@ addEventListener('DOMContentLoaded', function() {
             return "This action will result in a loss. (The game will be lost automatically in ten seconds.)";
         }
     };
-    document.getElementById('hide').addEventListener('click', function () {
-        document.getElementById('clock').style.visibility = visible && started ? 'hidden' : 'visible';
-        document.getElementById('hide').innerText = visible && started ? 'Bring it back' : 'Hide';
-        visible = !visible;
-    });
+    try{
+        document.getElementById('hide').addEventListener('click', function () {
+            document.getElementById('clock').style.visibility = visible && started ? 'hidden' : 'visible';
+            document.getElementById('hide').innerText = visible && started ? 'BRING IT BACK' : 'HIDE';
+            visible = !visible;
+        });
+    }
+    catch(err){
+        console.log('Playing on a non registered page.');
+    }
     document.getElementById('start').addEventListener('click', function () {
         if (!started) {
             document.getElementById('newGameButton').style.visibility = 'visible';
             document.getElementById('newGameButton').click();
             document.getElementById('game').style.visibility = 'hidden';
-            document.getElementById('hide').style.visibility = 'visible';
+            try{
+                document.getElementById('hide').style.visibility = 'visible';
+            }
+            catch(err) {
+                console.log('Playing on a non registered page.');
+            }
             document.getElementById('Wrapper').style.visibility = 'visible';
             clock = $('.clock').FlipClock({clockFace: 'MinuteCounter'});
             document.getElementById('start').innerText = 'Quit';

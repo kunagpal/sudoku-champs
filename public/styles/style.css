@@ -135,7 +135,7 @@ footer {
 #three, #four {
     top : 50%;
 }
-#one, #two, #three, #four, #start, #quit, #hide{
+#one, #two, #three, #four, #start, #quit, #hide, #checkButton, #newGameButton, #new, #close{
     width : 10%;
     padding : 2%;
     color : #FFFFFF;
@@ -146,7 +146,7 @@ footer {
     -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
     -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
 }
-#one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #hide:hover, #quit:hover{
+#one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #hide:hover, #quit:hover, #checkButton:hover, #newGameButton:hover, #new:hover, #close:hover{
     color : #000000;
     background : #8f8f8f;
 }
@@ -164,7 +164,7 @@ footer {
 .lead tr:nth-child(2n + 2) {
     background : #dddddd;
 }
-#reg, #forum li{
+#reg, #forum li, button{
     color : #FFFFFF;
     background : #000000;
 }
@@ -270,6 +270,21 @@ ul {
 }
 .err {
     color : #FFFFFF;
-//    padding : 0.45%;
+    background : #000000;
+}
+#hidden{
+    display : none;
+}
+#newGameButton{
+    width : 70%;
+}
+.logout {
+    padding : 1%;
+    width : 250px;
+    margin : 2% 0;
+    border : none;
+    outline : none;
+    color : #FFFFFF;
+    line-height : 200%;
     background : #000000;
 }

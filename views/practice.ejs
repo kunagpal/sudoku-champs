@@ -9,6 +9,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="/scripts/flipclock.js"></script>
     <script src="/scripts/script.js"></script>
+    <script src="/scripts/game.js"></script>
   </head>
   <body>
     <nav>
@@ -21,8 +22,8 @@
     </nav>
     <h1>Because practice makes perfect.</h1>
     <div class="clock" id="clock"></div>
-    <a id="start">Start</a>
-    <a id="hide">Hide</a>
+    <a id="start">START</a>
+    <a id="hide">HIDE</a>
     <form method="POST" action="/practice">
         <input type="hidden" name="_csrf" value="<%= token %>" />
         <div id="Wrapper">
@@ -57,7 +58,7 @@
                     </div>
                     <div id="col2">
                         <div class="validate">
-                            <input id="checkButton" type="submit" value="CHECK" class="gameControls" /><br/>
+                            <a id="checkButton" class="gameControls">CHECK</a><br/>
                             <span id="errorsFound" class="errorsFound" role="tab" aria-selected="true" aria-controls="ErrorsFound" tabindex="300">MISTAKE FOUND</span>
                             <span id="noErrors" class="noErrors" role="tab" aria-selected="true" aria-controls="NoErrorsFound" tabindex="400">LOOKIN GOOD</span>
                         </div>
@@ -66,7 +67,7 @@
             </div>
         </div>
         <div class="game" id="game">
-            <input id="newGameButton" type="submit" value="NEW GAME" class="gameControls" />
+            <a id="newGameButton" class="gameControls">NEW GAME</a>
             <br/>
             <label>Level:</label>&nbsp;&nbsp;
             <select id="difficulty">
@@ -81,9 +82,10 @@
             <br>
             <h2>Play Again?</h2>
             <br>
-            <input id="new" type="submit" value="NEW GAME" class="gameControls" />
-            <input id="close" type="submit" value="CLOSE" class="gameControls" />
+            <a id="new" class="gameControls">NEW GAME</a>
+            <a id="close" class="gameControls">CLOSE</a>
         </div>
+        <input type="submit" id="hidden"/>
     </form>
   </body>
 <footer>
