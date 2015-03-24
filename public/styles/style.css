@@ -146,7 +146,7 @@ footer {
     -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
     -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
 }
-#one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #hide:hover, #quit:hover, #checkButton:hover, #newGameButton:hover, #new:hover, #close:hover{
+#one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #hide:hover, #quit:hover, #checkButton:hover, #newGameButton:hover, #new:hover, #close:hover, .logout:hover{
     color : #000000;
     background : #8f8f8f;
 }
@@ -287,4 +287,8 @@ ul {
     color : #FFFFFF;
     line-height : 200%;
     background : #000000;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
+    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
 }
