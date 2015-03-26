@@ -33,7 +33,7 @@ catch(err){
 passport.use(new facebook({
     clientID :  process.env.FB_ID || key.fb_id,
     clientSecret : process.env.FB_KEY || key.fb_key,
-    callbackURL : 'https://127.0.0.1:3000/FB'
+    callbackURL : 'https://www.sudokuchamps.herokuapp.com/FB'
     },
     function(token, refreshToken, profile, done) {
             process.nextTick(function() {
@@ -48,7 +48,7 @@ passport.use(new facebook({
                         user.dob = new Date();
                         user.token = token;
                         user.email = profile.emails[0].value;
-                        db.collection('users').findAndModify({ _id : profile.name.givenName + ' ' + profile.name.familyName }, [], {$setOnInsert : user}, {upsert : true}, function(err, doc) {
+                        db.collection('users').findOneAndUpdate({ _id : profile.name.givenName + ' ' + profile.name.familyName }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
                             db.close();
                             if (err)
                             {
@@ -67,7 +67,7 @@ passport.use(new facebook({
 passport.use(new twitter({
     consumerKey : process.env.TW_ID || key.fb_id,
     consumerSecret : process.env.TW_KEY || key.fb_key,
-    callbackURL : 'https://127.0.0.1:3000/TW'
+    callbackURL : 'https://www.sudokuchamps.herokuapp.com/TW'
     },
     function(token, refreshToken, profile, done){
         process.nextTick(function() {
@@ -80,7 +80,7 @@ passport.use(new twitter({
                 {
                     user._id = profile.username;
                     user.token = profile.token;
-                    db.collection('users').findAndModify({ _id : profile.username }, [], {$setOnInsert : user}, {upsert : true}, function(err, doc) {
+                    db.collection('users').findOneAndUpdate({ _id : profile.username }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
                         db.close();
                         if (err)
                         {
@@ -98,7 +98,7 @@ passport.use(new twitter({
 ));
 passport.use(new google({
         realm : process.env.GO_ID || key.go_id,
-        returnURL : 'https://127.0.0.1:3000/GO'
+        returnURL : 'https://www.sudokuchamps.herokuapp.com/GO'
     },
     function(accessToken, refreshToken, profile, done){
         process.nextTick(function() {
@@ -111,7 +111,7 @@ passport.use(new google({
                 {
                     user._id = profile.displayName;
                     user.dob = Date.now();
-                    db.collection('users').findAndModify({ _id: profile.displayName }, [], {$setOnInsert : user}, {upsert : true}, function(err, doc) {
+                    db.collection('users').findOneAndUpdate({ _id: profile.displayName }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
                         db.close();
                         if(err)
                         {
@@ -130,7 +130,7 @@ passport.use(new google({
 passport.use(new github({
         clientID :  process.env.GI_ID ||  key.gi_id ,
         clientSecret :  process.env.GI_KEY || key.gi_key,
-        callbackURL : 'https://127.0.0.1:3000/GI'
+        callbackURL : 'https://www.sudokuchamps.herokuapp.com/GI'
     },
     function(accessToken, refreshToken, profile, done){
         process.nextTick(function() {
@@ -143,7 +143,7 @@ passport.use(new github({
                 {
                     user._id = profile.displayName;
                     user.dob = Date.now();
-                    db.collection('users').findAndModify({ _id: profile.displayName }, [], {$setOnInsert : user}, {upsert : true}, function(err, doc) {
+                    db.collection('users').findOneAndUpdate({ _id: profile.displayName }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
                         db.close();
                         if(err)
                         {
@@ -162,7 +162,7 @@ passport.use(new github({
 passport.use(new linkedin({
         consumerKey : process.env.LI_ID || key.li_id,
         consumerSecret : process.env.LI_KEY || key.li_key,
-        callbackURL : 'https://127.0.0.1:3000/LI'
+        callbackURL : 'https://www.sudokuchamps.herokuapp.com/LI'
     },
     function(token, tokenSecret, profile, done){
         process.nextTick(function() {
@@ -175,7 +175,7 @@ passport.use(new linkedin({
                 {
                     user._id = profile.displayName;
                     user.dob = Date.now();
-                    db.collection('users').findAndModify({ _id: profile.displayName }, [], {$setOnInsert : user}, {upsert : true}, function (err, doc) {
+                    db.collection('users').findOneAndUpdate({ _id: profile.displayName }, {$setOnInsert : user}, {upsert : true}, function (err, doc) {
                         db.close();
                         if(err)
                         {

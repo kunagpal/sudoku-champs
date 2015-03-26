@@ -1,7 +1,6 @@
 var temp = [],
     path = require('path'),
     router = require('express').Router(),
-    auth = require(path.join(__dirname, '..', 'database', 'auth')),
     quote = require(path.join(__dirname, '..', 'database', 'quote')),
     rand = function(arg){
         return arg[parseInt(Math.random() * 10000000000000000) % arg.length];

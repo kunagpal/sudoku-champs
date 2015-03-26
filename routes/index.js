@@ -120,7 +120,7 @@ router.get('/leader', function(req, res) {
         }
         else
         {
-            db.collection('users').find({}, op, frame).each(function(err, doc) {
+            db.collection('users').find({}, op, frame).forEach(function(err, doc) {
                 if(err)
                 {
                     console.log(err.message);
@@ -152,7 +152,7 @@ router.get('/leader', function(req, res) {
                                 }
                                 else
                                 {
-                                    db.collection('users').find({}, op, {sort : [['points', -1], ['played' , 1], ['steak', -1]]}).each(function (err, doc) {
+                                    db.collection('users').find({}, op, {sort : [['points', -1], ['played' , 1], ['steak', -1]]}).forEach(function (doc) {
                                         db.close();
                                         if (err)
                                         {
@@ -244,7 +244,7 @@ router.post('/register', function(req, res) {
             }
             else
             {
-                db.collection('users').count(function(err, num){
+                db.collection('users').count({}, function(err, num){
                     if(err)
                     {
                         console.log(err.message);
@@ -267,7 +267,7 @@ router.post('/register', function(req, res) {
                                 }
                                 else
                                 {
-                                    db.collection('users').insert(user, {w : 1}, function(err, docs){
+                                    db.collection('users').insertOne(user, {w : 1}, function(err, docs){
                                         db.close();
                                         if(err)
                                         {
@@ -319,7 +319,7 @@ router.post('/forgot', function(req, res) {
                     ' reset your password.\nWe would love to have you back as a user.\n In the event that this password reset was not requested by you, please ignore this' +
                     ' message and your password shall remain intact.\n\nRegards,\n\nThe Sudoku Champs team.'
                 };
-                db.collection('users').findAndModify({email : req.body.email, _id : req.body.name}, [], {$set:{token : token, expire : Date.now() + 3600000}}, {}, function(err, doc){
+                db.collection('users').findOneAndUpdate({email : req.body.email, _id : req.body.name}, {$set:{token : token, expire : Date.now() + 3600000}}, {}, function(err, doc){
                     db.close();
                     if(err)
                     {
@@ -367,7 +367,7 @@ router.post('/reset/:token', function(req, res) {
             {
                 var query = {token : req.params.token, expire : {$gt: Date.now()}},
                     op = {$set : {hash : bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))}, $unset : {token : '', expire : ''}};
-                db.collection('users').findAndModify(query, [], op, {}, function(err, doc) {
+                db.collection('users').findOneAndUpdate(query, op, {}, function(err, doc) {
                     db.close();
                     if(err || !doc)
                     {
