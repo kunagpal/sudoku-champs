@@ -30,7 +30,7 @@ var i,
         played : 'Matches played'
     },
     op = {'_id' : 1, 'points' : 1, 'played' : 1, 'streak' : 1},
-    frame = {'sort' : [['points', -1], ['played' , 1], ['streak' , -1]], 'limit' : 5};
+    frame = {'sort' : [['points', -1], ['played' , 1], ['streak' , -1]]};
 
 try{
     var key = require(path.join(__dirname, '..', 'key')).key;
@@ -85,13 +85,9 @@ router.get('/reset/:token', function(req, res) {
         }
         else
         {
-            db.collection('users').findOne({token: req.params.token, expire: {$gt: Date.now()}}, function(err, doc) {
+            db.collection('users').find({token: req.params.token, expire: {$gt: Date.now()}}, {limit : 1}).forEach(function(doc) {
                 db.close();
-                if(err)
-                {
-                    console.log(err.message);
-                }
-                else if (!doc)
+                if (!doc)
                 {
                     console.log('No matches found !');
                     req.session.info = 'No matches found!';
@@ -109,7 +105,7 @@ router.get('/reset/:token', function(req, res) {
 
 // GET leaderboard
 router.get('/leader', function(req, res) {
-    i = 1;
+    i = 0;
     lead = [];
     flag = !req.signedCookies.name;
     mongo.connect(uri, function(err, db) {
@@ -120,67 +116,32 @@ router.get('/leader', function(req, res) {
         }
         else
         {
-            db.collection('users').find({}, op, frame).forEach(function(err, doc) {
+            db.collection('users').find({}, op, frame).toArray(function(err, docs) {
+                db.close();
                 if(err)
                 {
                     console.log(err.message);
-                    res.render('leader', {lead : 0});
-                }
-                else if(doc)
-                {
-                    lead.push(doc);
-                    if(doc._id == req.signedCookies.name)
-                    {
-                        flag = true;
-                    }
                 }
                 else
                 {
-                    db.close(function(err){
-                        if(err)
-                        {
-                            console.log(err.message);
-                            res.render('leader', {lead : lead, name : ''});
-                        }
-                        else if(!flag && req.signedCookies.name)
-                        {
-                            mongo.connect(uri, function (err, db) {
-                                if (err)
-                                {
-                                    console.log(err.message);
-                                    res.render('leader', {lead : 0});
-                                }
-                                else
-                                {
-                                    db.collection('users').find({}, op, {sort : [['points', -1], ['played' , 1], ['steak', -1]]}).forEach(function (doc) {
-                                        db.close();
-                                        if (err)
-                                        {
-                                            console.log(err.message);
-                                            res.render('leader', {lead : 0});
-                                        }
-                                        else if(doc)
-                                        {
-                                            if(doc._id == req.signedCookies.name)
-                                            {
-                                                doc.rank = i;
-                                                lead.push(doc);
-                                                res.render('leader', {lead: lead, name : req.signedCookies.name});
-                                            }
-                                            else
-                                            {
-                                                ++i;
-                                            }
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                    if(flag)
+                    for(j in docs)
                     {
-                        res.render('leader', {lead : lead, name : req.signedCookies.name});
+                        if(docs[j]._id == req.signedCookies.name)
+                        {
+                            flag = true;
+                            docs[j].rank = parseInt(j) + 1;
+                            lead.push(docs[j]);
+                        }
+                        else if(lead.length < 5)
+                        {
+                            lead.push(docs[j]);
+                        }
+                        else if(flag)
+                        {
+                            break;
+                        }
                     }
+                    res.render('leader', {lead : lead, name : flag ? req.signedCookies.name : ''});
                 }
             });
         }
@@ -202,13 +163,9 @@ router.post('/login', function(req, res) {
         }
         else
         {
-            db.collection('users').findOne({_id : req.body.name}, function(err, doc){
+            db.collection('users').find({_id : req.body.name}, {}, {'limit' : 1}).forEach(function(doc){
                 db.close();
-                if(err)
-                {
-                    console.log(err.message);
-                }
-                else if(!doc)
+                if(!doc)
                 {
                     req.session.info = 'Incorrect credentials!';
                     res.redirect('/login');
@@ -267,7 +224,7 @@ router.post('/register', function(req, res) {
                                 }
                                 else
                                 {
-                                    db.collection('users').insertOne(user, {w : 1}, function(err, docs){
+                                    db.collection('users').insertOne(user, function(err, docs){
                                         db.close();
                                         if(err)
                                         {
@@ -277,7 +234,7 @@ router.post('/register', function(req, res) {
                                         }
                                         else
                                         {
-                                            res.cookie('name', docs[0]._id, {maxAge: 86400000, signed: true});
+                                            res.cookie('name', user._id, {maxAge: 86400000, signed: true});
                                             res.redirect('/play');
                                         }
                                     });
@@ -319,7 +276,7 @@ router.post('/forgot', function(req, res) {
                     ' reset your password.\nWe would love to have you back as a user.\n In the event that this password reset was not requested by you, please ignore this' +
                     ' message and your password shall remain intact.\n\nRegards,\n\nThe Sudoku Champs team.'
                 };
-                db.collection('users').findOneAndUpdate({email : req.body.email, _id : req.body.name}, {$set:{token : token, expire : Date.now() + 3600000}}, {}, function(err, doc){
+                db.collection('users').updateOne({email : req.body.email, _id : req.body.name}, {$set:{token : token, expire : Date.now() + 3600000}}, function(err, doc){
                     db.close();
                     if(err)
                     {
@@ -367,7 +324,7 @@ router.post('/reset/:token', function(req, res) {
             {
                 var query = {token : req.params.token, expire : {$gt: Date.now()}},
                     op = {$set : {hash : bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))}, $unset : {token : '', expire : ''}};
-                db.collection('users').findOneAndUpdate(query, op, {}, function(err, doc) {
+                db.collection('users').updateOne(query, op, function(err, doc) {
                     db.close();
                     if(err || !doc)
                     {

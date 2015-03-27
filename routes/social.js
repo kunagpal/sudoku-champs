@@ -6,14 +6,6 @@ var path = require('path'),
     router = require('express').Router(),
     auth = require(path.join(__dirname, '..', 'database', 'auth'));
 
-passport.serializeUser(function(user, done) {
-    done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-    done(null, obj);
-});
-
 router.get('/fb', passport.authenticate('facebook', {scope : 'email'}));
 
 router.get('/FB', passport.authenticate('facebook', {
