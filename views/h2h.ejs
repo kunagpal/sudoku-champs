@@ -23,7 +23,10 @@
     <div class="clock" id="clock"></div>
     <a id="start">Start</a>
     <a id="hide">Hide</a>
-    <table></table>
+    <form method="POST" action="/h2h">
+        <input type="hidden" name="_csrf" value="<%= token %>"/>
+        <input type="submit"/>
+    </form>
   </body>
 <footer>
     <nav>

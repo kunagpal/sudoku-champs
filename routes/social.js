@@ -6,6 +6,14 @@ var path = require('path'),
     router = require('express').Router(),
     auth = require(path.join(__dirname, '..', 'database', 'auth'));
 
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+    done(null, obj);
+});
+
 router.get('/fb', passport.authenticate('facebook', {scope : 'email'}));
 
 router.get('/FB', passport.authenticate('facebook', {
@@ -22,7 +30,7 @@ router.get('/FB', passport.authenticate('facebook', {
     }
 );
 
-router.get('/go', passport.authenticate('google'));
+router.get('/go', passport.authenticate('google', {scope : 'https://www.googleapis.com/auth/plus.login'}));
 
 router.get('/GO', passport.authenticate('google', {
         successRedirect : '/play',
@@ -40,7 +48,7 @@ router.get('/GO', passport.authenticate('google', {
 
 router.get('/gi', passport.authenticate('github'));
 
-router.get('/GI', passport.authenticate('github', {
+    router.get('/GI', passport.authenticate('github', {
         successRedirect : '/play',
         failureRedirect : '/login'
     }),

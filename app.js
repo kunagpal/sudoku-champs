@@ -7,6 +7,7 @@ var path = require('path'),
     ua = require('universal-analytics'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
+    passport = require('passport'),
     users = require(path.join(__dirname, 'routes', 'users')),
     social = require(path.join(__dirname, 'routes', 'social')),
     routes = require(path.join(__dirname, 'routes', 'index')),
@@ -31,6 +32,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(favicon(__dirname + '/public/images/main.jpg'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret : 'session secret key', resave : '', saveUninitialized : ''}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(csurf());
 app.use(ua.middleware(process.env.UA_ID || key.ua_id, {cookieName: '_ga'}));
 app.use('/', routes);

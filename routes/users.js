@@ -14,14 +14,14 @@ router.get('/logout', function(req, res) {
     }
     else
     {
-        res.redirect('/login');
+        res.redirect('/');
     }
 });
 
 // POST logout page
 router.post('/logout', function(req, res){
     res.clearCookie('name', {});
-    res.redirect('/');
+    res.redirect('/login');
 });
 
 // GET login page

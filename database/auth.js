@@ -4,11 +4,11 @@ var key,
     passport = require('passport'),
     mongo = require('mongodb').MongoClient,
     user = require(path.join(__dirname, 'user')),
-    github = require('passport-github').Strategy,
-    google = require('passport-google').Strategy,
+    github = require('passport-github2').Strategy,
     twitter = require('passport-twitter').Strategy,
     linkedin = require('passport-linkedin').Strategy,
     facebook = require('passport-facebook').Strategy,
+    google = require('passport-google-oauth').OAuth2Strategy,
     uri = process.env.MONGO || 'mongodb://127.0.0.1:27017/project';
 
 try{
@@ -33,7 +33,7 @@ catch(err){
 passport.use(new facebook({
     clientID :  process.env.FB_ID || key.fb_id,
     clientSecret : process.env.FB_KEY || key.fb_key,
-    callbackURL : 'https://www.sudokuchamps.herokuapp.com/FB'
+    callbackURL : 'https://sudokuchamps.herokuapp.com/FB'
     },
     function(token, refreshToken, profile, done) {
             process.nextTick(function() {
@@ -67,7 +67,7 @@ passport.use(new facebook({
 passport.use(new twitter({
     consumerKey : process.env.TW_ID || key.fb_id,
     consumerSecret : process.env.TW_KEY || key.fb_key,
-    callbackURL : 'https://www.sudokuchamps.herokuapp.com/TW'
+    callbackURL : 'https://sudokuchamps.herokuapp.com/TW'
     },
     function(token, refreshToken, profile, done){
         process.nextTick(function() {
@@ -97,10 +97,11 @@ passport.use(new twitter({
     }
 ));
 passport.use(new google({
-        realm : process.env.GO_ID || key.go_id,
-        returnURL : 'https://www.sudokuchamps.herokuapp.com/GO'
+        clientID : process.env.GO_ID || key.go_id,
+        clientSecret : process.env.GO_KEY || key.go_key,
+        callbackURL : 'http://localhost:3000/GO'
     },
-    function(accessToken, refreshToken, profile, done){
+    function(accessToken, refreshSecret, profile, done){
         process.nextTick(function() {
             mongo.connect(uri, function(err, db){
                 if(err)
@@ -109,9 +110,9 @@ passport.use(new google({
                 }
                 else
                 {
-                    user._id = profile.displayName;
+                    user._id = profile.id;
                     user.dob = Date.now();
-                    db.collection('users').findOneAndUpdate({ _id: profile.displayName }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
+                    db.collection('users').findOneAndUpdate({ _id: profile.id }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
                         db.close();
                         if(err)
                         {
@@ -130,7 +131,7 @@ passport.use(new google({
 passport.use(new github({
         clientID :  process.env.GI_ID ||  key.gi_id ,
         clientSecret :  process.env.GI_KEY || key.gi_key,
-        callbackURL : 'https://www.sudokuchamps.herokuapp.com/GI'
+        callbackURL : 'http://127.0.0.1:3000/GI'
     },
     function(accessToken, refreshToken, profile, done){
         process.nextTick(function() {
@@ -141,9 +142,9 @@ passport.use(new github({
                 }
                 else
                 {
-                    user._id = profile.displayName;
+                    user._id = profile.id;
                     user.dob = Date.now();
-                    db.collection('users').findOneAndUpdate({ _id: profile.displayName }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
+                    db.collection('users').findOneAndUpdate({ _id: profile.id }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
                         db.close();
                         if(err)
                         {
@@ -162,7 +163,7 @@ passport.use(new github({
 passport.use(new linkedin({
         consumerKey : process.env.LI_ID || key.li_id,
         consumerSecret : process.env.LI_KEY || key.li_key,
-        callbackURL : 'https://www.sudokuchamps.herokuapp.com/LI'
+        callbackURL : 'http://127.0.0.1:3000/LI'
     },
     function(token, tokenSecret, profile, done){
         process.nextTick(function() {

@@ -21,8 +21,13 @@
     </nav>
     <h1>What's life without a little challenge ?</h1>
     <div class="clock" id="clock"></div>
-    <a id="start" onclick="tick()">Start</a>
-    <a id="hide" onclick="hide()">Hide</a>
+    <a id="start">Start</a>
+    <a id="hide">Hide</a>
+    <form method="POST" action="/challenge">
+        <input type="hidden" name="_csrf" value="token"/>
+        <!-- Grid div goes here.-->
+        <input type="submit" />
+    </form>
   </body>
 <footer>
     <nav>
