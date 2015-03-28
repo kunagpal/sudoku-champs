@@ -22,9 +22,9 @@ function solveSudoku(inputBoard, stats) {
     loopCount++;
     var leastFree = [];
     var leastRemaining = 9;
-    for(var i = 0; i < 9; i++)
+    for(i = 0; i < 9; i++)
     {
-      for(var j = 0; j < 9; j++)
+      for(j = 0; j < 9; j++)
       {
         if(board[i][j] === 0)
         {
@@ -161,7 +161,7 @@ function checkFreedoms(board, i, j, possibilities, zoneRow, zoneCol)
   var uniquePosRow = currentPos.slice(0);
   var uniquePosCol = currentPos.slice(0);
   var uniquePosCube = currentPos.slice(0);
-  for(var k = 0; k < 9; k++)
+  for(k = 0; k < 9; k++)
   {
     for(var l = 1; l <= 9; l++)
     {
@@ -179,7 +179,7 @@ function checkFreedoms(board, i, j, possibilities, zoneRow, zoneCol)
   var remainingCol = 0;
   var lastDigitRow = 0;
   var lastDigitCol = 0;
-    for(var k = 1; k <= 9; k++)
+    for(k = 1; k <= 9; k++)
     {
     if(uniquePosRow[k])
     {
@@ -206,7 +206,7 @@ function checkFreedoms(board, i, j, possibilities, zoneRow, zoneCol)
   {
     for(var y = zoneCol; y <= (zoneCol + 2); y++)
     {
-      for(var l = 1; l <= 9; l++)
+      for(l = 1; l <= 9; l++)
       {
         if(board[x][y] === 0 && possibilities[x][y][l] && (x !== i || y !== j))
         {
@@ -251,7 +251,7 @@ function solveByGuessing(board, possibilities, leastFree, stats)
   var guesses = [];
   var currentPos = possibilities[randSpot[0]][randSpot[1]];
   
-  for(var i = 1; i <= 9; i++)
+  for(i = 1; i <= 9; i++)
   {
     if(currentPos[i])
     {
@@ -328,7 +328,7 @@ function generatePuzzle(difficulty)
   }
   var solvedPuzzle = solveSudoku(emptyPuzzle);
   var indexes = new Array(81);
-  for(var i = 0; i < 81; i++)
+  for(i = 0; i < 81; i++)
   {
       indexes[i] = i;
   }
@@ -350,7 +350,6 @@ function generatePuzzle(difficulty)
     var currentValue = solvedPuzzle[row][col];
     var state = {};
     solvedPuzzle[row][col] = 0;
-    var resolvedPuzzle = solveSudoku(solvedPuzzle, state);
     var undo = false;
     if(difficulty <= 2 && state.medium)
     {
@@ -394,7 +393,7 @@ function verifySolution(board, onlyFullySolved)
     rows.push([]);
     cols.push([]);
   }
-  for(var i = 0; i < 9; i++)
+  for(i = 0; i < 9; i++)
   {
     for(var j = 0; j < 9; j++)
     {
@@ -542,26 +541,6 @@ var emptyPuzzle = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
-function stressTest()
-{
-  var intervalCount = 0;
-  var intervalId = window.setInterval(function() {
-    intervalCount++;
-    if(intervalCount  > 500)
-    {
-      window.console && console.log("finished");
-      window.clearInterval(intervalId);
-    }
-    var newPuzzle = solveSudoku(emptyPuzzle);
-    var resp = verifySolution(newPuzzle);
-    if(resp['valid'] === false)
-    {
-      window.console && console.log("Boo! " + intervalCount);
-      printBoard(newPuzzle);
-    }
-  }, 1);
-}
-
 function cellInputHandler(event)
 {
   if(!this.value.match(/^[1-9]$/))
@@ -598,23 +577,6 @@ function renderBoard(board)
       el.innerHTML = "";
       el.setAttribute("class", elClass);
       el.appendChild(child);
-    }
-  }
-}
-
-function renderSolvedBoard(board)
-{
-  for(var i = 0; i < 9; i++)
-  {
-    for(var j = 0; j < 9; j++)
-    {
-      var id = "" + i + j;
-      var el = document.getElementById(id);
-      var val = board[i][j];
-      var child = el.children[0];
-      if(child.tagName === 'INPUT') {
-        child.value = val;
-      }
     }
   }
 }
@@ -656,20 +618,9 @@ function getCurrentBoard()
   return board;
 }
 
-function printBoard(board)
-{
-  for(var i = 0; i < 9; i++)
-  {
-    var line = "";
-    for(var j = 0; j < 9; j++)
-    {
-      line += " " + board[i][j];
-    }
-    window.console && console.log(line);
-  }
-}
-
 function init() {
+  var id, el, i, j, k, l;
+  var started;
   document.getElementById('youWon').style.display = 'none';
   var currentPuzzle = generatePuzzle();
   renderBoard(currentPuzzle);
@@ -731,6 +682,7 @@ function init() {
             document.getElementById('new').addEventListener('click', function() {
                 location.reload(true);
             }, false);
+            document.getElementById('hidden').click();
         });
       }
       else
@@ -745,10 +697,10 @@ function init() {
       if('badRow' in result)
       {
         var row = result['badRow'];
-        for(var i = 0; i < 9; i++)
+        for(i = 0; i < 9; i++)
         {
-          var id = "" + row + i;
-          var el = document.getElementById(id);
+          id = "" + row + i;
+          el = document.getElementById(id);
           el.setAttribute("class", el.getAttribute('class') + " error");
           currentErrors.push(el);
         }
@@ -756,10 +708,10 @@ function init() {
       else if('badCol' in result)
       {
         var col = result['badCol'];
-        for(var i = 0; i < 9; i++)
+        for(i = 0; i < 9; i++)
         {
-          var id = "" + i + col;
-          var el = document.getElementById(id);
+          id = "" + i + col;
+          el = document.getElementById(id);
           el.setAttribute("class", el.getAttribute('class') + " error");
           currentErrors.push(el);
         }

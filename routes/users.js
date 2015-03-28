@@ -1,6 +1,8 @@
 var temp = [],
     path = require('path'),
     router = require('express').Router(),
+    mongo = require('mongodb').MongoClient,
+    uri = 'mongodb://127.0.0.1:27017/project',
     quote = require(path.join(__dirname, '..', 'database', 'quote')),
     rand = function(arg){
         return arg[parseInt(Math.random() * 10000000000000000) % arg.length];
@@ -157,6 +159,94 @@ router.get('/register', function(req, res) {
     temp[3] = req.session.email ? req.session.email : 0;
     delete req.session.email;
     res.render('register', {token : req.csrfToken(), msg : temp[0], info : temp[1], name : temp[2], email : temp[3]});
+});
+
+router.post('/challenge', function(req, res){
+    mongo.connect(uri, function(err, db){
+        if(err)
+        {
+            console.log(err.message);
+        }
+        else
+        {
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$set : {}}, function(err, doc){
+                if(err)
+                {
+                    console.log(err.message);
+                }
+                else
+                {
+                    console.log(doc);
+                }
+            });
+        }
+    });
+});
+
+router.post('/h2h', function(req, res){
+    mongo.connect(uri, function(err, db){
+        if(err)
+        {
+            console.log(err.message);
+        }
+        else
+        {
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$set : {}}, function(err, doc){
+                if(err)
+                {
+                    console.log(err.message);
+                }
+                else
+                {
+                    console.log(doc);
+                }
+            });
+        }
+    });
+});
+
+router.post('/solo', function(req, res){
+    mongo.connect(uri, function(err, db){
+        if(err)
+        {
+            console.log(err.message);
+        }
+        else
+        {
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$set : {}}, function(err, doc){
+                if(err)
+                {
+                    console.log(err.message);
+                }
+                else
+                {
+                    console.log(doc);
+                }
+            });
+        }
+    });
+});
+
+router.post('/practice', function(req, res){
+    mongo.connect(uri, function(err, db){
+        if(err)
+        {
+            console.log(err.message);
+        }
+        else
+        {
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$set : {}}, function(err, doc){
+                if(err)
+                {
+                    console.log(err.message);
+                }
+                else
+                {
+                    console.log(doc);
+                }
+            });
+        }
+    });
 });
 
 //GET generic route
