@@ -541,12 +541,9 @@ var emptyPuzzle = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
-function cellInputHandler(event)
+function verify()
 {
-  if(!this.value.match(/^[1-9]$/))
-  {
-    this.value = "";
-  }
+    this.value = isNaN(this.value) ? '' : this.value;
 }
 
 function renderBoard(board)
@@ -559,23 +556,21 @@ function renderBoard(board)
       var el = document.getElementById(id);
       var val = board[i][j];
       var child;
-      var elClass;
       if(val === 0)
       {
         child = document.createElement("input");
         child.setAttribute('maxlength', 1);
-        child.addEventListener('keyup', cellInputHandler, false);
-        child.addEventListener('blur', cellInputHandler, false);
-        elClass = "editValue";
+        child.setAttribute('id', 'c' + i.toString() + j.toString());
+        child.addEventListener('input', verify, false);
       }
       else
       {
         child = document.createElement("span");
         child.textContent = val;
-        elClass = "staticValue"; 
       }
       el.innerHTML = "";
-      el.setAttribute("class", elClass);
+      el.setAttribute("class", ((val === 0) ? 'edit' : 'static') + 'Value');
+      el.setAttribute("tabIndex", 0);
       el.appendChild(child);
     }
   }
@@ -674,7 +669,7 @@ function init() {
         started = false;
         clock.stop(function(){
             var temp = clock.getTime().time - 1;
-            winBlock.innerHTML = 'Solved in ' + parseInt(temp/60) + ' minutes ' + (temp % 60) + ' seconds.' + winBlock.innerHTML;
+            winBlock.innerHTML = 'Solved in ' + parseInt(temp / 60) + ' minutes ' + (temp % 60) + ' seconds.' + winBlock.innerHTML;
             winBlock.style.display = 'block';
             document.getElementById('close').addEventListener('click', function() {
                 winBlock.style.display = 'none';

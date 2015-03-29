@@ -4,12 +4,12 @@
     <title>Guest | Sudoku Champs</title>
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="/styles/flipclock.css" type="text/css"/>
-    <link rel="stylesheet" href="/styles/game.css" type="text/css"/>
     <link rel="stylesheet" href="/styles/style.css" type="text/css"/>
+    <link rel="stylesheet" href="/styles/game.css" type="text/css"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="/scripts/flipclock.js"></script>
-    <script src="/scripts/script.js"></script>
     <script src="/scripts/game.js"></script>
+    <script src="/scripts/script.js"></script>
   </head>
   <body>
     <nav>
@@ -40,7 +40,7 @@
                                                 <% for(var l = 0; l < 3; ++l){ %>
                                                     <td class="cell">
                                                         <div id="<%= (k + 3 * i).toString() + (l + 3 * j).toString()%>" class="staticValue">
-                                                            <input id="input"/><label for="input"></label>
+                                                            <input id="c<%= (k + 3 * i).toString() + (l + 3 * j).toString()%>"/><label for="c<%= (k + 3 * i).toString() + (l + 3 * j).toString()%>"></label>
                                                         </div>
                                                     </td>
                                                 <% } %>

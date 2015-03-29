@@ -203,3 +203,9 @@ option:hover {
 #difficulty{
     top : -50%;
 }
+#newGameButton{
+    width : 70%;
+    outline : none;
+    border : none;
+    margin : 0;
+}

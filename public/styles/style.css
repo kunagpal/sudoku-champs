@@ -275,12 +275,8 @@ ul {
 #hidden{
     display : none;
 }
-#newGameButton{
-    width : 70%;
-}
 .logout {
-    padding : 1%;
-    width : 250px;
+    padding : 1% 2%;
     margin : 2% 0;
     border : none;
     outline : none;

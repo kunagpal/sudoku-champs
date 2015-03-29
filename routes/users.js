@@ -169,7 +169,7 @@ router.post('/challenge', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$set : {}}, function(err, doc){
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {challenge : 1, played : 1, xp : 1, form : 1}}, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
@@ -177,6 +177,7 @@ router.post('/challenge', function(req, res){
                 else
                 {
                     console.log(doc);
+                    res.redirect('/challenge');
                 }
             });
         }
@@ -191,7 +192,7 @@ router.post('/h2h', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$set : {}}, function(err, doc){
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {h2h : 1, played : 1, xp : 1, rep : 1, form : 1}}, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
@@ -199,6 +200,7 @@ router.post('/h2h', function(req, res){
                 else
                 {
                     console.log(doc);
+                    res.redirect('/h2h');
                 }
             });
         }
@@ -213,7 +215,7 @@ router.post('/solo', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$set : {}}, function(err, doc){
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {solo : 1, played : 1, form : 1, xp : 1}}, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
@@ -221,6 +223,7 @@ router.post('/solo', function(req, res){
                 else
                 {
                     console.log(doc);
+                    res.redirect('/solo');
                 }
             });
         }
@@ -235,7 +238,7 @@ router.post('/practice', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$set : {}}, function(err, doc){
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {practice : 1, played : 1, form : 1, xp : 1}}, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
@@ -243,6 +246,7 @@ router.post('/practice', function(req, res){
                 else
                 {
                     console.log(doc);
+                    res.redirect('/practice');
                 }
             });
         }

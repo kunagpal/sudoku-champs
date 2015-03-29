@@ -5,11 +5,71 @@ var id,
     clock,
     ver = 0,
     hor = 0,
+    eVer = 0,
+    eHor = 0,
     visible = true,
     started = false,
-    ref = ['37', '38', '39', '40'];
+    ref = [37, 38, 39, 40];
 
 addEventListener('DOMContentLoaded', function() {
+    while(!document.getElementById('c' + eVer.toString() + eHor.toString()))
+    {
+        ++eHor;
+        if(eHor == 9)
+        {
+            eHor = 0;
+            ++eVer;
+        }
+    }
+    eVer = eVer.toString();
+    eHor = eHor.toString();
+    window.onkeydown = function() {
+        id = document.activeElement.id;
+        if(!id[2])
+        {
+            id = 'c' + id;
+        }
+        temp = window.event.keyCode;
+        switch(temp)
+        {
+            case 65 : temp = 37; // left, a
+                      break;
+            case 87 : temp = 38; // up, w
+                      break;
+            case 68 : temp = 39; // right, d
+                      break;
+            case 83 : temp = 40; // down, s
+                      break;
+            default : break;
+        }
+        if(ref.indexOf(temp) > -1)
+        {
+            if(id.match(/^c?[0-8]{2}$/))
+            {
+                ver = (temp % 2) ? 0 : (temp - 39);
+                hor = (temp % 2) ? (temp - 38) : 0;
+                ver = (parseInt(id[1]) + ver) % 9;
+                hor = (parseInt(id[2]) + hor) % 9;
+                ver = (ver > -1) ? ver.toString() : '8';
+                hor = (hor > -1) ? hor.toString() : '8';
+            }
+            else
+            {
+                ver = eVer;
+                hor = eHor;
+            }
+            id = ver + hor;
+            temp = document.getElementById(id);
+            try
+            {
+                document.getElementById('c' + id).focus();
+            }
+            catch(err)
+            {
+                document.getElementById(id).focus();
+            }
+        }
+    };
     window.onbeforeunload = function() {
         time = Date.now();
         if(started)
@@ -54,35 +114,11 @@ addEventListener('DOMContentLoaded', function() {
             }
             document.getElementById('Wrapper').style.visibility = 'visible';
             clock = $('.clock').FlipClock({clockFace: 'MinuteCounter'});
-            document.getElementById('start').innerText = 'Quit';
+            document.getElementById('start').innerText = 'QUIT';
             document.getElementById('start').addEventListener('click', function(){
                 window.location = '/';
             });
             started = true;
         }
     });
-    window.onkeydown = function nav() {
-        id = document.activeElement.id;
-        console.log(id);
-        if(id.match(/^[0-8]{2}$/))
-        {
-            temp = window.event.keyCode;
-            if(ref.indexOf(temp) > -1)
-            {
-                if(temp % 2)
-                {
-                    hor = temp - 38;
-                    ver = 0;
-                }
-                else
-                {
-                    ver = 39 - temp;
-                    hor = 0;
-                }
-            }
-            ver = ver.toString();
-            hor = hor.toString();
-            document.getElementById((temp[0] + ver).toString() + (temp[1] + hor).toString()).focus();
-        }
-    };
 }, false);

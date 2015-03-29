@@ -29,8 +29,8 @@ module.exports = {
         "My old friend futility was back, whispering sweet nothings in my ear.",
         "Fate was mocking me, the same bad joke I'd heard a hundred times before.",
         "All I had left was empty Sudoku grids, and they had rarely served me well.",
-        "It had been so long since I'd seen a good idea, I'd forgotten what they looked like.",
-        "Here I was again, waging a war that wasn't mine for reasons I didn't fully understand."
+        "It had been so long since I'd seen a solved Sudoku grid, I'd forgotten what they looked like.",
+        "Here I was again, solving a puzzle that wasn't mine for reasons I didn't fully understand."
   ],
   away : [
         "I was a has-been.",

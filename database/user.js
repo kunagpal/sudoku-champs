@@ -9,6 +9,10 @@ module.exports = {
         loss : 0,
         tied : 0,
         played : 0,
+        practice : 0,
+        h2h : 0,
+        solo : 0,
+        challenge : 0,
         points : 0,
         ratio : 0.0,
         form : 1,
@@ -16,5 +20,6 @@ module.exports = {
         worst : -1,
         best : Number.MAX_VALUE,
         avg : 0,
-        rep : 0
+        rep : 0,
+        xp : 0
 };
