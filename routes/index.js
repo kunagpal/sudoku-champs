@@ -180,6 +180,7 @@ router.post('/login', function(req, res) {
                     else
                     {
                         req.session.info = 'Incorrect credentials!';
+                        req.session.name = req.body.name;
                         res.redirect('/login');
                     }
                 }

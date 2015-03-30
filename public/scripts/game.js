@@ -677,7 +677,15 @@ function init() {
             document.getElementById('new').addEventListener('click', function() {
                 location.reload(true);
             }, false);
-            document.getElementById('hidden').click();
+            try
+            {
+                window.onbeforeunload = null;
+                document.getElementById('hidden').click();
+            }
+            catch(err)
+            {
+                console.log('Playing on a non-registered page.');
+            }
         });
       }
       else

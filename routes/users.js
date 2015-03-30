@@ -22,8 +22,32 @@ router.get('/logout', function(req, res) {
 
 // POST logout page
 router.post('/logout', function(req, res){
+    mongo.connect(uri, function(err, db) {
+        if(err)
+        {
+            console.log(err.message);
+            req.session.info = 'An unexpected error has occurred. Please retry.';
+            res.redirect('/');
+        }
+        else
+        {
+            db.collection('users').updateOne({_id: req.signedCookies.name}, {$inc : {visit : 1}}, function(err, num) {
+                db.close();
+                if (err)
+                {
+                    console.log(err.message);
+                    req.session.info = 'An unexpected error has occurred. Please retry.';
+                    res.redirect('/');
+                }
+                else
+                {
+                    console.log(num, ' document updated.');
+                    res.redirect('/login');
+                }
+            });
+        }
+    });
     res.clearCookie('name', {});
-    res.redirect('/login');
 });
 
 // GET login page
@@ -38,7 +62,9 @@ router.get('/login', function(req, res) {
         delete req.session.msg;
         temp[1] = req.session.info ? req.session.info : 0;
         delete req.session.info;
-        res.render('login', {token : req.csrfToken(), msg : temp[0], info : temp[1]});
+        temp[2] = req.session.name ? req.session.name : 0;
+        delete req.session.name;
+        res.render('login', {token : req.csrfToken(), msg : temp[0], info : temp[1], name : temp[2]});
     }
 });
 
@@ -215,7 +241,7 @@ router.post('/solo', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {solo : 1, played : 1, form : 1, xp : 1}}, function(err, doc){
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {attempt : 1, solo : 1, played : 1, form : 1, xp : 1}}, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);

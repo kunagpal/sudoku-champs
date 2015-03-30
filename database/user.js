@@ -21,5 +21,6 @@ module.exports = {
         best : Number.MAX_VALUE,
         avg : 0,
         rep : 0,
-        xp : 0
+        xp : 0,
+        visit : 0
 };

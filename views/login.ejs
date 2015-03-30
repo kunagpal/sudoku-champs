@@ -4,6 +4,7 @@
     <title>Login | Sudoku Champs</title>
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="/styles/style.css" type="text/css" />
+    <script type="text/javascript" lang="javascript" src="/scripts/valid.js"></script>
   </head>
   <body>
       <nav>
@@ -20,8 +21,8 @@
       <h2>Or, play as a guest <a href="/guest" class="link">here</a>.</h2>
       <h3>You'll get no points, nor would you feature on our exclusive leaderboard :(</h3>
       <form method="POST" action="/login">
-            <input type="hidden" name="_csrf" value="<%= token %>">
-            <input type="text" name="name" placeholder="User" autofocus="true" autocomplete="true" required/> <br /><br />
+            <input type="hidden" name="_csrf" value="<%=token%>" />
+            <input type="text" name="name"  value="<%= name ? name : '' %>" placeholder="User" autocomplete="true" required/> <br /><br />
             <input type="password" name="password" placeholder="Password" required/> <br/><br />
             <input type="submit" id="begin" value="Let's go!"/>
       </form>
