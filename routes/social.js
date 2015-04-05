@@ -3,8 +3,9 @@
  */
 var path = require('path'),
     passport = require('passport'),
-    router = require('express').Router(),
-    auth = require(path.join(__dirname, '..', 'database', 'auth'));
+    router = require('express').Router();
+
+require(path.join(__dirname, '..', 'database', 'auth'));
 
 router.get('/fb', passport.authenticate('facebook', {scope : 'email'}));
 
@@ -15,7 +16,7 @@ router.get('/FB', passport.authenticate('facebook', {
     function(req, res){
         if (req.signedCookies.name)
         {
-            res.clearCookie('name', { });
+            res.clearCookie('name', {});
         }
         res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
         res.redirect('/play');
@@ -31,7 +32,7 @@ router.get('/GO', passport.authenticate('google', {
     function(req, res){
         if (req.signedCookies.name)
         {
-            res.clearCookie('name', { });
+            res.clearCookie('name', {});
         }
         res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
         res.redirect('/play');
@@ -47,7 +48,7 @@ router.get('/gi', passport.authenticate('github'));
     function(req, res){
         if (req.signedCookies.name)
         {
-            res.clearCookie('name', { });
+            res.clearCookie('name', {});
         }
         res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
         res.redirect('/play');
@@ -63,7 +64,7 @@ router.get('/TW', passport.authenticate('twitter', {
     function(req, res){
         if (req.signedCookies.name)
         {
-            res.clearCookie('name', { });
+            res.clearCookie('name', {});
         }
         res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
         res.redirect('/play');
@@ -79,7 +80,7 @@ router.get('/LI', passport.authenticate('linkedin', {
     function(req, res){
         if (req.signedCookies.name)
         {
-            res.clearCookie('name', { });
+            res.clearCookie('name', {});
         }
         res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
         res.redirect('/play');

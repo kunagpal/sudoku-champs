@@ -22,10 +22,10 @@ nav ul li a, #forum li a {
     display : block;
     line-height : 250%;
     background: #000000;
-    transition : color 0.5s ease-out, background 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.4s ease-out, background 0.4s ease-out;
+    -ms-transition : color 0.4s ease-out, background 0.4s ease-out;
+    -moz-transition : color 0.4s ease-out, background 0.4s ease-out;
+    -webkit-transition : color 0.4s ease-out, background 0.4s ease-out;
 }
 footer nav ul li a{
     line-height : 188%;
@@ -40,9 +40,9 @@ nav ul{
     width : 100%;
 }
 nav ul li{
+    width : 25%;
     float : left;
     text-align : center;
-    width : 25%;
 }
 .center {
     alignment: center;
@@ -87,11 +87,11 @@ h2 {
     padding : 3%;
     color : #FFFFFF;
     text-align : left;
-    margin : 5% 15% 0 10%;
+    margin : 2% 15% 3%;
     background : #000000;
 }
 #contain li{
-    margin : 0.75%;
+    margin : 12px;
 }
 footer {
     bottom : 0;
@@ -144,10 +144,10 @@ footer {
     color : #FFFFFF;
     position : absolute;
     background : #000000;
-    transition : color 0.5s ease-out, background 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.4s ease-out, background 0.4s ease-out;
+    -ms-transition : color 0.4s ease-out, background 0.4s ease-out;
+    -moz-transition : color 0.4s ease-out, background 0.4s ease-out;
+    -webkit-transition : color 0.4s ease-out, background 0.4s ease-out;
 }
 #one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #hide:hover, #quit:hover, #checkButton:hover, #newGameButton:hover, #new:hover, #close:hover, .logout:hover{
     color : #000000;
@@ -183,21 +183,51 @@ footer {
     color : #FFFFFF;
     margin-top : 5px;
     background : #000000;
-    transition : color 0.5s ease-out, background 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.4s ease-out, background 0.4s ease-out;
+    -ms-transition : color 0.4s ease-out, background 0.4s ease-out;
+    -moz-transition : color 0.4s ease-out, background 0.4s ease-out;
+    -webkit-transition : color 0.4s ease-out, background 0.4s ease-out;
 }
 #begin:hover {
     color : #000000;
     background : #8f8f8f;
 }
 #stats{
-    top : 25%;
-    right : 5%;
-    float : right;
-    text-align : left;
+    width : 70%;
+    margin : 2% 15%;
+    color : #FFFFFF;
     position : absolute;
+    background : #000000;
+    border-collapse: collapse;
+}
+#stats tr{
+    padding : 10% 0;
+}
+#stats tr td{
+    margin : 0;
+    padding : 5% 0;
+    border : 1px solid white;
+    transition : color 0.4s ease-out, background 0.4s ease-out;
+    -ms-transition : color 0.4s ease-out, background 0.4s ease-out;
+    -moz-transition : color 0.4s ease-out, background 0.4s ease-out;
+    -webkit-transition : color 0.4s ease-out, background 0.4s ease-out;
+}
+#stats tr td:hover{
+    color : #000000;
+    background : #FFFFFF;
+}
+#stats tr th{
+    margin : 0;
+    padding : 2% 0;
+    border : 1px solid white;
+    transition : color 0.5s ease-out, background 0.5s ease-out;
+    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
+    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+}
+#stats tr th:hover{
+    color : #000000;
+    background : #8f8f8f;
 }
 img {
     border : 0;
@@ -279,15 +309,15 @@ ul {
     display : none;
 }
 .logout {
-    padding : 1% 2%;
     margin : 2% 0;
     border : none;
     outline : none;
+    padding : 1% 2%;
     color : #FFFFFF;
     line-height : 200%;
     background : #000000;
-    transition : color 0.5s ease-out, background 0.5s ease-out;
-    -ms-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -moz-transition : color 0.5s ease-out, background 0.5s ease-out;
-    -webkit-transition : color 0.5s ease-out, background 0.5s ease-out;
+    transition : color 0.4s ease-out, background 0.4s ease-out;
+    -ms-transition : color 0.4s ease-out, background 0.4s ease-out;
+    -moz-transition : color 0.4s ease-out, background 0.4s ease-out;
+    -webkit-transition : color 0.4s ease-out, background 0.4s ease-out;
 }

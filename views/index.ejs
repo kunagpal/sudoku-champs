@@ -20,16 +20,6 @@
     <h3>Because you just have to solve them all.</h3>
     <br/><br/>
     <a href="/login" id="begin">Get Started</a>
-    <%if(stats.played) {%>
-        <div id="stats">
-            <h3><%= 'Number crunching...' %></h3>
-            <ul>
-                 <% for(i in stats) {%>
-                 <li><%= index[i] + ' : ' + stats[i] %></li>
-                 <%}%>
-            </ul>
-        </div>
-    <%}%>
   </body>
   <footer>
       <nav>

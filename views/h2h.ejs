@@ -21,9 +21,71 @@
     </nav>
     <h1>Lock horns with your worst enemy. Or your best friend. Or both ...</h1>
     <div class="clock" id="clock"></div>
-    <a id="start">Start</a>
+    <a id="start">START</a>
     <form method="POST" action="/h2h">
         <input type="hidden" name="_csrf" value="<%= token %>"/>
+        <input type="hidden" name="win" value="0"/>
+        <input type="hidden" name="loss" value="0"/>
+        <input type="hidden" name="time" value="0"/>
+        <div id="Wrapper">
+            <div id="Main">
+                <div id="Content">
+                    <br/><br/><br/>
+                    <div id="Column1"><input id="amazeButton" type="hidden" /></div>
+                    <div id="sudokuBoard">
+                        <table cellspacing="0" cellpadding="0">
+                            <% for(var i = 0; i < 3; ++i){ %>
+                            <tr>
+                                <% for(var j = 0; j < 3; ++j){ %>
+                                <td class="alpha">
+                                    <table cellspacing="1" cellpadding="0">
+                                        <% for(var k = 0; k < 3; ++k){ %>
+                                        <tr>
+                                            <% for(var l = 0; l < 3; ++l){ %>
+                                            <td class="cell">
+                                                <div id="<%= (k + 3 * i).toString() + (l + 3 * j).toString()%>" class="staticValue">
+                                                    <input id="input"/><label for="input"></label>
+                                                </div>
+                                            </td>
+                                            <% } %>
+                                        </tr>
+                                        <% } %>
+                                    </table>
+                                </td>
+                                <% } %>
+                            </tr>
+                            <% } %>
+                        </table>
+                    </div>
+                    <div id="col2">
+                        <div class="validate">
+                            <a id="checkButton" class="gameControls">CHECK</a><br/>
+                            <span id="errorsFound" class="errorsFound" role="tab" aria-selected="true" aria-controls="ErrorsFound" tabindex="300">MISTAKE FOUND</span>
+                            <span id="noErrors" class="noErrors" role="tab" aria-selected="true" aria-controls="NoErrorsFound" tabindex="400">LOOKIN GOOD</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="game" id="game">
+            <a id="newGameButton" class="gameControls">NEW GAME</a>
+            <br/>
+            <label for="difficulty">Level:</label>&nbsp;&nbsp;
+            <select id="difficulty">
+                <option value="1" selected>KID MODE</option>
+                <option value="2">RECRUIT</option>
+                <option value="3">SEASONED</option>
+                <option value="4">VETERAN</option>
+                <option value="5">GOD MODE</option>
+            </select>
+        </div>
+        <div id="youWon">
+            <br>
+            <h2>Play Again?</h2>
+            <br>
+            <a id="new" class="gameControls">NEW GAME</a>
+            <a id="close" class="gameControls">CLOSE</a>
+        </div>
         <input type="submit" id="hidden"/>
     </form>
   </body>

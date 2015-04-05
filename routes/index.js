@@ -1,6 +1,7 @@
 var i,
     lead,
     flag,
+    bcrypt,
     ref = {
         'h':'/h2h',
         's':'/solo',
@@ -10,28 +11,19 @@ var i,
     },
     path = require('path'),
     crypto = require('crypto'),
-    bcrypt = require('bcryptjs'),
     router = require('express').Router(),
     mongo = require('mongodb').MongoClient,
     user = require(path.join(__dirname, '..', 'database', 'user')),
     uri = process.env.MONGO || 'mongodb://127.0.0.1:27017/project',
-    index = {
-        best : 'Best',
-        _id : 'Player',
-        worst: 'Worst',
-        avg: 'Average',
-        ratio : 'Ratio',
-        points : 'Points',
-        streak : 'Streak',
-        rep: 'Reputation',
-        win : 'Matches won',
-        loss : 'Matches lost',
-        tied : 'Matches tied',
-        played : 'Matches played'
-    },
     op = {'_id' : 1, 'points' : 1, 'played' : 1, 'streak' : 1},
     frame = {'sort' : [['points', -1], ['played' , 1], ['streak' , -1]]};
 
+try{
+    bcrypt = require('bcrypt');
+}
+catch(err){
+    bcrypt = require('bcryptjs');
+}
 try{
     var key = require(path.join(__dirname, '..', 'key')).key;
 }
@@ -50,28 +42,7 @@ var email = require('nodemailer').createTransport({
 // GET home page.
 router.get('/', function(req, res)
 {
-    mongo.connect(uri, function(err, db){
-        if(err)
-        {
-            console.log(err.message);
-            res.render('index', {stats : 0});
-        }
-        else
-        {
-            var op = {dob : 0, hash : 0, email : 0, token : 0, expires : 0, form : 0, num : 0};
-            db.collection('users').findOne({_id : req.signedCookies.name}, op, function(err, doc){
-               db.close();
-               if(err)
-               {
-                   console.log(err.message);
-               }
-               else
-               {
-                   res.render('index', {stats : doc ? doc : 0, index : index});
-               }
-            });
-        }
-    });
+    res.render('index');
 });
 
 // GET reset token page
@@ -235,7 +206,7 @@ router.post('/register', function(req, res) {
                                         }
                                         else
                                         {
-                                            res.cookie('name', user._id, {maxAge: 86400000, signed: true});
+                                            res.cookie('name', docs[0]._id, {maxAge: 86400000, signed: true});
                                             res.redirect('/play');
                                         }
                                     });
@@ -266,33 +237,33 @@ router.post('/forgot', function(req, res) {
         }
         else
         {
-            crypto.randomBytes(20, function(err, buf) {
-                var token = buf.toString('hex');
-                var options = {
-                    from: 'sudokuchampster@gmail.com',
-                    to : req.body.email,
-                    subject: 'Time to get back in the game',
-                    text: 'Hey there, ' + req.body.name + '\n' + 'A little birdie told us that you were having troubles with your Sudoku champs password.\n'
-                    + 'That really hurts us, so please click on http://' + req.headers.host + '/reset/' + token + ' within sixty minutes of seeing this message in order to' +
-                    ' reset your password.\nWe would love to have you back as a user.\n In the event that this password reset was not requested by you, please ignore this' +
-                    ' message and your password shall remain intact.\n\nRegards,\n\nThe Sudoku Champs team.'
-                };
-                db.collection('users').updateOne({email : req.body.email, _id : req.body.name}, {$set:{token : token, expire : Date.now() + 3600000}}, function(err, doc){
-                    db.close();
-                    if(err)
-                    {
-                        console.log(err.message);
-                        req.session.info = 'An unexpected error has occurred. Please retry.';
-                        res.redirect('/forgot');
-                    }
-                    else if(!doc)
-                    {
-                        console.log('Oh No !');
-                        req.session.info = 'No matches found!';
-                        res.redirect('/forgot');
-                    }
-                    else
-                    {
+            db.collection('users').updateOne({email : req.body.email, _id : req.body.name}, {$set:{token : token, expire : Date.now() + 3600000}}, function(err, doc){
+                db.close();
+                if(err)
+                {
+                    console.log(err.message);
+                    req.session.info = 'An unexpected error has occurred. Please retry.';
+                    res.redirect('/forgot');
+                }
+                else if(!doc)
+                {
+                    console.log('Oh No !');
+                    req.session.info = 'No matches found!';
+                    res.redirect('/forgot');
+                }
+                else
+                {
+                    crypto.randomBytes(20, function(err, buf) {
+                        var token = buf.toString('hex');
+                        var options = {
+                            from: 'sudokuchampster@gmail.com',
+                            to : req.body.email,
+                            subject: 'Time to get back in the game',
+                            text: 'Hey there, ' + req.body.name + '\n' + 'A little birdie told us that you were having troubles with your Sudoku champs password.\n'
+                            + 'That really hurts us, so please click on http://' + req.headers.host + '/reset/' + token + ' within sixty minutes of seeing this message in order to' +
+                            ' reset your password.\nWe would love to have you back as a user.\n In the event that this password reset was not requested by you, please ignore this' +
+                            ' message and your password shall remain intact.\n\nRegards,\n\nThe Sudoku Champs team.'
+                        };
                         email.sendMail(options, function(err) {
                             if(err)
                             {
@@ -304,8 +275,8 @@ router.post('/forgot', function(req, res) {
                             }
                             res.redirect('/login');
                         });
-                    }
-                });
+                    });
+                }
             });
         }
     });
@@ -325,19 +296,20 @@ router.post('/reset/:token', function(req, res) {
             {
                 var query = {token : req.params.token, expire : {$gt: Date.now()}},
                     op = {$set : {hash : bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))}, $unset : {token : '', expire : ''}};
-                db.collection('users').updateOne(query, op, function(err, doc) {
+                db.collection('users').findOneAndUpdate(query, op, function(err, doc) {
                     db.close();
                     if(err || !doc)
                     {
                         console.log(err.message);
-                        req.session.info = 'An unexpected error has occurred. Please retry.';
+                        req.session.info = 'The password reset link associated with this instance is either invalid or has expired. Please retry.';
                         res.redirect('/forgot');
                     }
                     else
                     {
                         var options = {
+                            from : 'sudokuchampster@gmail.com',
                             to : doc.email,
-                            subject : 'Password change successful !',
+                            subject : 'Password change successful!',
                             text : 'Hey there, ' + doc._id + '.\nWe\'re just writing in to let you know that the recent password change for your account with Sudoku Champs was successful.' +
                             '\nRegards,\nThe Sudoku Champs team.'
                         };

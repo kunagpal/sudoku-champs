@@ -80,7 +80,8 @@ addEventListener('DOMContentLoaded', function() {
                     if(Date.now() - time > 10000)
                     {
                         window.onbeforeunload = null;
-                        window.location = '/';
+                        document.getElementsByName('loss')[0].value = 1;
+                        document.getElementById('hidden').click();
                     }
                     else
                     {

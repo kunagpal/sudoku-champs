@@ -666,16 +666,18 @@ function init() {
         "NICE", "SWEET", "LOOKS GOOD TO ME"];
       if(verifySolution(board, true)['valid'])
       {
-        started = false;
         clock.stop(function(){
+            started = false;
             var temp = clock.getTime().time - 1;
+            document.getElementsByName('win')[0].value = 1;
+            document.getElementsByName('time')[0].value = temp;
             winBlock.innerHTML = 'Solved in ' + parseInt(temp / 60) + ' minutes ' + (temp % 60) + ' seconds.' + winBlock.innerHTML;
             winBlock.style.display = 'block';
             document.getElementById('close').addEventListener('click', function() {
                 winBlock.style.display = 'none';
             }, false);
             document.getElementById('new').addEventListener('click', function() {
-                location.reload(true);
+                document.getElementById('hidden').click();
             }, false);
             try
             {

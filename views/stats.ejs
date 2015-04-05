@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html class="center">
+  <head>
+    <title>Stats | Sudoku Champs</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="/styles/style.css" type="text/css" />
+  </head>
+  <body>
+    <nav>
+      <ul>
+          <li><a id="inv">HOME</a></li>
+          <li><a href="/play">PLAY</a></li>
+          <li><a href="/rules">RULES</a></li>
+          <li><a href="/leader">LEADERBOARD</a></li>
+      </ul>
+    </nav>
+    <%if(stats || 1){%>
+        <h1>Number crunching</h1>
+        <table id="stats">
+            <tr>
+                <th>COMPUTE</th>
+                <th>CRUNCH</th>
+                <th>ANALYZE</th>
+                <th>REPEAT</th>
+            </tr>
+            <tr>
+                <td rowspan="5">PLAYED</td>
+                <td rowspan="4">BEST</td>
+                <td rowspan="4" colspan="2">AVERAGE</td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td rowspan="4" colspan="2">FAVOURITE GAME MODE</td>
+                <td rowspan="4">WORST</td>
+            </tr>
+            <tr>
+                <td rowspan="5">WINS</td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td rowspan="7" colspan="3">AWESOME GRAPH!</td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td rowspan="5">LOSSES</td>
+            </tr>
+        </table>
+    <%} else {%>
+        <h1>Whoa. Looks like there are no statistics to your name.</h1>
+        <h2>Well, what are you waiting for? Get out there and rack 'em up!</h2>
+    <% }%>
+  </body>
+  <footer>
+      <nav>
+          <ul>
+              <li><a href="/logout">I wish to leave</a></li>
+              <li><a href="/privacy">Privacy</a></li>
+              <li><a href="/forum">Forum</a></li>
+              <li><a href="/developers">Developers</a></li>
+          </ul>
+      </nav>
+  </footer>
+</html>

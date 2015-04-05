@@ -22,5 +22,7 @@ module.exports = {
         avg : 0,
         rep : 0,
         xp : 0,
-        visit : 0
+        visit : 0,
+        prevType : '',
+        prevTime : 0
 };

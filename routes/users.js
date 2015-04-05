@@ -6,7 +6,8 @@ var temp = [],
     quote = require(path.join(__dirname, '..', 'database', 'quote')),
     rand = function(arg){
         return arg[parseInt(Math.random() * 10000000000000000) % arg.length];
-    };
+    },
+    op = {dob : 0, hash : 0, email : 0, token : 0, expires : 0, form : 0, num : 0};
 
 // GET logout page
 router.get('/logout', function(req, res) {
@@ -68,7 +69,7 @@ router.get('/login', function(req, res) {
     }
 });
 
-// GET contact page
+// GET forum page
 router.get('/forum', function(req, res) {
     res.render('forum');
 });
@@ -195,7 +196,7 @@ router.post('/challenge', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {challenge : 1, played : 1, xp : 1, form : 1}}, function(err, doc){
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {challenge : 1, played : 1, xp : 1, form : 1, win : req.body.win, loss : req.body.loss, time : req.body.time}}, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
@@ -218,7 +219,7 @@ router.post('/h2h', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {h2h : 1, played : 1, xp : 1, rep : 1, form : 1}}, function(err, doc){
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {h2h : 1, played : 1, xp : 1, rep : 1, form : 1, win : req.body.win, loss : req.body.loss, time : req.body.time}}, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
@@ -241,7 +242,7 @@ router.post('/solo', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {attempt : 1, solo : 1, played : 1, form : 1, xp : 1}}, function(err, doc){
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {solo : 1, played : 1, form : 1, xp : 1, win : req.body.win, loss : req.body.loss, time : req.body.time}}, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
@@ -264,7 +265,7 @@ router.post('/practice', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {practice : 1, played : 1, form : 1, xp : 1}}, function(err, doc){
+            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {practice : 1, played : 1, form : 1, xp : 1, win : req.body.win, loss : req.body.loss, time : req.body.time}}, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
@@ -277,6 +278,37 @@ router.post('/practice', function(req, res){
             });
         }
     });
+});
+
+router.get('/stats', function(req, res){
+    if(req.signedCookies.name)
+    {
+        mongo.connect(uri, function(err, db){
+            if(err)
+            {
+                console.log(err.message);
+                res.render('stats', {stats : 0});
+            }
+            else
+            {
+                db.collection('users').findOne({_id : req.signedCookies.name}, op, function(err, doc){
+                    db.close();
+                    if(err)
+                    {
+                        console.log(err.message);
+                    }
+                    else
+                    {
+                        res.render('stats', {stats : doc ? doc : 0});
+                    }
+                });
+            }
+        });
+    }
+    else
+    {
+        res.redirect('/login');
+    }
 });
 
 //GET generic route

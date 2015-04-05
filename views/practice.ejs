@@ -26,6 +26,9 @@
     <a id="hide">HIDE</a>
     <form method="POST" action="/practice">
         <input type="hidden" name="_csrf" value="<%= token %>" />
+        <input type="hidden" name="win" value="0"/>
+        <input type="hidden" name="loss" value="0"/>
+        <input type="hidden" name="time" value="0"/>
         <div id="Wrapper">
             <div id="Main">
                 <div id="Content">
