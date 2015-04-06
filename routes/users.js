@@ -1,4 +1,5 @@
-var temp = [],
+var opt,
+    temp = [],
     path = require('path'),
     router = require('express').Router(),
     mongo = require('mongodb').MongoClient,
@@ -32,7 +33,7 @@ router.post('/logout', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id: req.signedCookies.name}, {$inc : {visit : 1}}, function(err, num) {
+            db.collection('users').updateOne({_id: req.signedCookies.name}, {$inc : {visit : 1}}, function(err) {
                 db.close();
                 if (err)
                 {
@@ -48,6 +49,8 @@ router.post('/logout', function(req, res){
         }
     });
     res.clearCookie('name', {});
+    res.clearCookie('best', {});
+    res.clearCookie('worst', {});
 });
 
 // GET login page
@@ -122,7 +125,7 @@ router.get('/play', function(req, res) {
     }
     else
     {
-        res.redirect('/login?pl');
+        res.redirect('/login');
     }
 });
 
@@ -134,7 +137,8 @@ router.get('/practice', function(req, res) {
     }
     else
     {
-        res.redirect('/login?pr');
+        req.session.route = 2;
+        res.redirect('/login');
     }
 });
 
@@ -146,7 +150,8 @@ router.get('/h2h', function(req, res) {
     }
     else
     {
-        res.redirect('/login?h');
+        req.session.route = 0;
+        res.redirect('/login');
     }
 });
 
@@ -158,7 +163,8 @@ router.get('/challenge', function(req, res) {
     }
     else
     {
-        res.redirect('/login?c');
+        req.session.route = 3;
+        res.redirect('/login');
     }
 });
 
@@ -170,7 +176,8 @@ router.get('/solo', function(req, res) {
     }
     else
     {
-        res.redirect('/login?s');
+        req.session.route = 1;
+        res.redirect('/login');
     }
 });
 
@@ -195,14 +202,33 @@ router.post('/challenge', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {challenge : 1, played : 1, xp : 1, form : 1, win : req.body.win, loss : req.body.loss, time : req.body.time}}, function(err, doc){
+            opt =  {
+                $set : {
+                    prevType : 'Challenge',
+                    prevTime : parseInt(req.body.time),
+                    best : req.signedCookies.best < parseInt(req.body.time) ? req.signedCookies.best : parseInt(req.body.time),
+                    worst : req.signedCookies.worst > parseInt(req.body.time) ? req.signedCookies.worst : parseInt(req.body.time)
+                },
+                $inc : {
+                    xp : 1,
+                    form : 1,
+                    streak : 1,
+                    played : 1,
+                    challenge : 1,
+                    win : parseInt(req.body.win),
+                    loss : parseInt(req.body.loss),
+                    time : parseInt(req.body.time)
+                }
+            };
+            db.collection('users').updateOne({_id : req.signedCookies.name}, opt, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
                 }
                 else
                 {
-                    console.log(doc);
+                    res.cookie('best', opt.$set.best, {maxAge : 86400000, signed : true});
+                    res.cookie('worst', opt.$set.worst, {maxAge : 86400000, signed : true});
                     res.redirect('/challenge');
                 }
             });
@@ -218,14 +244,33 @@ router.post('/h2h', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {h2h : 1, played : 1, xp : 1, rep : 1, form : 1, win : req.body.win, loss : req.body.loss, time : req.body.time}}, function(err, doc){
+            opt =  {
+                $set : {
+                    prevType : 'Head to head',
+                    prevTime : parseInt(req.body.time),
+                    best : req.signedCookies.best < parseInt(req.body.time) ? req.signedCookies.best : parseInt(req.body.time),
+                    worst : req.signedCookies.worst > parseInt(req.body.time) ? req.signedCookies.worst : parseInt(req.body.time)
+                },
+                $inc : {
+                    xp : 1,
+                    h2h : 1,
+                    form : 1,
+                    streak : 1,
+                    played : 1,
+                    win : parseInt(req.body.win),
+                    loss : parseInt(req.body.loss),
+                    time : parseInt(req.body.time)
+                }
+            };
+            db.collection('users').updateOne({_id : req.signedCookies.name}, opt, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
                 }
                 else
                 {
-                    console.log(doc);
+                    res.cookie('best', opt.$set.best, {maxAge: 86400000, signed: true});
+                    res.cookie('worst', opt.$set.worst, {maxAge: 86400000, signed: true});
                     res.redirect('/h2h');
                 }
             });
@@ -241,14 +286,33 @@ router.post('/solo', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {solo : 1, played : 1, form : 1, xp : 1, win : req.body.win, loss : req.body.loss, time : req.body.time}}, function(err, doc){
+            opt =  {
+                $set : {
+                    prevType : 'Solo',
+                    prevTime : parseInt(req.body.time),
+                    best : req.signedCookies.best < parseInt(req.body.time) ? req.signedCookies.best : parseInt(req.body.time),
+                    worst : req.signedCookies.worst > parseInt(req.body.time) ? req.signedCookies.worst : parseInt(req.body.time)
+                },
+                $inc : {
+                    xp : 1,
+                    solo : 1,
+                    form : 1,
+                    streak : 1,
+                    played : 1,
+                    win : parseInt(req.body.win),
+                    loss : parseInt(req.body.loss),
+                    time : parseInt(req.body.time)
+                }
+            };
+            db.collection('users').updateOne({_id : req.signedCookies.name}, opt, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
                 }
                 else
                 {
-                    console.log(doc);
+                    res.cookie('best', opt.$set.best, {maxAge: 86400000, signed: true});
+                    res.cookie('worst', opt.$set.worst, {maxAge: 86400000, signed: true});
                     res.redirect('/solo');
                 }
             });
@@ -264,14 +328,30 @@ router.post('/practice', function(req, res){
         }
         else
         {
-            db.collection('users').updateOne({_id : req.signedCookies.name}, {$inc : {practice : 1, played : 1, form : 1, xp : 1, win : req.body.win, loss : req.body.loss, time : req.body.time}}, function(err, doc){
+            opt =  {
+                $set : {
+                    best : req.signedCookies.best < req.body.time ? req.signedCookies.best : parseInt(req.body.time),
+                    worst : req.signedCookies.worst > parseInt(req.body.time) ? req.signedCookies.worst : parseInt(req.body.time),
+                    prevType : 'Practice',
+                    prevTime : parseInt(req.body.time)
+                },
+                $inc : {
+                    xp : 1,
+                    form : 1,
+                    played : 1,
+                    practice : 1,
+                    time : parseInt(req.body.time)
+                }
+            };
+            db.collection('users').updateOne({_id : req.signedCookies.name}, opt, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
                 }
                 else
                 {
-                    console.log(doc);
+                    res.cookie('best', opt.$set.best, {maxAge: 86400000, signed: true});
+                    res.cookie('worst', opt.$set.worst, {maxAge: 86400000, signed: true});
                     res.redirect('/practice');
                 }
             });
@@ -296,9 +376,20 @@ router.get('/stats', function(req, res){
                     {
                         console.log(err.message);
                     }
+                    else if(!doc.played)
+                    {
+                        res.render('stats', {stats : 0});
+                    }
                     else
                     {
-                        res.render('stats', {stats : doc ? doc : 0});
+                        temp = [doc.practice, doc.h2h, doc.challenge, doc.solo].sort();
+                        doc.fav = doc.practice == temp[3] ? 'Practice' : doc.challenge == temp[3] ? 'Challenge' : doc.solo == temp[3] ? 'Solo' : 'Head to head';
+                        doc.fav += ' (' + temp[3] + ' of ' + doc.played + ' games)';
+                        doc.avg = parseInt(doc.time / doc.played);
+                        doc.avg = parseInt(doc.avg / 60) + ' : ' + (doc.avg % 60 > 9 ? '' : '0') + doc.avg % 60;
+                        doc.best = doc.best != Number.MAX_VALUE ? parseInt(doc.best / 60) + ' : ' + (doc.best % 60 > 9 ? '' : '0') + doc.best % 60 : 'NA';
+                        doc.worst = doc.worst != -1 ? parseInt(doc.worst / 60) + ' : ' + (doc.worst % 60 > 9 ? '' : '0') + doc.worst % 60 : 'NA';
+                        res.render('stats', {stats : doc});
                     }
                 });
             }
@@ -306,7 +397,8 @@ router.get('/stats', function(req, res){
     }
     else
     {
-        res.redirect('/login?st');
+        req.session.route = 4;
+        res.redirect('/login');
     }
 });
 

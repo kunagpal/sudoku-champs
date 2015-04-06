@@ -1,15 +1,15 @@
 var i,
+    temp,
     lead,
     flag,
     bcrypt,
-    ref = {
-        'h':'/h2h',
-        's':'/solo',
-        'pl':'/play',
-        'pr':'/practice',
-        'c':'/challenge',
-        'st':'/stats'
-    },
+    ref = [
+        '/h2h',
+        '/solo',
+        '/practice',
+        '/challenge',
+        '/stats'
+    ],
     path = require('path'),
     crypto = require('crypto'),
     router = require('express').Router(),
@@ -146,8 +146,12 @@ router.post('/login', function(req, res) {
                 {
                     if (bcrypt.compareSync(req.body.password, doc.hash))
                     {
+                        temp =  req.session.route;
+                        delete req.session.route;
                         res.cookie('name', req.body.name, {maxAge: 86400000, signed: true});
-                        res.redirect(ref[req.headers.referer.split('?')[1]] || '/play');
+                        res.cookie('best', doc.best, {maxAge: 86400000, signed: true});
+                        res.cookie('worst', doc.worst, {maxAge: 86400000, signed: true});
+                        res.redirect(ref[temp] || '/play');
                     }
                     else
                     {
@@ -197,7 +201,7 @@ router.post('/register', function(req, res) {
                                 }
                                 else
                                 {
-                                    db.collection('users').insertOne(user, function(err, docs){
+                                    db.collection('users').insertOne(user, {w : 1}, function(err, docs){
                                         db.close();
                                         if(err)
                                         {
@@ -208,6 +212,8 @@ router.post('/register', function(req, res) {
                                         else
                                         {
                                             res.cookie('name', docs[0]._id, {maxAge: 86400000, signed: true});
+                                            res.cookie('best', docs[0].best, {maxAge: 86400000, signed: true});
+                                            res.cookie('worst', docs[0].worst, {maxAge: 86400000, signed: true});
                                             res.redirect('/play');
                                         }
                                     });

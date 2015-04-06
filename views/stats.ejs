@@ -14,7 +14,7 @@
           <li><a href="/leader">LEADERBOARD</a></li>
       </ul>
     </nav>
-    <%if(stats || 1){%>
+    <%if(stats){%>
         <h1>Number crunching</h1>
         <table id="stats">
             <tr>
@@ -30,7 +30,7 @@
                 </td>
                 <td rowspan="4">
                     BEST
-                    <p class="val"><%= stats.low %></p>
+                    <p class="val"><%= stats.best %></p>
                 </td>
                 <td rowspan="4" colspan="2">
                     AVERAGE
@@ -47,7 +47,7 @@
                 </td>
                 <td rowspan="4">
                     WORST
-                    <p class="val"><%= stats.high %></p>
+                    <p class="val"><%= stats.worst %></p>
                 </td>
             </tr>
             <tr>

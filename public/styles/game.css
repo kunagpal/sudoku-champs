@@ -197,7 +197,6 @@ option:hover {
     top : 20%;
 }
 #newGameButton{
-    visibility : hidden;
     top : 30%;
 }
 #difficulty{

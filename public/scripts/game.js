@@ -677,17 +677,9 @@ function init() {
                 winBlock.style.display = 'none';
             }, false);
             document.getElementById('new').addEventListener('click', function() {
-                document.getElementById('hidden').click();
-            }, false);
-            try
-            {
                 window.onbeforeunload = null;
                 document.getElementById('hidden').click();
-            }
-            catch(err)
-            {
-                console.log('Playing on a non-registered page.');
-            }
+            }, false);
         });
       }
       else
