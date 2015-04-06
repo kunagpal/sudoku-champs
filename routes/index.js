@@ -7,7 +7,8 @@ var i,
         's':'/solo',
         'pl':'/play',
         'pr':'/practice',
-        'c':'/challenge'
+        'c':'/challenge',
+        'st':'/stats'
     },
     path = require('path'),
     crypto = require('crypto'),

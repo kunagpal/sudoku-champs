@@ -42,7 +42,6 @@ router.post('/logout', function(req, res){
                 }
                 else
                 {
-                    console.log(num, ' document updated.');
                     res.redirect('/login');
                 }
             });
@@ -307,7 +306,7 @@ router.get('/stats', function(req, res){
     }
     else
     {
-        res.redirect('/login');
+        res.redirect('/login?st');
     }
 });
 
