@@ -43,17 +43,6 @@ b {
     width: 426px;
     margin-left: 40px;
     float: left;
-    z-index : 0;
-}
-#cover{
-    height : auto;
-    filter : blur(10px);
-    -moz-filter : blur(10px);
-    -ms-filter : blur(10px);
-    -o-filter : blur(10px);
-    -webkit-filter : blur(10px);
-    visibility : hidden;
-    z-index : 1;
 }
 #col2 {
     width: 174px;
@@ -74,9 +63,10 @@ td.alpha td.cell, td.beta td.cell {
     text-align: center;
     font-size: 30px;
     color: #FFFFFF;
+    outline-color : #444444;
     background : #000000;
 }
-.staticValue,.editValue {
+.staticValue, .editValue {
     width: 42px;
     height: 42px;
     padding: 0;
@@ -196,15 +186,22 @@ option:hover {
 #checkButton{
     top : 20%;
 }
-#newGameButton{
-    top : 30%;
-}
 #difficulty{
     top : -50%;
 }
 #newGameButton{
+    top : 30%;
     width : 70%;
     outline : none;
     border : none;
     margin : 0;
+    padding : 2%;
+    color : #FFFFFF;
+    position : absolute;
+    background : #000000;
+    transition : all 0.4s ease-out;
+    -ms-transition : all 0.4s ease-out;
+    -moz-transition : all 0.4s ease-out;
+    -webkit-transition : all 0.4s ease-out;
+    visibility : hidden;
 }

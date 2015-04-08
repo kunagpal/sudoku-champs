@@ -2,27 +2,15 @@
 var id,
     time,
     temp,
+    index,
     clock,
     ver = 0,
     hor = 0,
-    eVer = 0,
-    eHor = 0,
     visible = true,
     started = false,
-    ref = [37, 38, 39, 40];
+    ref = [37, 38, 39, 40, 67, 69, 90, 81];
 
 addEventListener('DOMContentLoaded', function() {
-    while(!document.getElementById('c' + eVer.toString() + eHor.toString()))
-    {
-        ++eHor;
-        if(eHor == 9)
-        {
-            eHor = 0;
-            ++eVer;
-        }
-    }
-    eVer = eVer.toString();
-    eHor = eHor.toString();
     window.onkeydown = function() {
         id = document.activeElement.id;
         if(!id[2])
@@ -30,6 +18,7 @@ addEventListener('DOMContentLoaded', function() {
             id = 'c' + id;
         }
         temp = window.event.keyCode;
+        console.log(temp);
         switch(temp)
         {
             case 65 : temp = 37; // left, a
@@ -42,12 +31,21 @@ addEventListener('DOMContentLoaded', function() {
                       break;
             default : break;
         }
-        if(ref.indexOf(temp) > -1)
+        index = ref.indexOf(temp);
+        if(index > -1)
         {
             if(id.match(/^c?[0-8]{2}$/))
             {
-                ver = (temp % 2) ? 0 : (temp - 39);
-                hor = (temp % 2) ? (temp - 38) : 0;
+                if(index <= 3)
+                {
+                    ver = (temp % 2) ? 0 : (temp - 39);
+                    hor = (temp % 2) ? (temp - 38) : 0;
+                }
+                else
+                {
+                    ver = Math.pow(-1, index);
+                    hor = Math.pow(-1, parseInt(index / 2));
+                }
                 ver = (parseInt(id[1]) + ver) % 9;
                 hor = (parseInt(id[2]) + hor) % 9;
                 ver = (ver > -1) ? ver.toString() : '8';
@@ -55,8 +53,8 @@ addEventListener('DOMContentLoaded', function() {
             }
             else
             {
-                ver = eVer;
-                hor = eHor;
+                ver = '0';
+                hor = '0';
             }
             id = ver + hor;
             temp = document.getElementById(id);
@@ -67,21 +65,31 @@ addEventListener('DOMContentLoaded', function() {
             catch(err)
             {
                 document.getElementById(id).focus();
+                console.log(document.getElementById(id).style.border);
             }
         }
     };
+
     window.onbeforeunload = function() {
-        time = Date.now();
         if(started)
         {
+            time = Date.now();
             document.getElementById('sudokuBoard').style.visibility = 'hidden';
             setTimeout(function() {
                 setTimeout(function() {
                     if(Date.now() - time > 10000)
                     {
                         window.onbeforeunload = null;
-                        document.getElementsByName('loss')[0].value = 1;
-                        document.getElementById('hidden').click();
+                        try
+                        {
+                            document.getElementsByName('loss')[0].value = 1;
+                            document.getElementById('hidden').click();
+                        }
+                        catch(err)
+                        {
+                            console.log('Playing as a guest.');
+                            window.location = document.activeElement.href;
+                        }
                     }
                     else
                     {
@@ -92,16 +100,7 @@ addEventListener('DOMContentLoaded', function() {
             return "This action will result in a loss. (The game will be lost automatically in ten seconds.)";
         }
     };
-    try{
-        document.getElementById('hide').addEventListener('click', function () {
-            document.getElementById('clock').style.visibility = visible && started ? 'hidden' : 'visible';
-            document.getElementById('hide').innerText = visible && started ? 'BRING IT BACK' : 'HIDE';
-            visible = !visible;
-        });
-    }
-    catch(err){
-        console.log('Playing on a non registered page.');
-    }
+
     document.getElementById('start').addEventListener('click', function () {
         if (!started) {
             document.getElementById('newGameButton').style.visibility = 'visible';
@@ -111,7 +110,7 @@ addEventListener('DOMContentLoaded', function() {
                 document.getElementById('hide').style.visibility = 'visible';
             }
             catch(err) {
-                console.log('Playing on a non registered page.');
+                console.log('Playing as a guest.');
             }
             document.getElementById('Wrapper').style.visibility = 'visible';
             clock = $('.clock').FlipClock({clockFace: 'MinuteCounter'});
@@ -122,4 +121,16 @@ addEventListener('DOMContentLoaded', function() {
             started = true;
         }
     });
+
+    try{
+        document.getElementById('hide').addEventListener('click', function () {
+            document.getElementById('clock').style.visibility = visible && started ? 'hidden' : 'visible';
+            document.getElementById('hide').innerText = visible && started ? 'BRING IT BACK' : 'HIDE';
+            visible = !visible;
+        });
+    }
+    catch(err){
+        console.log('Playing as a guest.');
+    }
+
 }, false);
