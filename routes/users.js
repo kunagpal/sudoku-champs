@@ -2,8 +2,6 @@ var opt,
     temp = [],
     path = require('path'),
     router = require('express').Router(),
-    mongo = require('mongodb').MongoClient,
-    uri = 'mongodb://127.0.0.1:27017/project',
     quote = require(path.join(__dirname, '..', 'database', 'quote')),
     rand = function(arg){
         return arg[parseInt(Math.random() * 10000000000000000) % arg.length];
@@ -24,17 +22,8 @@ router.get('/logout', function(req, res) {
 
 // POST logout page
 router.post('/logout', function(req, res){
-    mongo.connect(uri, function(err, db) {
-        if(err)
         {
-            console.log(err.message);
-            req.session.info = 'An unexpected error has occurred. Please retry.';
-            res.redirect('/');
-        }
-        else
-        {
-            db.collection('users').updateOne({_id: req.signedCookies.name}, {$inc : {visit : 1}}, function(err) {
-                db.close();
+            req.db.collection('users').updateOne({_id: req.signedCookies.name}, {$inc : {visit : 1}}, function(err) {
                 if (err)
                 {
                     console.log(err.message);
@@ -47,7 +36,6 @@ router.post('/logout', function(req, res){
                 }
             });
         }
-    });
     res.clearCookie('name', {});
     res.clearCookie('best', {});
     res.clearCookie('worst', {});
@@ -195,12 +183,6 @@ router.get('/register', function(req, res) {
 });
 
 router.post('/challenge', function(req, res){
-    mongo.connect(uri, function(err, db){
-        if(err)
-        {
-            console.log(err.message);
-        }
-        else
         {
             opt =  {
                 $set : {
@@ -220,7 +202,7 @@ router.post('/challenge', function(req, res){
                     time : parseInt(req.body.time)
                 }
             };
-            db.collection('users').updateOne({_id : req.signedCookies.name}, opt, function(err, doc){
+            req.db.collection('users').updateOne({_id : req.signedCookies.name}, opt, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
@@ -234,15 +216,8 @@ router.post('/challenge', function(req, res){
             });
         }
     });
-});
 
 router.post('/h2h', function(req, res){
-    mongo.connect(uri, function(err, db){
-        if(err)
-        {
-            console.log(err.message);
-        }
-        else
         {
             opt =  {
                 $set : {
@@ -262,7 +237,7 @@ router.post('/h2h', function(req, res){
                     time : parseInt(req.body.time)
                 }
             };
-            db.collection('users').updateOne({_id : req.signedCookies.name}, opt, function(err, doc){
+            req.db.collection('users').updateOne({_id : req.signedCookies.name}, opt, function(err, doc){
                 if(err)
                 {
                     console.log(err.message);
@@ -275,86 +250,67 @@ router.post('/h2h', function(req, res){
                 }
             });
         }
-    });
 });
 
 router.post('/solo', function(req, res){
-    mongo.connect(uri, function(err, db){
+    opt =  {
+        $set : {
+            prevType : 'Solo',
+            prevTime : parseInt(req.body.time),
+            best : req.signedCookies.best < parseInt(req.body.time) ? req.signedCookies.best : parseInt(req.body.time),
+            worst : req.signedCookies.worst > parseInt(req.body.time) ? req.signedCookies.worst : parseInt(req.body.time)
+        },
+        $inc : {
+            xp : 1,
+            solo : 1,
+            form : 1,
+            streak : 1,
+            played : 1,
+            win : parseInt(req.body.win),
+            loss : parseInt(req.body.loss),
+            time : parseInt(req.body.time)
+        }
+    };
+    req.db.collection('users').updateOne({_id : req.signedCookies.name}, opt, function(err, doc){
         if(err)
         {
             console.log(err.message);
         }
         else
         {
-            opt =  {
-                $set : {
-                    prevType : 'Solo',
-                    prevTime : parseInt(req.body.time),
-                    best : req.signedCookies.best < parseInt(req.body.time) ? req.signedCookies.best : parseInt(req.body.time),
-                    worst : req.signedCookies.worst > parseInt(req.body.time) ? req.signedCookies.worst : parseInt(req.body.time)
-                },
-                $inc : {
-                    xp : 1,
-                    solo : 1,
-                    form : 1,
-                    streak : 1,
-                    played : 1,
-                    win : parseInt(req.body.win),
-                    loss : parseInt(req.body.loss),
-                    time : parseInt(req.body.time)
-                }
-            };
-            db.collection('users').updateOne({_id : req.signedCookies.name}, opt, function(err, doc){
-                if(err)
-                {
-                    console.log(err.message);
-                }
-                else
-                {
-                    res.cookie('best', opt.$set.best, {maxAge: 86400000, signed: true});
-                    res.cookie('worst', opt.$set.worst, {maxAge: 86400000, signed: true});
-                    res.redirect('/solo');
-                }
-            });
+            res.cookie('best', opt.$set.best, {maxAge: 86400000, signed: true});
+            res.cookie('worst', opt.$set.worst, {maxAge: 86400000, signed: true});
+            res.redirect('/solo');
         }
     });
 });
 
 router.post('/practice', function(req, res){
-    mongo.connect(uri, function(err, db){
+    opt =  {
+        $set : {
+            best : req.signedCookies.best < req.body.time ? req.signedCookies.best : parseInt(req.body.time),
+            worst : req.signedCookies.worst > parseInt(req.body.time) ? req.signedCookies.worst : parseInt(req.body.time),
+            prevType : 'Practice',
+            prevTime : parseInt(req.body.time)
+        },
+        $inc : {
+            xp : 1,
+            form : 1,
+            played : 1,
+            practice : 1,
+            time : parseInt(req.body.time)
+        }
+    };
+    req.db.collection('users').updateOne({_id : req.signedCookies.name}, opt, function(err, doc){
         if(err)
         {
             console.log(err.message);
         }
         else
         {
-            opt =  {
-                $set : {
-                    best : req.signedCookies.best < req.body.time ? req.signedCookies.best : parseInt(req.body.time),
-                    worst : req.signedCookies.worst > parseInt(req.body.time) ? req.signedCookies.worst : parseInt(req.body.time),
-                    prevType : 'Practice',
-                    prevTime : parseInt(req.body.time)
-                },
-                $inc : {
-                    xp : 1,
-                    form : 1,
-                    played : 1,
-                    practice : 1,
-                    time : parseInt(req.body.time)
-                }
-            };
-            db.collection('users').updateOne({_id : req.signedCookies.name}, opt, function(err, doc){
-                if(err)
-                {
-                    console.log(err.message);
-                }
-                else
-                {
-                    res.cookie('best', opt.$set.best, {maxAge: 86400000, signed: true});
-                    res.cookie('worst', opt.$set.worst, {maxAge: 86400000, signed: true});
-                    res.redirect('/practice');
-                }
-            });
+            res.cookie('best', opt.$set.best, {maxAge: 86400000, signed: true});
+            res.cookie('worst', opt.$set.worst, {maxAge: 86400000, signed: true});
+            res.redirect('/practice');
         }
     });
 });
@@ -362,16 +318,8 @@ router.post('/practice', function(req, res){
 router.get('/stats', function(req, res){
     if(req.signedCookies.name)
     {
-        mongo.connect(uri, function(err, db){
-            if(err)
             {
-                console.log(err.message);
-                res.render('stats', {stats : 0});
-            }
-            else
-            {
-                db.collection('users').findOne({_id : req.signedCookies.name}, op, function(err, doc){
-                    db.close();
+                req.db.collection('users').findOne({_id : req.signedCookies.name}, op, function(err, doc){
                     if(err)
                     {
                         console.log(err.message);
@@ -393,7 +341,6 @@ router.get('/stats', function(req, res){
                     }
                 });
             }
-        });
     }
     else
     {
@@ -403,8 +350,8 @@ router.get('/stats', function(req, res){
 });
 
 //GET generic route
-router.get(/\/.*/, function(req, res){
-    res.redirect('/');
-});
+//router.get(/\/.*/, function(req, res){
+//    res.redirect('/');
+//});
 
 module.exports = router;

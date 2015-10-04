@@ -24,7 +24,7 @@
           password.
       </p>
       <form method="POST" action="/forgot">
-          <input type="hidden" name="_csrf" value="<%= token %>">
+          <input type="hidden" name="_csrf" value="<%=token%>">
           <input type="text" name="name" placeholder="Username" autofocus="true" autocomplete="true" required /> <br /> <br />
           <input type = "email" name = "email" placeholder = "Email Address" autocomplete="true" required/> <br /> <br />
           <input type = "submit" value = "Submit" id = "begin"/>

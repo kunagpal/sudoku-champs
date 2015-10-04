@@ -70,7 +70,8 @@ addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    window.onbeforeunload = function() {
+    window.onbeforeunload = function()
+    {
         if(started)
         {
             time = Date.now();
@@ -102,14 +103,17 @@ addEventListener('DOMContentLoaded', function() {
     };
 
     document.getElementById('start').addEventListener('click', function () {
-        if (!started) {
+        if (!started)
+        {
             document.getElementById('newGameButton').style.visibility = 'visible';
             document.getElementById('newGameButton').click();
             document.getElementById('game').style.visibility = 'hidden';
-            try{
+            try
+            {
                 document.getElementById('hide').style.visibility = 'visible';
             }
-            catch(err) {
+            catch(err)
+            {
                 console.log('Playing as a guest.');
             }
             document.getElementById('Wrapper').style.visibility = 'visible';
@@ -122,14 +126,16 @@ addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    try{
+    try
+    {
         document.getElementById('hide').addEventListener('click', function () {
             document.getElementById('clock').style.visibility = visible && started ? 'hidden' : 'visible';
             document.getElementById('hide').innerText = visible && started ? 'BRING IT BACK' : 'HIDE';
             visible = !visible;
         });
     }
-    catch(err){
+    catch(err)
+    {
         console.log('Playing as a guest.');
     }
 

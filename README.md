@@ -9,5 +9,6 @@ The source code repository for the sudoku-champs initiative.
 * Download and install MongoDB from [here] (https://www.mongodb.org/downloads)
 * Run the localhost MongoDB server 'mongod'
 * Navigate to the project directory, and install all dependencies using 'npm install'
+* Install security dependency manually using 'npm install bcryptjs' (Microsoft Windows only) 
 * Run the server using 'npm start'
 * View the website at localhost:3000
