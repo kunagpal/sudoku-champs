@@ -1,0 +1,106 @@
+<!--
+*  Sudoku Champs <sudokuchampster@gmail.com>
+*
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Practice | Sudoku Champs</title>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="/styles/flipclock.css" type="text/css" />
+        <link rel="stylesheet" href="/styles/game.css" type="text/css" />
+        <link rel="stylesheet" href="/styles/style.css" type="text/css" />
+        <link rel="icon" type="image/png" href="/images/main.jpg">
+        <script src="/bower/jquery/dist/jquery.min.js"></script>
+        <script src="/scripts/flipclock.js"></script>
+        <script src="/scripts/game.js"></script>
+        <script src="/scripts/script.js"></script>
+    </head>
+    <body>
+        {{{head}}}
+        <h1>Because practice makes perfect.</h1>
+        <div class="clock" id="clock"></div>
+        <a id="start">START</a>
+        <a id="hide">HIDE</a>
+        <form method="POST" action="/{{mode}}">
+            <input type="hidden" name="_csrf" value="{{ token }}" />
+            <input type="hidden" name="win" value="0"/>
+            <input type="hidden" name="loss" value="0"/>
+            <input type="hidden" name="time" value="0"/>
+            <div id="Wrapper">
+                <div id="Main">
+                    <div id="Content">
+                        <br><br><br>
+                        <div id="Column1"><input id="amazeButton" type="hidden" /></div>
+                        <div id="sudokuBoard">
+                            <table cellspacing="0" cellpadding="0">
+                                {{ for(var i = 0; i < 3; ++i){ }}
+                                <tr>
+                                    {{ for(var j = 0; j < 3; ++j){ }}
+                                    <td class="alpha">
+                                        <table cellspacing="1" cellpadding="0">
+                                            {{ for(var k = 0; k < 3; ++k){ }}
+                                            <tr>
+                                                {{ for(var l = 0; l < 3; ++l){ }}
+                                                <td class="cell">
+                                                    <div id="{{{ (k + 3 * i).toString() + (l + 3 * j).toString()}}}" class="staticValue">
+                                                        <input id="input"/><label for="input"></label>
+                                                    </div>
+                                                </td>
+                                                {{ } }}
+                                            </tr>
+                                            {{ } }}
+                                        </table>
+                                    </td>
+                                    {{ } %}}
+                                </tr>
+                                {{ } }}
+                            </table>
+                        </div>
+                        <div id="col2">
+                            <div class="validate">
+                                <a id="checkButton" class="gameControls">CHECK</a><br>
+                                <span id="errorsFound" class="errorsFound" role="tab" aria-selected="true" aria-controls="ErrorsFound" tabindex="300">MISTAKE FOUND</span>
+                                <span id="noErrors" class="noErrors" role="tab" aria-selected="true" aria-controls="NoErrorsFound" tabindex="400">LOOKIN GOOD</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="game" id="game">
+                <a id="newGameButton" class="gameControls">NEW GAME</a>
+                <br>
+                <label for="difficulty">Level:</label>&nbsp;&nbsp;
+                <select id="difficulty">
+                    <option value="1" selected>KID MODE</option>
+                    <option value="2">RECRUIT</option>
+                    <option value="3">SEASONED</option>
+                    <option value="4">VETERAN</option>
+                    <option value="5">GOD MODE</option>
+                </select>
+            </div>
+            <div id="youWon">
+                <br>
+                <h2>Play Again?</h2>
+                <br>
+                <a id="new" class="gameControls">NEW GAME</a>
+                <a id="close" class="gameControls">CLOSE</a>
+            </div>
+            <input type="submit" id="hidden"/>
+        </form>
+    </body>
+    {{{foot}}}
+</html>

@@ -1,0 +1,55 @@
+<!--
+*  Sudoku Champs <sudokuchampster@gmail.com>
+*
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE html>
+<html class="center">
+  <head>
+    <title>Leaderboard | Sudoku Champs</title>
+    <link rel="icon" type="image/png" href="/images/main.jpg">
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="/styles/style.css" type="text/css" />
+  </head>
+  <body>
+        {{{head}}}
+        <h1>Where Goliaths stand, with the Davids not so far behind...</h1>
+        {{#if lead}}
+            <table class="lead">
+                 <tr>
+                    <th>Rank</th>
+                    <th>Legend</th>
+                    <th>Score</th>
+                    <th>Matches</th>
+                    <th>Streak</th>
+                 </tr>
+                 {{#lead}}
+                    {{#if @index}}
+                        <tr class="{{#if rank}}reg{{else}}{{/if}}">
+                             <td>{{#if rank}}{{rank}}{{else}}{{@index}}{{/if}}</td>
+                             <td>{{_id}}</td>
+                             <td>{{points}}</td>
+                             <td>{{played}}</td>
+                             <td>{{streak}}</td>
+                         </tr>
+                    {{/if}}
+                 {{/lead}}
+            </table>
+        {{ else }}
+        <h2>Looks like the top spot is reserved for you. <br>What are you waiting for? Play some matches and make it yours!</h2>
+        {{/if}}
+  </body>
+  {{{foot}}}
+</html>

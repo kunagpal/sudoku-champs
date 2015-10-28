@@ -1,52 +1,65 @@
+/*
+*  Sudoku Champs <sudokuchampster@gmail.com>
+*
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 var express = require('express');
 var app = express();
 app.use(require('compression')());
-require('dotenv').load();
-var re = 0,
-    users,
+if(!process.env.NODE_ENV)
+{
+    require('dotenv').load();
+}
+var users,
     social,
     index,
-    fresh = 0,
-    connection,
     path = require('path'),
     passport = require('passport'),
-    bodyParser = require('body-parser'),
-    mongo = require('mongodb').MongoClient.connect;
-
-app.use(function(req, res, next){
-    if(!connection)
-    {
-        connection = mongo(process.env.MONGO || 'mongodb://localhost/project');
-        console.log('f',++fresh);
-    }
-    else
-    {
-        console.log('r',++re);
-    }
-    connection.then(function (db) {
-            req.db = db;
-            next();
-        })
-        .catch(function (err) {
-            connection = undefined;
-            next(err);
-        });
-});
+    bodyParser = require('body-parser');
 
 users = require(path.join(__dirname, 'routes', 'users'));
 social = require(path.join(__dirname, 'routes', 'social'));
 index = require(path.join(__dirname, 'routes', 'index'));
 
+head = "<nav>"+
+            "<ul>"+
+                "<li><a href='/'>HOME</a></li>"+
+                "<li><a href='/play'>PLAY</a></li>"+
+                "<li><a href='/rules'>RULES</a></li>"+
+                "<li><a href='/leader'>LEADERBOARD</a></li>"+
+            "</ul>"+
+        "</nav>";
+foot = "<footer>"+
+            "<nav>"+
+                "<ul>"+
+                    "<li><a href='/logout'>I wish to leave</a></li>"+
+                    "<li><a href='/privacy'>Privacy</a></li>"+
+                    "<li><a href='/forum'>Forum</a></li>"+
+                    "<li><a href='/developers'>Developers</a></li>"+
+                "</ul>"+
+            "</nav>"+
+        "</footer>";
 // view engine setup
-app.set('view engine', 'ejs');
+app.set('view engine', 'hbs');
 app.set('case sensitive routing', true);
-app.set('port', process.env.PORT || 3000);
+app.set('port', 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.use(require('morgan')('dev'));
 app.use(bodyParser.json());
 app.use(require('cookie-parser')("secret"));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(require('serve-favicon')(__dirname + '/public/images/main.jpg'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('express-session')({ secret : 'session secret key', resave : '', saveUninitialized : ''}));
 app.use(passport.initialize());
@@ -61,29 +74,14 @@ app.enable('trust proxy');
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
-    res.render('error');
     next(err);
 });
-// error handlers
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development')
-{
-    app.use(function(err, req, res) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
-// production error handler
-// no stacktraces leaked to user
+// error handler
 app.use(function(err, req, res) {
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,
-        error: {}
+        error: process.env.NODE_ENV ? {} : err
     });
 });
 

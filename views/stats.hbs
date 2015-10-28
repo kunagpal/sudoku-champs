@@ -1,20 +1,31 @@
+<!--
+*  Sudoku Champs <sudokuchampster@gmail.com>
+*
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <!DOCTYPE html>
 <html class="center">
   <head>
     <title>Stats | Sudoku Champs</title>
+    <link rel="icon" type="image/png" href="/images/main.jpg">
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="/styles/style.css" type="text/css" />
   </head>
   <body>
-    <nav>
-      <ul>
-          <li><a id="inv">HOME</a></li>
-          <li><a href="/play">PLAY</a></li>
-          <li><a href="/rules">RULES</a></li>
-          <li><a href="/leader">LEADERBOARD</a></li>
-      </ul>
-    </nav>
-    <%if(stats){%>
+  {{{head}}}
+    {{#if stats}}
         <h1>Number crunching</h1>
         <table id="stats">
             <tr>
@@ -23,18 +34,19 @@
                 <th>ANALYZE</th>
                 <th>REPEAT</th>
             </tr>
+            {{#with stats}}
             <tr>
                 <td rowspan="5">
                     PLAYED
-                    <p class="val"><%= stats.played %></p>
+                    <p class="val">{{ played }}</p>
                 </td>
                 <td rowspan="4">
                     BEST
-                    <p class="val"><%= stats.best %></p>
+                    <p class="val">{{ best }}</p>
                 </td>
                 <td rowspan="4" colspan="2">
                     AVERAGE
-                    <p class="val"><%= stats.avg %></p>
+                    <p class="val">{{ avg }}</p>
                 </td>
             </tr>
             <tr></tr>
@@ -43,17 +55,17 @@
             <tr>
                 <td rowspan="4" colspan="2">
                     FAVOURITE GAME MODE
-                    <p class="val"><%= stats.fav %></p>
+                    <p class="val">{{ fav }}</p>
                 </td>
                 <td rowspan="4">
                     WORST
-                    <p class="val"><%= stats.worst %></p>
+                    <p class="val">{{ worst }}</p>
                 </td>
             </tr>
             <tr>
                 <td rowspan="5">
                     WINS
-                    <p class="val"><%= stats.win %></p>
+                    <p class="val">{{ win }}</p>
                 </td>
             </tr>
             <tr></tr>
@@ -68,25 +80,17 @@
             <tr>
                 <td rowspan="5">
                     LOSSES
-                    <p class="val"><%= stats.loss %></p>
+                    <p class="val">{{ loss }}</p>
                 </td>
             </tr>
+            {{/with}}
         </table>
-        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br>
         <h2>Hover over a section for details</h2>
-    <%} else {%>
+    {{else}}
         <h1>Whoa. Looks like there are no statistics to your name.</h1>
         <h2>Well, what are you waiting for? Get out there and rack 'em up!</h2>
-    <% }%>
+    {{/if}}
   </body>
-  <footer>
-      <nav>
-          <ul>
-              <li><a href="/logout">I wish to leave</a></li>
-              <li><a href="/privacy">Privacy</a></li>
-              <li><a href="/forum">Forum</a></li>
-              <li><a href="/developers">Developers</a></li>
-          </ul>
-      </nav>
-  </footer>
+  {{{foot}}}
 </html>

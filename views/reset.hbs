@@ -1,0 +1,40 @@
+<!--
+*  Sudoku Champs <sudokuchampster@gmail.com>
+*
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE html>
+<html class="center">
+  <head>
+    <title>Reset | Sudoku Champs</title>
+    <link rel="icon" type="image/png" href="/images/main.jpg">
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="/styles/style.css" type="text/css" />
+  </head>
+  <body>
+      {{{head}}}
+      <br><br>
+      <h3 class="reg">{{ info }}</h3>
+      <h1>Reset Password ?</h1>
+      <h2>The closest thing to resurrection in today's digital world.</h2>
+      <form method="POST">
+          <input type="hidden" name="_csrf" value="{{ token }}">
+          <input type = "password" placeholder="Password" name = "password" autofocus/> <br><br>
+          <input type = "password" placeholder="Confirm password" id="confirm" name="confirm"/><label for="confirm" class="reg">{{ msg }}</label> <br><br>
+          <input type="submit" value="Bring me back!" id="begin"/>
+      </form>
+  </body>
+  {{{foot}}}
+</html>

@@ -1,8 +1,28 @@
+/*
+*  Sudoku Champs <sudokuchampster@gmail.com>
+*
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 var path = require('path'),
     debug = require('debug')('sudokuchamps'),
-    app = require(path.join(__dirname, '..', 'app'));
+    app = require(path.join(__dirname, '..', 'app')),
+    server = require('http').createServer(app),
+    mongo = require('mongodb').MongoClient.connect,
+    port = normalizePort(process.env.PORT || '3000');
 
-var port = normalizePort(process.env.PORT || '3000');
+
 function normalizePort(val)
 {
     var port = parseInt(val, 10);
@@ -12,7 +32,8 @@ function normalizePort(val)
         return val;
     }
 
-    if (port >= 0) {
+    if (port >= 0)
+    {
         return port;
     }
 
@@ -49,7 +70,26 @@ function onListening()
     debug('Listening on ' + bind);
 }
 
-var server = require('http').createServer(app);
-server.on('error', onError);
-server.on('listening', onListening);
-server.listen(port);
+mongo(process.env.MONGO || 'mongodb://127.0.0.1:27017/project', function(err, database){
+    if(err)
+    {
+        throw err;
+    }
+    else
+    {
+        db = database.collection('users');
+        parent = database;
+        server.on('error', onError);
+        server.on('listening', onListening);
+        server.listen(port);
+
+        process.on('SIGINT', function(err){
+            if(err)
+            {
+                console.log(err.message);
+            }
+            database.close();
+            process.exit(0);
+        });
+    }
+});

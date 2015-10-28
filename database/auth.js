@@ -1,106 +1,105 @@
-// Created by Kunal Nagpal <kunagpal@gmail.com> on 28-02-2015.
+/*
+ *  Sudoku Champs <sudokuchampster@gmail.com>
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 var path = require('path'),
     passport = require('passport'),
+    ref = {
+        "production" : "http://sudokuchamps.herokuapp.com/",
+        undefined : "http://localhost:3000/"
+    },
     user = require(path.join(__dirname, 'user')),
-    mongo = require('mongodb').MongoClient.connect,
     twitter = require('passport-twitter').Strategy,
     facebook = require('passport-facebook').Strategy,
-    google = require('passport-google-oauth').OAuth2Strategy,
-    uri = process.env.MONGO || 'mongodb://127.0.0.1:27017/project';
+    google = require('passport-google-oauth').OAuth2Strategy;
+
+passport.serializeUser(function (user, done) {
+    done(null, user._id);
+});
+
+// used to deserialize the user
+passport.deserializeUser(function (id, done) {
+    mongoUsers.fetchUser({'_id' : id}, done);
+});
 
 passport.use(new facebook({
     clientID :  process.env.FB_ID,
     clientSecret : process.env.FB_KEY,
-    callbackURL : 'https://sudokuchamps.herokuapp.com/FB'
+    callbackURL : ref[process.env.NODE_ENV] + 'FB'
     },
     function(token, refreshToken, profile, done) {
             process.nextTick(function() {
-                mongo(uri, function(err, db){
-                    if(err)
+                user._id = profile.name.givenName + ' ' + profile.name.familyName;
+                user.dob = new Date();
+                user.token = token;
+                user.email = profile.emails[0].value;
+                db('users').findOneAndUpdate({ _id : profile.name.givenName + ' ' + profile.name.familyName }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
+                    if (err)
                     {
                         console.log(err.message);
                     }
                     else
                     {
-                        user._id = profile.name.givenName + ' ' + profile.name.familyName;
-                        user.dob = new Date();
-                        user.token = token;
-                        user.email = profile.emails[0].value;
-                        db.collection('users').findOneAndUpdate({ _id : profile.name.givenName + ' ' + profile.name.familyName }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
-                            db.close();
-                            if (err)
-                            {
-                                console.log(err.message);
-                            }
-                            else if (doc)
-                            {
-                                return done(null, doc);
-                            }
-                        });
+                        return done(null, doc || user);
                     }
                 });
         });
     })
 );
+
 passport.use(new twitter({
     consumerKey : process.env.TW_ID,
     consumerSecret : process.env.TW_KEY,
-    callbackURL : 'https://sudokuchamps.herokuapp.com/TW'
+    callbackURL : ref[process.env.NODE_ENV] + 'TW'
     },
     function(token, refreshToken, profile, done){
         process.nextTick(function() {
-            mongo(uri, function(err, db){
-                if(err)
+            user._id = profile.username;
+            user.token = profile.token;
+            db('users').findOneAndUpdate({ _id : profile.username }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
+                if (err)
                 {
                     console.log(err.message);
                 }
                 else
                 {
-                    user._id = profile.username;
-                    user.token = profile.token;
-                    db.collection('users').findOneAndUpdate({ _id : profile.username }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
-                        db.close();
-                        if (err)
-                        {
-                            console.log(err.message);
-                        }
-                        else
-                        {
-                            return done(null, doc ? doc : user);
-                        }
-                    });
+                    return done(null, doc || user);
                 }
             });
         });
     }
 ));
+
 passport.use(new google({
         clientID : process.env.GO_ID,
         clientSecret : process.env.GO_KEY,
-        callbackURL : 'http://localhost:3000/GO'
+        callbackURL : ref[process.env.NODE_ENV] + 'GO'
     },
     function(accessToken, refreshSecret, profile, done){
         process.nextTick(function() {
-            mongo(uri, function(err, db){
+            user._id = profile.id;
+            user.dob = Date.now();
+            db('users').findOneAndUpdate({ _id: profile.id }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
                 if(err)
                 {
                     console.log(err.message);
                 }
                 else
                 {
-                    user._id = profile.id;
-                    user.dob = Date.now();
-                    db.collection('users').findOneAndUpdate({ _id: profile.id }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
-                        db.close();
-                        if(err)
-                        {
-                            console.log(err.message);
-                        }
-                        else
-                        {
-                            done(null, doc ? doc : user);
-                        }
-                    });
+                    done(null, doc || user);
                 }
             });
         });

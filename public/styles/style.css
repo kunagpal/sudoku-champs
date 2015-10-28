@@ -167,7 +167,7 @@ footer {
 .lead tr:nth-child(2n + 2) {
     background : #dddddd;
 }
-#reg, #forum li, button{
+.reg, #forum li, button{
     color : #FFFFFF;
     background : #000000;
 }

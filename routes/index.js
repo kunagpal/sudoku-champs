@@ -1,3 +1,20 @@
+/*
+ *  Sudoku Champs <sudokuchampster@gmail.com>
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 var i,
     temp,
     lead,
@@ -34,12 +51,12 @@ catch(err)
 
 router.get('/', function(req, res)
 {
-    res.render('index');
+    res.render('index', {head: head, foot: foot});
 });
 
 // GET reset token page
 router.get('/reset/:token', function(req, res) {
-    req.db.collection('users').find({token: req.params.token, expire: {$gt: Date.now()}}, {limit : 1}).forEach(function(doc) {
+    db.find({token: req.params.token, expire: {$gt: Date.now()}}, {limit : 1}).forEach(function(doc) {
         if (!doc)
         {
             console.log('No matches found !');
@@ -48,7 +65,7 @@ router.get('/reset/:token', function(req, res) {
         }
         else
         {
-            res.redirect('/reset');
+            res.render('/reset', {head: head, foot: foot});
             console.log('Found!');
         }
     });
@@ -57,9 +74,9 @@ router.get('/reset/:token', function(req, res) {
 // GET leaderboard
 router.get('/leader', function(req, res) {
     i = 0;
-    lead = [];
+    lead = [{}];
     flag = !req.signedCookies.name;
-    req.db.collection('users').find({}, op, frame).toArray(function(err, docs) {
+    db.find({}, op, frame).toArray(function(err, docs) {
         if(err)
         {
             console.log(err.message);
@@ -74,7 +91,7 @@ router.get('/leader', function(req, res) {
                     docs[j].rank = parseInt(j) + 1;
                     lead.push(docs[j]);
                 }
-                else if(lead.length < 5)
+                else if(lead.length < 6)
                 {
                     lead.push(docs[j]);
                 }
@@ -83,7 +100,7 @@ router.get('/leader', function(req, res) {
                     break;
                 }
             }
-            res.render('leader', {lead : lead, name : flag ? req.signedCookies.name : ''});
+            res.render('leader', {lead : lead, name : flag ? req.signedCookies.name : '', head: head, foot: foot});
         }
     });
 });
@@ -94,7 +111,7 @@ router.post('/login', function(req, res) {
     {
         res.clearCookie('name', {});
     }
-    req.db.collection('users').find({_id : req.body.name}, {}, {'limit' : 1}).forEach(function(doc){
+    db.find({_id : req.body.name}, {}, {'limit' : 1}).forEach(function(doc){
         if(!doc)
         {
             req.session.info = 'Incorrect credentials!';
@@ -125,7 +142,7 @@ router.post('/login', function(req, res) {
 router.post('/register', function(req, res) {
     if(req.body.password === req.body.confirm)
     {
-        req.db.collection('users').count({}, function(err, num){
+        db.count({}, function(err, num){
             if(err)
             {
                 console.log(err.message);
@@ -140,7 +157,7 @@ router.post('/register', function(req, res) {
                 user.num = parseInt(num) + 1;
                 user.hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
                 user.email = req.body.email;
-                req.db.collection('users').insertOne(user, {w : 1}, function(err, docs){
+                db.collection.insertOne(user, {w : 1}, function(err, docs){
                     if(err)
                     {
                         console.log(err.message);
@@ -170,7 +187,7 @@ router.post('/register', function(req, res) {
 // POST forgot password page
 router.post('/forgot', function(req, res) {
 {
-    req.db.collection('users').updateOne({email : req.body.email, _id : req.body.name}, {$set:{token : token, expire : Date.now() + 3600000}}, function(err, doc){
+    db.updateOne({email : req.body.email, _id : req.body.name}, {$set:{token : token, expire : Date.now() + 3600000}}, function(err, doc){
         if(err)
         {
             console.log(err.message);
@@ -201,7 +218,7 @@ router.post('/forgot', function(req, res) {
                     }
                     else
                     {
-                        req.session.info = 'An email has been sent to ' + options.to + ' with further instructions.';
+                        req.session.info = 'An email has been sent to ' + req.body.email + ' with further instructions.';
                     }
                     res.redirect('/login');
                 });
@@ -218,7 +235,7 @@ router.post('/reset/:token', function(req, res) {
         {
             var query = {token : req.params.token, expire : {$gt: Date.now()}},
                 op = {$set : {hash : bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))}, $unset : {token : '', expire : ''}};
-            req.db.collection('users').findOneAndUpdate(query, op, function(err, doc) {
+            db.findOneAndUpdate(query, op, function(err, doc) {
                 if(err || !doc)
                 {
                     console.log(err.message);
@@ -242,6 +259,7 @@ router.post('/reset/:token', function(req, res) {
                             console.log('Updated successfully!');
                             req.session.info = 'Updated successfully!';
                         }
+
                         res.redirect('/login');
                     });
                 }
@@ -257,16 +275,27 @@ router.post('/reset/:token', function(req, res) {
 });
 
 router.get('/check/:query', function(req, res) {
-req.db.collection('users').find({_id : req.params.query}, function(err, doc){
-    if(err)
+    db.find({_id : req.params.query}, function(err, doc){
+        if(err)
+        {
+            console.log(err.message);
+        }
+        else
+        {
+            res.send(doc ? true : false);
+        }
+    });
+});
+
+router.get('/settings', function(req, res){
+    if(req.signedCookies.name)
     {
-        console.log(err.message);
+        res.render('settings', {token : req.csrfToken(), head: head, foot: foot});
     }
     else
     {
-        res.send(doc ? true : false);
+        res.redirect('/login');
     }
-});
 });
 
 module.exports = router;
