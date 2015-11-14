@@ -3,24 +3,20 @@
   "version": "0.2.0",
   "description": "Sudoku Champs",
   "homepage": "https://www.sudokuchamps.herokuapp.com",
-  "bugs":
-  {
+  "bugs": {
     "url": "https://www.github.com/kunagpal/sudoku-champs/issues",
     "email": "sudokuchampster@gmail.com"
   },
   "main": "./bin/www",
   "private": true,
-  "scripts":
-  {
+  "scripts": {
     "start": "node ./bin/www",
     "postinstall": ""
   },
-  "cacheDirectories":
-  [
+  "cacheDirectories": [
     "public/bower"
   ],
-  "contributors":
-  [
+  "contributors": [
     {
       "name": "Kunal Nagpal",
       "email": "kunagpal@gmail.com"
@@ -30,8 +26,7 @@
       "email": "karanbabariya35@gmail.com"
     }
   ],
-  "dependencies":
-  {
+  "dependencies": {
     "body-parser": "^1.14.1",
     "bower": "^1.6.5",
     "compression": "^1.6.0",
@@ -41,33 +36,31 @@
     "dotenv": "^1.2.0",
     "emailjs": "^1.0.0",
     "express": "^4.13.3",
-    "express-session": "^1.11.3",
-    "mongodb": "^2.0.46",
+    "express-session": "^1.12.1",
+    "flash": "^1.1.0",
+    "hbs": "^4.0.0",
+    "mongodb": "^2.0.48",
     "morgan": "^1.6.1",
-    "passport": "^0.3.0",
+    "passport": "^0.3.2",
     "passport-facebook": "^2.0.0",
     "passport-google-oauth": "^0.2.0",
     "passport-twitter": "^1.0.3"
   },
-  "optionalDependencies":
-  {
+  "optionalDependencies": {
     "bcrypt": "^0.8.5"
   },
-  "repository":
-  {
+  "repository": {
     "type": "git",
     "url": "https://github.com/kunagpal/sudoku-champs.git"
   },
   "license": "GPL-3.0+",
-  "licenses":
-  [
+  "licenses": [
     {
       "type": "GPL-3.0+",
       "url": "https://www.gnu.org/licenses/gpl-3.0-standalone.html"
     }
   ],
-  "engines":
-  {
-    "node": "4.2.x"
+  "engines": {
+    "node": "5.0.x"
   }
 }

@@ -22,9 +22,10 @@ if(!process.env.NODE_ENV)
 {
     require('dotenv').load();
 }
-var users,
+var index,
+    users,
     social,
-    index,
+    status,
     path = require('path'),
     passport = require('passport'),
     bodyParser = require('body-parser');
@@ -62,8 +63,8 @@ app.use(require('cookie-parser')("secret"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('express-session')({ secret : 'session secret key', resave : '', saveUninitialized : ''}));
+app.use(require('flash')());
 app.use(passport.initialize());
-app.use(passport.session());
 app.use(require('csurf')());
 app.use('/', index);
 app.use('/', social);
@@ -76,13 +77,27 @@ app.use(function(req, res, next) {
     err.status = 404;
     next(err);
 });
+
 // error handler
-app.use(function(err, req, res) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: process.env.NODE_ENV ? {} : err
-    });
+app.use(function(err, req, res, next) {
+    status = err.status || 500;
+    res.status(status);
+    if(err.code === 'EBADCSRFTOKEN')
+    {
+        req.flash('err', 'That form submission had expired, please retry.');
+        res.redirect(req.headers.referer);
+    }
+    else
+    {
+        res.render('error', {
+            head: head,
+            foot: foot,
+            status: status,
+            message: err.message,
+            session: process.env.NODE_ENV,
+            stack: process.env.NODE_ENV ? '' : err.stack
+        });
+    }
 });
 
 module.exports = app;

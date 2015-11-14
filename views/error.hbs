@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <!--
 *  Sudoku Champs <sudokuchampster@gmail.com>
 *
@@ -25,16 +24,15 @@
         <link rel="stylesheet" href="/styles/style.css" type="text/css" />
     </head>
     <body>
-    {{{head}}}
-     <h1>That was odd, even for us.</h1>
-        <p>
-           It would appear that we have had a little bit of a technical issue, so let's double check. <br>
-           Yep, it's definitely a technical issue. <br><br>
-           Rest assured, as our dedicated team of professional superheroes is toiling
-           night and day to get this back on track. <br><br>
-           Or, perhaps you decided you were a whiz and tried out a route that doesn't exist. Well guess what ? You ended up
-           here :( <br> In the meantime, why don't you go to a <a href="/" class="link">page</a> that works ?
-        </p>
+        {{{head}}}
+        <h1>{{status}}</h1>
+        <h1>{{message}}</h1>
+        {{#if session}}
+            <h1>That was odd, even for us.</h1>
+            <a href="/">Go Back</a>
+        {{else}}
+            <p>{{stack}}</p>
+        {{/if}}
     </body>
     {{{foot}}}
 </html>

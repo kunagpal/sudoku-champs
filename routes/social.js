@@ -15,58 +15,50 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var path = require('path'),
+var strategy,
+    path = require('path'),
     passport = require('passport'),
+    cook = function(req, res, next)
+    {
+        passport.authenticate(strategy, function(err, user)
+        {
+            if (err)
+            {
+                console.log(err);
+                return next(err);
+            }
+            if (!user)
+            {
+                return res.redirect('/login');
+            }
+            else
+            {
+                res.cookie('user', user, {maxAge: 86400000, signed: true});
+                return res.redirect('/play');
+            }
+        })(req, res, next);
+    },
     router = require('express').Router();
 
 require(path.join(__dirname, '..', 'database', 'auth'));
 
-router.get('/fb', passport.authenticate('facebook', {scope : 'email'}));
+router.get('/auth/fb', passport.authenticate('facebook', {scope : 'email'}));
 
-router.get('/FB', passport.authenticate('facebook', {
-        successRedirect : '/play',
-        failureRedirect : '/login'
-    }),
-    function(req, res){
-        if (req.signedCookies.name)
-        {
-            res.clearCookie('name', {});
-        }
-        res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
-        res.redirect('/play');
+router.get('/FB', function(req, res, next){ strategy = 'facebook'; next();}, cook);
+
+router.get('/auth/go', passport.authenticate('google', {
+        scope :
+        [
+            'https://www.googleapis.com/auth/userinfo.profile',
+            'https://www.googleapis.com/auth/userinfo.email'
+        ]
     }
-);
+));
 
-router.get('/go', passport.authenticate('google', {scope : 'https://www.googleapis.com/auth/plus.login'}));
+router.get('/GO', function(req, res, next){strategy = 'google'; next();}, cook);
 
-router.get('/GO', passport.authenticate('google', {
-        successRedirect : '/play',
-        failureRedirect : '/login'
-    }),
-    function(req, res){
-        if (req.signedCookies.name)
-        {
-            res.clearCookie('name', {});
-        }
-        res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
-        res.redirect('/play');
-    }
-);
+router.get('/auth/tw', passport.authenticate('twitter', {scope: 'email'}));
 
-router.get('/tw', passport.authenticate('twitter'));
-
-router.get('/TW', passport.authenticate('twitter', {
-        successRedirect : '/play',
-        failureRedirect : '/login'
-    }),
-    function(req, res){
-        if (req.signedCookies.name)
-        {
-            res.clearCookie('name', {});
-        }
-        res.cookie('name', doc._id, {maxAge: 86400000, signed: true});
-        res.redirect('/play');
-    }
-);
+router.get('/TW', function(req, res, next){strategy = 'twitter'; next();}, cook);
 
 module.exports = router;

@@ -15,69 +15,57 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var path = require('path'),
+var user,
+    path = require('path'),
     passport = require('passport'),
-    ref = {
-        "production" : "http://sudokuchamps.herokuapp.com/",
-        undefined : "http://localhost:3000/"
+    ref =
+    {
+        undefined : "http://localhost:3000/",
+        "production" : "http://sudokuchamps.herokuapp.com/"
     },
-    user = require(path.join(__dirname, 'user')),
+    record = require(path.join(__dirname, 'user')),
     twitter = require('passport-twitter').Strategy,
     facebook = require('passport-facebook').Strategy,
     google = require('passport-google-oauth').OAuth2Strategy;
 
-passport.serializeUser(function (user, done) {
-    done(null, user._id);
-});
-
-// used to deserialize the user
-passport.deserializeUser(function (id, done) {
-    mongoUsers.fetchUser({'_id' : id}, done);
-});
-
 passport.use(new facebook({
-    clientID :  process.env.FB_ID,
-    clientSecret : process.env.FB_KEY,
-    callbackURL : ref[process.env.NODE_ENV] + 'FB'
+        clientID :  process.env.FB_ID,
+        clientSecret : process.env.FB_KEY,
+        callbackURL : ref[process.env.NODE_ENV] + 'FB'
     },
-    function(token, refreshToken, profile, done) {
-            process.nextTick(function() {
-                user._id = profile.name.givenName + ' ' + profile.name.familyName;
-                user.dob = new Date();
-                user.token = token;
-                user.email = profile.emails[0].value;
-                db('users').findOneAndUpdate({ _id : profile.name.givenName + ' ' + profile.name.familyName }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
-                    if (err)
-                    {
-                        console.log(err.message);
-                    }
-                    else
-                    {
-                        return done(null, doc || user);
-                    }
-                });
+    function(req, token, refreshToken, profile, done) {
+        process.nextTick(function() {
+            user = record;
+            user.token = token;
+            user.strategy = 'fb';
+            user.dob = new Date();
+            user.profile = profile.id;
+            user._id = profile.displayName;
+            user.email = profile.emails[0].value;
+
+            db.findOneAndUpdate({ _id : profile.displayName, strategy : 'fb'}, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
+                return done(err, ((doc || {}).value || {})._id || user._id);
+            });
         });
     })
 );
 
 passport.use(new twitter({
-    consumerKey : process.env.TW_ID,
-    consumerSecret : process.env.TW_KEY,
-    callbackURL : ref[process.env.NODE_ENV] + 'TW'
+        consumerKey : process.env.TW_ID,
+        consumerSecret : process.env.TW_KEY,
+        callbackURL : ref[process.env.NODE_ENV] + 'TW'
     },
-    function(token, refreshToken, profile, done){
+    function(req, token, refreshToken, profile, done){
         process.nextTick(function() {
-            user._id = profile.username;
+            user = record;
+            user.strategy = 'tw';
+            user.dob = new Date();
+            user.profile = profile.id;
             user.token = profile.token;
-            db('users').findOneAndUpdate({ _id : profile.username }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
-                if (err)
-                {
-                    console.log(err.message);
-                }
-                else
-                {
-                    return done(null, doc || user);
-                }
+            user._id = profile.username;
+
+            db.findOneAndUpdate({_id : profile.username, strategy : 'tw'}, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
+                return done(err, ((doc || {}).value || {})._id || user._id);
             });
         });
     }
@@ -88,19 +76,18 @@ passport.use(new google({
         clientSecret : process.env.GO_KEY,
         callbackURL : ref[process.env.NODE_ENV] + 'GO'
     },
-    function(accessToken, refreshSecret, profile, done){
+    function(req, accessToken, refreshSecret, profile, done){
         process.nextTick(function() {
-            user._id = profile.id;
-            user.dob = Date.now();
-            db('users').findOneAndUpdate({ _id: profile.id }, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
-                if(err)
-                {
-                    console.log(err.message);
-                }
-                else
-                {
-                    done(null, doc || user);
-                }
+            user = record;
+            user.token = profile.token;
+            user.strategy = 'go';
+            user.dob = new Date();
+            user._id = profile.displayName;
+            user.email = profile.emails[0].value;
+            console.log(profile);
+
+            db.findOneAndUpdate({_id: profile.displayName, strategy : 'go'}, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
+                return done(err, ((doc || {}).value || {})._id || user._id);
             });
         });
     }

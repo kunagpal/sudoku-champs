@@ -15,11 +15,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-module.exports = {
+module.exports =
+{
         _id : '',
-        dob : new Date(),
-        num : '',
-        hash : '',
+        dob : '',
         email : '',
         win : 0,
         loss : 0,
@@ -33,6 +32,7 @@ module.exports = {
         ratio : 0.0,
         form : 1,
         streak: 0,
+        strategy : '',
         worst : -1,
         best : Number.MAX_VALUE,
         avg : 0,
@@ -40,5 +40,7 @@ module.exports = {
         xp : 0,
         visit : 0,
         prevType : '',
-        prevTime : 0
+        prevTime : 0,
+        help : 0,
+        highlight : 0
 };

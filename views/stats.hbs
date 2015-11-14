@@ -17,80 +17,80 @@
 
 <!DOCTYPE html>
 <html class="center">
-  <head>
-    <title>Stats | Sudoku Champs</title>
-    <link rel="icon" type="image/png" href="/images/main.jpg">
-    <meta charset="utf-8"/>
-    <link rel="stylesheet" href="/styles/style.css" type="text/css" />
-  </head>
-  <body>
-  {{{head}}}
-    {{#if stats}}
-        <h1>Number crunching</h1>
-        <table id="stats">
-            <tr>
-                <th>COMPUTE</th>
-                <th>CRUNCH</th>
-                <th>ANALYZE</th>
-                <th>REPEAT</th>
-            </tr>
-            {{#with stats}}
-            <tr>
-                <td rowspan="5">
-                    PLAYED
-                    <p class="val">{{ played }}</p>
-                </td>
-                <td rowspan="4">
-                    BEST
-                    <p class="val">{{ best }}</p>
-                </td>
-                <td rowspan="4" colspan="2">
-                    AVERAGE
-                    <p class="val">{{ avg }}</p>
-                </td>
-            </tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr>
-                <td rowspan="4" colspan="2">
-                    FAVOURITE GAME MODE
-                    <p class="val">{{ fav }}</p>
-                </td>
-                <td rowspan="4">
-                    WORST
-                    <p class="val">{{ worst }}</p>
-                </td>
-            </tr>
-            <tr>
-                <td rowspan="5">
-                    WINS
-                    <p class="val">{{ win }}</p>
-                </td>
-            </tr>
-            <tr></tr>
-            <tr></tr>
-            <tr>
-                <td rowspan="7" colspan="3">
-                    AWESOME GRAPH!
-                    <p class="val"></p>
-                </td>
-            </tr>
-            <tr></tr>
-            <tr>
-                <td rowspan="5">
-                    LOSSES
-                    <p class="val">{{ loss }}</p>
-                </td>
-            </tr>
-            {{/with}}
-        </table>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br>
-        <h2>Hover over a section for details</h2>
-    {{else}}
-        <h1>Whoa. Looks like there are no statistics to your name.</h1>
-        <h2>Well, what are you waiting for? Get out there and rack 'em up!</h2>
-    {{/if}}
-  </body>
-  {{{foot}}}
+      <head>
+            <title>Stats | Sudoku Champs</title>
+            <link rel="icon" type="image/png" href="/images/main.jpg">
+            <meta charset="utf-8"/>
+            <link rel="stylesheet" href="/styles/style.css" type="text/css" />
+      </head>
+      <body>
+            {{{head}}}
+            {{#if stats}}
+                <h1>Number crunching</h1>
+                <table id="stats">
+                    <tr>
+                        <th>COMPUTE</th>
+                        <th>CRUNCH</th>
+                        <th>ANALYZE</th>
+                        <th>REPEAT</th>
+                    </tr>
+                    {{#with stats}}
+                        <tr>
+                            <td rowspan="5">
+                                PLAYED
+                                <p class="val">{{ played }}</p>
+                            </td>
+                            <td rowspan="4">
+                                BEST
+                                <p class="val">{{ best }}</p>
+                            </td>
+                            <td rowspan="4" colspan="2">
+                                AVERAGE
+                                <p class="val">{{ avg }}</p>
+                            </td>
+                        </tr>
+                        <tr></tr>
+                        <tr></tr>
+                        <tr></tr>
+                        <tr>
+                            <td rowspan="4" colspan="2">
+                                FAVOURITE GAME MODE
+                                <p class="val">{{ fav }}</p>
+                            </td>
+                            <td rowspan="4">
+                                WORST
+                                <p class="val">{{ worst }}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5">
+                                WINS
+                                <p class="val">{{ win }}</p>
+                            </td>
+                        </tr>
+                        <tr></tr>
+                        <tr></tr>
+                        <tr>
+                            <td rowspan="7" colspan="3">
+                                AWESOME GRAPH!
+                                <p class="val"></p>
+                            </td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <td rowspan="5">
+                                LOSSES
+                                <p class="val">{{ loss }}</p>
+                            </td>
+                        </tr>
+                    {{/with}}
+                </table>
+                <br><br><br><br><br><br><br><br><br><br><br><br><br>
+                <h2>Hover over a section for details</h2>
+            {{else}}
+                <h1>Whoa. Looks like there are no statistics to your name.</h1>
+                <h2>Well, what are you waiting for? Get out there and rack 'em up!</h2>
+            {{/if}}
+      </body>
+      {{{foot}}}
 </html>

@@ -97,7 +97,7 @@ footer {
     bottom : 0;
     padding : 0;
     width : 100%;
-    position: absolute;
+    position: fixed;
     margin : 100% 0 0 0;
 }
 .left{

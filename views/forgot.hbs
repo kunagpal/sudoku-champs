@@ -26,7 +26,7 @@
   <body>
       {{{head}}}
       <br> <br>
-      <h3 id="reg">{{info}}</h3>
+      <h3 id="reg">{{flash.info}}</h3>
       <h1>Forgot Password ?</h1>
       <h2>Never worry, you can still be a sudoku champ.</h2>
       <p>
@@ -37,8 +37,8 @@
       <form method="POST" action="/forgot">
           <input type="hidden" name="_csrf" value="{{token}}">
           <input type="text" name="name" placeholder="Username" autofocus autocomplete="on" required /> <br> <br>
-          <input type = "email" name = "email" placeholder = "Email Address" autocomplete="on" required/> <br> <br>
-          <input type = "submit" value = "Submit" id = "begin"/>
+          <input type="email" name="email" placeholder="Email Address" autocomplete="on" required/> <br> <br>
+          <input type="submit" value="Submit" id="begin"/>
       </form>
   </body>
   {{{foot}}}

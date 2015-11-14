@@ -17,32 +17,32 @@
 
 <!DOCTYPE html>
 <html class="center">
-  <head>
-    <title>Login | Sudoku Champs</title>
-    <link rel="icon" type="image/png" href="/images/main.jpg">
-    <meta charset="utf-8"/>
-    <link rel="stylesheet" href="/styles/style.css" type="text/css" />
-    <script type="text/javascript" lang="javascript" src="/scripts/valid.js"></script>
-  </head>
-  <body>
-      {{{head}}}
-      <br><br>
-      <h3 id="reg">{{info}}</h3>
-      <h1>Not registered? No worries, go <a href="/register" class="link">here</a><br></h1>
-      <h2>Or, play as a guest <a href="/guest" class="link">here</a>.</h2>
-      <h3>You'll get no points, nor would you feature on our exclusive leaderboard :(</h3>
-      <form method="POST" action="/login">
-            <input type="hidden" name="_csrf" value="{{token}}" />
-            <input type="text" name="name"  value="{{name}}" placeholder="User" autocomplete="on" required/> <br /><br />
-            <input type="password" name="password" placeholder="Password" required/> <br><br>
-            <input type="submit" id="begin" value="Let's go!"/>
-      </form>
-      <br>
-      <a href="/forgot" class="link">I need help with my password</a>
-      <h3>Or, if you wish, you can login through one of your other accounts.</h3>
-      <a href="/fb"><img src="/images/social/fb.png" /></a>
-      <a href="/go"><img src="/images/social/go.png" /></a>
-      <a href="/tw"><img src="/images/social/tw.jpg" /></a>
-  </body>
-  {{{foot}}}
+    <head>
+        <title>Login | Sudoku Champs</title>
+        <link rel="icon" type="image/png" href="/images/main.jpg">
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="/styles/style.css" type="text/css" />
+        <script type="text/javascript" lang="javascript" src="/scripts/valid.js"></script>
+    </head>
+    <body>
+        {{{head}}}
+        <br><br>
+        <h3 id="reg">{{flash.info}}</h3>
+        <h1>Not registered? No worries, go <a href="/register" class="link">here</a><br></h1>
+        <h2>Or, play as a guest <a href="/guest" class="link">here</a>.</h2>
+        <h3>You'll get no points, nor would you feature on our exclusive leaderboard :(</h3>
+        <form method="POST" action="/login">
+        <input type="hidden" name="_csrf" value="{{token}}" />
+        <input type="text" name="name"  value="{{flash.name}}" placeholder="User" autocomplete="on" required/> <br><br>
+        <input type="password" name="password" placeholder="Password" required/> <br><br>
+        <input type="submit" id="begin" value="Let's go!"/>
+        </form>
+        <br>
+        <a href="/forgot" class="link">I need help with my password</a>
+        <h3>Or, if you wish, you can login through one of your other accounts.</h3>
+        <a href="/auth/fb"><img src="/images/social/fb.png" /></a>
+        <a href="/auth/go"><img src="/images/social/go.png" /></a>
+        <a href="/auth/tw"><img src="/images/social/tw.jpg" /></a>
+    </body>
+    {{{foot}}}
 </html>
