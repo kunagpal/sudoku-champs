@@ -18,6 +18,27 @@
 var user,
     path = require('path'),
     passport = require('passport'),
+    callback = function(token, refresh, profile, done)
+    {
+        process.nextTick(function() {
+            user = record;
+            user.token = token;
+            user.dob = new Date();
+            user.profile = profile.id;
+            user._id = profile.displayName;
+            user.strategy = profile.provider;
+
+            if(profile.provider !== 'twitter')
+            {
+                user.email = profile.emails[0].value;
+            }
+
+            db.findOneAndUpdate({_id: profile.displayName, strategy: profile.provider}, {$setOnInsert : user}, {upsert : true}, function(err, doc)
+            {
+                return done(err, ((doc || {}).value || {})._id || user._id);
+            });
+        });
+    },
     ref =
     {
         undefined : "http://localhost:3000/",
@@ -32,63 +53,19 @@ passport.use(new facebook({
         clientID :  process.env.FB_ID,
         clientSecret : process.env.FB_KEY,
         callbackURL : ref[process.env.NODE_ENV] + 'FB'
-    },
-    function(req, token, refreshToken, profile, done) {
-        process.nextTick(function() {
-            user = record;
-            user.token = token;
-            user.strategy = 'fb';
-            user.dob = new Date();
-            user.profile = profile.id;
-            user._id = profile.displayName;
-            user.email = profile.emails[0].value;
-
-            db.findOneAndUpdate({ _id : profile.displayName, strategy : 'fb'}, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
-                return done(err, ((doc || {}).value || {})._id || user._id);
-            });
-        });
-    })
-);
+    }, callback
+));
 
 passport.use(new twitter({
         consumerKey : process.env.TW_ID,
         consumerSecret : process.env.TW_KEY,
         callbackURL : ref[process.env.NODE_ENV] + 'TW'
-    },
-    function(req, token, refreshToken, profile, done){
-        process.nextTick(function() {
-            user = record;
-            user.strategy = 'tw';
-            user.dob = new Date();
-            user.profile = profile.id;
-            user.token = profile.token;
-            user._id = profile.username;
-
-            db.findOneAndUpdate({_id : profile.username, strategy : 'tw'}, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
-                return done(err, ((doc || {}).value || {})._id || user._id);
-            });
-        });
-    }
+    }, callback
 ));
 
 passport.use(new google({
         clientID : process.env.GO_ID,
         clientSecret : process.env.GO_KEY,
         callbackURL : ref[process.env.NODE_ENV] + 'GO'
-    },
-    function(req, accessToken, refreshSecret, profile, done){
-        process.nextTick(function() {
-            user = record;
-            user.token = profile.token;
-            user.strategy = 'go';
-            user.dob = new Date();
-            user._id = profile.displayName;
-            user.email = profile.emails[0].value;
-            console.log(profile);
-
-            db.findOneAndUpdate({_id: profile.displayName, strategy : 'go'}, {$setOnInsert : user}, {upsert : true}, function(err, doc) {
-                return done(err, ((doc || {}).value || {})._id || user._id);
-            });
-        });
-    }
+    }, callback
 ));

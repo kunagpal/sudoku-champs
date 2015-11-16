@@ -17,10 +17,7 @@
 
 var opt =
     {
-        $set :
-        {
-            prevType : 'Challenge'
-        },
+        $set : {},
         $inc :
         {
             xp : 1,
@@ -33,25 +30,29 @@ var opt =
     temp = [],
     path = require('path'),
     router = require('express').Router(),
-    check = function(req, res, next)
-    {
-        if(req.signedCookies.user || !process.env.NODE_ENV)
-        {
-            next();
-        }
-        else
-        {
-            res.redirect('/login');
-        }
-    },
-    update = function()
+    onGame = function(req, res)
     {
         opt.$inc.win = parseInt(req.body.win);
         opt.$inc.loss = parseInt(req.body.loss);
         opt.$inc.time = parseInt(req.body.time);
         opt.$set.prevTime = parseInt(req.body.time);
+        opt.$set.prevType = req.headers.referer.split('/')[3];
         opt.$set.best = Math.min(req.signedCookies.best, parseInt(req.body.time));
         opt.$set.worst = Math.max(req.signedCookies.worst, parseInt(req.body.time));
+
+        db.updateOne({_id : req.signedCookies.user}, opt, function(err){
+            if(err)
+            {
+                console.log(err.message);
+                next(err);
+            }
+            else
+            {
+                res.cookie('best', opt.$set.best, {maxAge : 86400000, signed : true});
+                res.cookie('worst', opt.$set.worst, {maxAge : 86400000, signed : true});
+                res.redirect(req.headers.referer);
+            }
+        });
     },
     quote = require(path.join(__dirname, '..', 'database', 'quote')),
     rand = function(arg)
@@ -102,29 +103,14 @@ router.get('/forum', check, function(req, res) {
     res.render('forum', {head: head, foot: foot});
 });
 
-// GET dev page
-router.get('/developers', function(req, res) {
-    res.render('developers', {head: head, foot: foot});
-});
-
 //GET rules
-router.get('/rules', function(req, res) {
-    res.render('rules', {head: head, foot: foot});
-});
-
-//GET privacy
-router.get('/privacy', function(req, res) {
-    res.render('privacy', {head: head, foot: foot});
+router.get(/^\/rules|privacy|solved$/, function(req, res) {
+    res.render(req.originalUrl.slice(1), {head: head, foot: foot});
 });
 
 // GET forgot password page
-router.get('/forgot', function(req, res) {
-    res.render('forgot', {token : req.csrfToken(), flash: req.flash(), head: head, foot: foot});
-});
-
-// GET solved example
-router.get('/solved', function(req, res) {
-    res.render('solved', {head: head, foot: foot});
+router.get(/^\/forgot|register|settings$/, function(req, res) {
+    res.render(req.originalUrl.slice(1), {token : req.csrfToken(), flash: req.flash(), head: head, foot: foot});
 });
 
 // GET guest page
@@ -145,109 +131,11 @@ router.get('/play', check, function(req, res) {
 });
 
 // GET practice page
-router.get('/practice', check, function(req, res) {
-    res.render('game', {token : req.csrfToken(), mode : 'practice', head: head, foot: foot});
+router.get(/^\/practice|h2h|challenge|solo$/, check, function(req, res) {
+    res.render('game', {token : req.csrfToken(), mode : req.originalUrl, head: head, foot: foot});
 });
 
-// GET h2h page
-router.get('/h2h', check, function(req, res) {
-    res.render('game', {token : req.csrfToken(), mode : 'h2h', head: head, foot: foot});
-});
-
-// GET challenge page
-router.get('/challenge', check, function(req, res) {
-    res.render('game', {token : req.csrfToken(), mode : 'challenge', head: head, foot: foot});
-});
-
-// GET solo page
-router.get('/solo', check, function(req, res) {
-    res.render('game', {token : req.csrfToken(), mode : 'solo', head: head, foot: foot});
-});
-
-// GET registration page
-router.get('/register', function(req, res) {
-    res.render('register', {token : req.csrfToken(), flash: req.flash(), head: head, foot: foot});
-});
-
-router.post('/challenge', function(req, res){
-    opt.$set.prevType = 'Challenge';
-
-    update();
-    db.updateOne({_id : req.signedCookies.name}, opt, function(err){
-        if(err)
-        {
-            console.log(err.message);
-            req.flash('err', 'Error updating details...');
-            res.redirect('/game');
-        }
-        else
-        {
-            res.cookie('best', opt.$set.best, {maxAge : 86400000, signed : true});
-            res.cookie('worst', opt.$set.worst, {maxAge : 86400000, signed : true});
-            res.redirect('/challenge');
-        }
-    });
-});
-
-router.post('/h2h', function(req, res){
-    opt.$set.prevType = 'Head 2 head';
-
-    update();
-    db.updateOne({_id : req.signedCookies.name}, opt, function(err){
-        if(err)
-        {
-            console.log(err.message);
-            req.flash('err', 'Error updating details...');
-            res.redirect('/game');
-        }
-        else
-        {
-            res.cookie('best', opt.$set.best, {maxAge: 86400000, signed: true});
-            res.cookie('worst', opt.$set.worst, {maxAge: 86400000, signed: true});
-            res.redirect('/h2h');
-        }
-    });
-});
-
-router.post('/solo', function(req, res){
-    opt.$set.prevType = 'Solo';
-
-    update();
-    db.updateOne({_id : req.signedCookies.name}, opt, function(err){
-        if(err)
-        {
-            console.log(err.message);
-            req.flash('err', 'Error updating details...');
-            res.redirect('/game');
-        }
-        else
-        {
-            res.cookie('best', opt.$set.best, {maxAge: 86400000, signed: true});
-            res.cookie('worst', opt.$set.worst, {maxAge: 86400000, signed: true});
-            res.redirect('/solo');
-        }
-    });
-});
-
-router.post('/practice', function(req, res){
-    opt.$set.prevType = 'Practice';
-
-    update();
-    db.updateOne({_id : req.signedCookies.name}, opt, function(err){
-        if(err)
-        {
-            console.log(err.message);
-            req.flash('err', 'Error updating details...');
-            res.redirect('/game');
-        }
-        else
-        {
-            res.cookie('best', opt.$set.best, {maxAge: 86400000, signed: true});
-            res.cookie('worst', opt.$set.worst, {maxAge: 86400000, signed: true});
-            res.redirect('/practice');
-        }
-    });
-});
+router.post(/^\/h2h|practice|solo|challenge$/, onGame);
 
 router.get('/stats', check, function(req, res){
     db.find({_id : req.signedCookies.name}, op).limit(1).next(function(err, doc){
@@ -279,9 +167,5 @@ router.get('/stats', check, function(req, res){
 //router.get(/\/.*/, function(req, res){
 //    res.redirect('/');
 //});
-
-router.get('/settings', check, function(req, res){
-    res.render('settings', {token : req.csrfToken(), flash: req.flash(), head: head, foot: foot});
-});
 
 module.exports = router;

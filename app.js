@@ -52,6 +52,18 @@ foot = "<footer>"+
                 "</ul>"+
             "</nav>"+
         "</footer>";
+
+check = function(req, res, next)
+{
+    if(req.signedCookies.user || !process.env.NODE_ENV)
+    {
+        next();
+    }
+    else
+    {
+        res.redirect('/login');
+    }
+};
 // view engine setup
 app.set('view engine', 'hbs');
 app.set('case sensitive routing', true);
