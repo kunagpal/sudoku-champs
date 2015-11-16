@@ -15,12 +15,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var strategy,
+var ref =
+    {
+        'GO': 'google',
+        'TW': 'twitter',
+        'FB': 'facebook'
+    },
     path = require('path'),
     passport = require('passport'),
+    email = require(path.join(__dirname, '..', 'database', 'email')),
+    message = email.wrap({
+        from: 'sudokuchampster@gmail.com',
+        subject: 'Registration successful!'
+    }),
     cook = function(req, res, next)
     {
-        passport.authenticate(strategy, function(err, user)
+        passport.authenticate(ref[req.originalUrl.slice(1, 3)], function(err, user)
         {
             if (err)
             {
@@ -33,8 +43,17 @@ var strategy,
             }
             else
             {
-                res.cookie('user', user, {maxAge: 86400000, signed: true});
-                return res.redirect('/play');
+                res.cookie('user', user._id, {maxAge: 86400000, signed: true});
+                message.header.to = user.email;
+                message.attach_alternative("Hey there " + user._id + ",<br>Welcome to Sudoku Champs!<br><br>Regards,<br>The Sudoku champs team");
+                email.send(message, function(err){
+                    if(err)
+                    {
+                        console.log(err.message);
+                    }
+
+                    return res.redirect('/play');
+                });
             }
         })(req, res, next);
     },
@@ -43,8 +62,6 @@ var strategy,
 require(path.join(__dirname, '..', 'database', 'auth'));
 
 router.get('/auth/fb', passport.authenticate('facebook', {scope : 'email'}));
-
-router.get('/FB', function(req, res, next){ strategy = 'facebook'; next();}, cook);
 
 router.get('/auth/go', passport.authenticate('google', {
         scope :
@@ -55,10 +72,8 @@ router.get('/auth/go', passport.authenticate('google', {
     }
 ));
 
-router.get('/GO', function(req, res, next){strategy = 'google'; next();}, cook);
-
 router.get('/auth/tw', passport.authenticate('twitter', {scope: 'email'}));
 
-router.get('/TW', function(req, res, next){strategy = 'twitter'; next();}, cook);
+router.get(/^\/FB|GO|TW$/, cook);
 
 module.exports = router;

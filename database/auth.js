@@ -35,7 +35,7 @@ var user,
 
             db.findOneAndUpdate({_id: profile.displayName, strategy: profile.provider}, {$setOnInsert : user}, {upsert : true}, function(err, doc)
             {
-                return done(err, ((doc || {}).value || {})._id || user._id);
+                return done(err, (doc || {}).value || user);
             });
         });
     },

@@ -30,6 +30,18 @@ var index,
     passport = require('passport'),
     bodyParser = require('body-parser');
 
+check = function(req, res, next)
+{
+    if(req.signedCookies.user || !process.env.NODE_ENV)
+    {
+        next();
+    }
+    else
+    {
+        res.redirect('/login');
+    }
+};
+
 users = require(path.join(__dirname, 'routes', 'users'));
 social = require(path.join(__dirname, 'routes', 'social'));
 index = require(path.join(__dirname, 'routes', 'index'));
@@ -48,22 +60,10 @@ foot = "<footer>"+
                     "<li><a href='/logout'>I wish to leave</a></li>"+
                     "<li><a href='/privacy'>Privacy</a></li>"+
                     "<li><a href='/forum'>Forum</a></li>"+
-                    "<li><a href='/developers'>Developers</a></li>"+
                 "</ul>"+
             "</nav>"+
         "</footer>";
 
-check = function(req, res, next)
-{
-    if(req.signedCookies.user || !process.env.NODE_ENV)
-    {
-        next();
-    }
-    else
-    {
-        res.redirect('/login');
-    }
-};
 // view engine setup
 app.set('view engine', 'hbs');
 app.set('case sensitive routing', true);

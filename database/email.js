@@ -18,7 +18,7 @@
 var email = require("emailjs");
 var server = email.server.connect({
     user: "sudokuchampster@gmail.com",
-    password: process.env.KEY,
+    password: process.env.PASSWORD,
     host: "smtp.gmail.com",
     ssl: true
 });

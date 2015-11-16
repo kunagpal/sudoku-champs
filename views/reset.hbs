@@ -27,12 +27,12 @@
         {{{head}}}
         <br><br>
         <h3 class="reg">{{flash.info}}</h3>
-        <h1>Reset Password ?</h1>
+        <h1>Reset Password</h1>
         <h2>The closest thing to resurrection in today's digital world.</h2>
         <form method="POST">
             <input type="hidden" name="_csrf" value="{{ token }}">
-            <input type = "password" placeholder="Password" name = "password" autofocus/> <br><br>
-            <input type = "password" placeholder="Confirm password" id="confirm" name="confirm"/><label for="confirm" class="reg">{{flash.info}}</label> <br><br>
+            <input type="password" placeholder="Password" name="password" autofocus/> <br><br>
+            <input type="password" placeholder="Confirm password" id="confirm" name="confirm"/><label for="confirm" class="reg">{{flash.info}}</label> <br><br>
             <input type="submit" value="Bring me back!" id="begin"/>
         </form>
     </body>
