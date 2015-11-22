@@ -305,7 +305,7 @@ var FlipClock;
 		  		}
 		  	}
 		}
-		
+
 	});
 	
 }(jQuery));

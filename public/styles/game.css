@@ -4,22 +4,27 @@
     border: 0;
     overflow: auto;
 }
+
 body {
     font-family: Arial;
     font-size: 12px;
 }
+
 body,tr,td,div {
     margin: 0;
     padding: 0;
     border: 0;
 }
+
 table {
     border : 1px black solid;
 }
+
 b {
     color: #FFFFFF;
     font-weight: bold;
 }
+
 #Wrapper {
     min-height: 600px;
     min-width : 720px;
@@ -27,37 +32,45 @@ b {
     position : absolute;
     visibility : hidden;
 }
+
 #Main,#Content,#Footer {
     width: 980px;
     margin: 0 auto;
 }
+
 #Content {
     float: left;
 }
+
 #Column1 {
     width: 300px;
     float: left;
 }
+
 #sudokuBoard, #cover{
     position : absolute;
     width: 426px;
     margin-left: 40px;
     float: left;
 }
+
 #col2 {
     width: 174px;
     right: 90%;
     float: right;
 }
+
 td.alpha,td.beta {
     background-color: #000000;
 }
+
 td.alpha td.cell, td.beta td.cell {
     width: 44px;
     height: 44px;
     border: 1px solid #FFFFFF;
     background-color: #000000;
 }
+
 .staticValue {
     font-family: Segoe UI, Arial;
     text-align: center;
@@ -66,6 +79,7 @@ td.alpha td.cell, td.beta td.cell {
     outline-color : #444444;
     background : #000000;
 }
+
 .staticValue, .editValue {
     width: 42px;
     height: 42px;
@@ -73,12 +87,15 @@ td.alpha td.cell, td.beta td.cell {
     margin: 0;
     border: 1px solid #FFFFFF;
 }
+
 .editValue {
     background: #FFFFFF;
 }
+
 .editValue:hover {
     background: #8F8F8F;
 }
+
 label {
     position: relative;
     top: 3px;
@@ -86,6 +103,7 @@ label {
     font-size: 15px;
     color: #000000;
 }
+
 select {
     font-family: Arial;
     color: #999999;
@@ -99,6 +117,7 @@ select {
     min-width: 100px;
     background: #FDFDFD;
 }
+
 .editValue input {
     font-family: Segoe UI, Arial;
     font-size: 30px;
@@ -113,6 +132,7 @@ select {
     position: relative;
     left: -1px;
 }
+
 input[type="submit"] {
     font-family: Arial;
     font-size: 18px;
@@ -125,6 +145,7 @@ input[type="submit"] {
     margin: 8px 0;
     cursor: pointer;
 }
+
 input[type="submit"].gameControls {
     font-family: Arial;
     font-size: 16px;
@@ -136,16 +157,19 @@ input[type="submit"].gameControls {
     padding: 2px 16px;
     cursor: pointer;
 }
+
 .game {
     position : absolute;
     float : right;
     right : 40%;
     top : 10%;
 }
+
 #buttonSolve {
     margin-top: 119px;
     color: #FFAEAE;
 }
+
 #youWon {
     width: 50%;
     height: 25%;
@@ -154,7 +178,7 @@ input[type="submit"].gameControls {
     padding : 10% 0;
     position: absolute;
     top: 25%;
-    bottom : 25%
+    bottom : 25%;
     display: none;
     color : #FFFFFF;
     background : #000000;
@@ -163,32 +187,40 @@ input[type="submit"].gameControls {
 small {
     font-size: 14px;
 }
+
 .noErrors, .errorsFound {
     font-size: 18px;
     color: #000000;
     display : none;
 }
+
 .error {
     border: 1px solid red;
 }
+
 input {
     outline: none;
 }
+
 select, option {
     color : #FFFFFF;
     text-align : center;
     background : #000000;
 }
+
 option:hover {
     color : #000000;
     background : #FFFFFF;
 }
+
 #checkButton{
     top : 20%;
 }
+
 #difficulty{
     top : -50%;
 }
+
 #newGameButton{
     top : 30%;
     width : 70%;

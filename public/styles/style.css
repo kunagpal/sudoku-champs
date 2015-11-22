@@ -232,13 +232,14 @@ footer {
     padding : 2% 0;
     border : 1px solid white;
     transition : all 0.4s ease-out;
-    -ms-transition : all 0.4s ease-out;
+    -ms-transition : all 0.1s ease-out;
     -moz-transition : all 0.4s ease-out;
     -webkit-transition : all 0.4s ease-out;
 }
 #stats tr th:hover{
     color : #000000;
     background : #8f8f8f;
+    new: 1;
 }
 img {
     border : 0;
