@@ -269,7 +269,6 @@ var FlipClock;
 			}
 			return false;
 		},
-		
 		/**
 		 * Get all options
 		 *

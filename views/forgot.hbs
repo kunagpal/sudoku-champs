@@ -17,29 +17,30 @@
 
 <!DOCTYPE html>
 <html class="center">
-  <head>
-    <title>Forgot | Sudoku Champs</title>
-    <link rel="icon" type="image/png" href="/images/main.jpg">
-    <meta charset="utf-8"/>
-    <link rel="stylesheet" href="/styles/style.min.css" type="text/css" />
-  </head>
-  <body>
-      {{{head}}}
-      <br> <br>
-      <h3 id="reg">{{flash.info}}</h3>
-      <h1>Forgot Password ?</h1>
-      <h2>Never worry, you can still be a sudoku champ.</h2>
-      <p>
-          Please supply the username and email address associated with your Sudoku Champs account in the field provided below, and a
-          password reset email will be sent to your email address. <br> Follow the instructions therein to reset your
-          password.
-      </p>
-      <form method="POST" action="/forgot">
-          <input type="hidden" name="_csrf" value="{{token}}">
-          <input type="text" name="name" placeholder="Username" autofocus autocomplete="on" required /> <br> <br>
-          <input type="email" name="email" placeholder="Email Address" autocomplete="on" required/> <br> <br>
-          <input type="submit" value="Submit" id="begin"/>
-      </form>
-  </body>
-  {{{foot}}}
+    <head>
+        <meta charset="utf-8"/>
+        <title>Forgot | Sudoku Champs</title>
+        <link rel="icon" type="image/png" href="/images/main.jpg">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/styles/style.min.css" type="text/css" />
+    </head>
+    <body>
+        {{{head}}}
+        <br> <br>
+        <h3 id="reg">{{flash.info}}</h3>
+        <h1>Forgot Password ?</h1>
+        <h2>Never worry, you can still be a sudoku champ.</h2>
+        <p>
+            Please supply the username and email address associated with your Sudoku Champs account in the field provided below, and a
+            password reset email will be sent to your email address. <br> Follow the instructions therein to reset your
+            password.
+        </p>
+        <form method="POST" action="/forgot">
+            <input type="hidden" name="_csrf" value="{{token}}">
+            <input type="text" name="name" placeholder="Username" autofocus autocomplete="on" required /> <br> <br>
+            <input type="email" name="email" placeholder="Email Address" autocomplete="on" required/> <br> <br>
+            <input type="submit" value="Submit" id="begin"/>
+        </form>
+    </body>
+    {{{foot}}}
 </html>

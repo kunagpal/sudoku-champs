@@ -17,39 +17,40 @@
 
 <!DOCTYPE html>
 <html class="center">
-  <head>
-    <title>Leaderboard | Sudoku Champs</title>
-    <link rel="icon" type="image/png" href="/images/main.jpg">
-    <meta charset="utf-8"/>
-    <link rel="stylesheet" href="/styles/style.min.css" type="text/css" />
-  </head>
-  <body>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Leaderboard | Sudoku Champs</title>
+        <link rel="icon" type="image/png" href="/images/main.jpg">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/styles/style.min.css" type="text/css" />
+    </head>
+    <body>
         {{{head}}}
         <h1>Where Goliaths stand, with the Davids not so far behind...</h1>
         {{#if lead}}
             <table class="lead">
-                 <tr>
+                <tr>
                     <th>Rank</th>
                     <th>Legend</th>
                     <th>Score</th>
                     <th>Matches</th>
                     <th>Streak</th>
-                 </tr>
-                 {{#lead}}
+                </tr>
+                {{#lead}}
                     {{#if @index}}
                         <tr class="{{#if rank}}reg{{else}}{{/if}}">
-                             <td>{{#if rank}}{{rank}}{{else}}{{@index}}{{/if}}</td>
-                             <td>{{_id}}</td>
-                             <td>{{points}}</td>
-                             <td>{{played}}</td>
-                             <td>{{streak}}</td>
-                         </tr>
+                            <td>{{#if rank}}{{rank}}{{else}}{{@index}}{{/if}}</td>
+                            <td>{{_id}}</td>
+                            <td>{{points}}</td>
+                            <td>{{played}}</td>
+                            <td>{{streak}}</td>
+                        </tr>
                     {{/if}}
-                 {{/lead}}
+                {{/lead}}
             </table>
         {{ else }}
             <h2>Looks like the top spot is reserved for you. <br>What are you waiting for? Play some matches and make it yours!</h2>
         {{/if}}
-  </body>
-  {{{foot}}}
+    </body>
+    {{{foot}}}
 </html>

@@ -43,8 +43,8 @@ check = function(req, res, next)
 };
 
 users = require(path.join(__dirname, 'routes', 'users'));
-social = require(path.join(__dirname, 'routes', 'social'));
 index = require(path.join(__dirname, 'routes', 'index'));
+social = require(path.join(__dirname, 'routes', 'social'));
 
 head = "<nav>"+
             "<ul>"+

@@ -1,9 +1,18 @@
+*{
+    alignment: center;
+    text-align: center;
+    align-self: center;
+    align-items: center;
+    align-content: center;
+}
+
 html {
     padding: 0;
     margin : 0;
     height : 100%;
     background : #FFFFFF;
 }
+
 body {
   top : 0;
   margin : 0;
@@ -12,10 +21,12 @@ body {
   height : 100%;
   font : 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+
 nav{
     margin : 0;
     padding : 0;
 }
+
 nav ul li a, #forum li a {
     width : 100%;
     color : #FFFFFF;
@@ -27,65 +38,72 @@ nav ul li a, #forum li a {
     -moz-transition : all 0.4s ease-out;
     -webkit-transition : all 0.4s ease-out;
 }
+
 footer nav ul li a{
     line-height : 188%;
 }
+
 nav ul li a:hover, #forum li a:hover {
     color : #000000;
     background : #8f8f8f;
 }
+
 nav ul{
     margin : 0;
     padding : 0;
     width : 100%;
 }
+
 footer nav ul li{
     width: 33.333%;
 }
+
 nav ul li{
     width : 25%;
     float : left;
     text-align : center;
 }
-.center {
-    alignment: center;
-    text-align: center;
-    align-self: center;
-    align-items: center;
-    align-content: center;
-}
+
 a{
     text-decoration: none;
 }
+
 tr {
     width : 20%;
     height : 2%;
 }
+
 h1 {
     margin: 0;
     padding-top: 4%;
 }
+
 h2 {
     margin-top: 0;
     padding-top: 2%;
 }
+
 .lead{
     margin : 2.5% 40% 0;
     border-collapse: collapse;
 }
+
 .lead th {
     width : 20%;
     padding-bottom: 5%;
     border-bottom: 1px solid black;
 }
+
 #inv, #inv td{
     color : #000000;
     background : #FFFFFF;
 }
+
 #solved {
     padding-top : 5%;
     margin-bottom : 2.5%;
 }
+
 #contain {
     padding : 3%;
     color : #FFFFFF;
@@ -93,9 +111,11 @@ h2 {
     margin : 2% 15% 3%;
     background : #000000;
 }
+
 #contain li{
     margin : 12px;
 }
+
 footer {
     bottom : 0;
     padding : 0;
@@ -103,6 +123,7 @@ footer {
     position: fixed;
     margin : 100% 0 0 0;
 }
+
 .left{
     right : 55%;
     float : left;
@@ -113,6 +134,7 @@ footer {
     position : absolute;
     background : #000000;
 }
+
 .right{
     left : 55%;
     float : right;
@@ -123,24 +145,30 @@ footer {
     position : absolute;
     background : #000000;
 }
+
 .left img, .right img {
     width : 100%;
     height : auto;
 }
+
 #one, #two {
     top : 30%;
 }
+
 #one, #three {
     left : 35%;
     float : left;
 }
+
 #two, #four {
     right : 35%;
     float : right;
 }
+
 #three, #four {
     top : 50%;
 }
+
 #one, #two, #three, #four, #start, #quit, #hide, #checkButton, #new, #close{
     width : 10%;
     padding : 2%;
@@ -152,32 +180,40 @@ footer {
     -moz-transition : all 0.4s ease-out;
     -webkit-transition : all 0.4s ease-out;
 }
+
 #one:hover, #two:hover, #three:hover, #four:hover, #start:hover, #hide:hover, #quit:hover, #checkButton:hover, #newGameButton:hover, #new:hover, #close:hover, .logout:hover{
     color : #000000;
     background : #8f8f8f;
 }
+
 #start, #quit, #hide{
     left : 5%;
     float : left;
 }
+
 #start, #quit{
     top : 30%;
 }
+
 #hide {
     top : 45%;
     visibility : hidden;
 }
+
 .lead tr:nth-child(2n + 2) {
     background : #dddddd;
 }
+
 .reg, #forum li, button{
     color : #FFFFFF;
     background : #000000;
 }
+
 #clock{
     width : 90%;
     margin : 0 0 2em 2em;
 }
+
 #begin{
     width : 10%;
     border : none;
@@ -191,10 +227,12 @@ footer {
     -moz-transition : all 0.4s ease-out;
     -webkit-transition : all 0.4s ease-out;
 }
+
 #begin:hover {
     color : #000000;
     background : #8f8f8f;
 }
+
 #stats{
     width : 70%;
     margin : 2% 15%;
@@ -203,9 +241,11 @@ footer {
     background : #000000;
     border-collapse: collapse;
 }
+
 #stats tr{
     padding : 10% 0;
 }
+
 #stats tr td{
     margin : 0;
     padding : 5% 0;
@@ -215,6 +255,7 @@ footer {
     -moz-transition : all 0.4s ease-out;
     -webkit-transition : all 0.4s ease-out;
 }
+
 #stats tr td:hover{
     color : #000000;
     background : #EEEEEE;
@@ -224,9 +265,11 @@ footer {
     -o-transform:scale(1.5);
     transform:scale(1.5);
 }
+
 #stats tr td:hover > .val{
     display : block;
 }
+
 #stats tr th{
     margin : 0;
     padding : 2% 0;
@@ -236,11 +279,13 @@ footer {
     -moz-transition : all 0.4s ease-out;
     -webkit-transition : all 0.4s ease-out;
 }
+
 #stats tr th:hover{
     color : #000000;
     background : #8f8f8f;
     new: 1;
 }
+
 img {
     border : 0;
     margin : 0;
@@ -254,15 +299,18 @@ img {
     -moz-transition: all 0.4s ease-out;
     -webkit-transition: all 0.4s ease-out;
 }
+
 img:hover {
     filter : grayscale(0);
     -ms-filter : grayscale(0);
     -moz-filter : grayscale(0);
     -webkit-filter : grayscale(0);
 }
+
 .link {
     color : #8f8f8f;
 }
+
 #drop {
     top : 70%;
     left : 35%;
@@ -270,38 +318,48 @@ img:hover {
     clear : both;
     position : absolute;
 }
+
 ::-webkit-input-placeholder {
     text-align : center;
 }
+
 :-moz-placeholder {
     opacity:  1;
     text-align : center;
 }
+
 ::-moz-placeholder {
     opacity:  1;
     text-align : center;
 }
+
 :-ms-input-placeholder {
     text-align : center;
 }
+
 ::selection {
     color : #FFFFFF;
     background: #000000;
 }
+
 ::-moz-selection {
     color : #FFFFFF;
     background: #000000;
 }
+
 input {
     outline-color: #000000;
 }
+
 ul {
     list-style : none;
 }
+
 #main{
     width : auto;
     height : 45%;
 }
+
 #forum {
     width : 15%;
     height : 45%;
@@ -310,16 +368,20 @@ ul {
     margin-right : 2.5%;
     position : absolute;
 }
+
 #forum li{
     margin : 20% 0;
 }
+
 .err {
     color : #FFFFFF;
     background : #000000;
 }
+
 #hidden{
     display : none;
 }
+
 .logout {
     margin : 2% 0;
     border : none;
@@ -333,6 +395,7 @@ ul {
     -moz-transition : all 0.4s ease-out;
     -webkit-transition : all 0.4s ease-out;
 }
+
 .val {
     display : none;
 }
