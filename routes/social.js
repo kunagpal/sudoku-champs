@@ -34,7 +34,6 @@ var ref =
         {
             if (err)
             {
-                console.log(err);
                 return next(err);
             }
             if (!user)

@@ -62,17 +62,17 @@ var opt =
     op = {dob : 0, hash : 0, email : 0, token : 0, expires : 0, form : 0, num : 0};
 
 // GET logout page
-router.get('/logout', check, function(req, res) {
-    res.render('logout', {main : rand(quote.title), quit : rand(quote.away), stay : rand(quote.stay), token : req.csrfToken(), head: head, foot: foot});
+router.get('/logout', check, function(req, res){
+    res.render('logout', {main: rand(quote.title), quit: rand(quote.away), stay: rand(quote.stay), token: req.csrfToken(), head: head, foot: foot});
 });
 
 // POST logout page
 router.post('/logout', function(req, res){
-    db.updateOne({_id: req.signedCookies.name}, {$inc : {visit : 1}}, function(err) {
-        if (err)
+    db.updateOne({_id: req.signedCookies.name}, {$inc: {visit: 1}}, function(err) {
+        if(err)
         {
             console.log(err.message);
-            req.flash('err', 'An unexpected error has occurred. Please retry.');
+            req.flash('An unexpected error has occurred. Please retry.');
             res.redirect('/');
         }
         else
@@ -87,52 +87,52 @@ router.post('/logout', function(req, res){
 });
 
 // GET login page
-router.get('/login', function(req, res) {
+router.get('/login', function(req, res){
     if(req.signedCookies.name)
     {
         res.redirect('/');
     }
     else
     {
-        res.render('login', {token : req.csrfToken(), flash: req.flash(), head: head, foot: foot});
+        res.render('login', {token : req.csrfToken(), msg: req.flash(), head: head, foot: foot});
     }
 });
 
 // GET forum page
-router.get('/forum', check, function(req, res) {
+router.get('/forum', check, function(req, res){
     res.render('forum', {head: head, foot: foot});
 });
 
 //GET rules
-router.get(/^\/rules|privacy|solved$/, function(req, res) {
+router.get(/^\/rules|privacy|solved$/, function(req, res){
     res.render(req.originalUrl.slice(1), {head: head, foot: foot});
 });
 
 // GET forgot password page
-router.get(/^\/forgot|register|settings$/, function(req, res) {
-    res.render(req.originalUrl.slice(1), {token : req.csrfToken(), flash: req.flash(), head: head, foot: foot});
+router.get(/^\/forgot|register|settings$/, function(req, res){
+    res.render(req.originalUrl.slice(1), {token: req.csrfToken(), msg: req.flash(), head: head, foot: foot});
 });
 
 // GET guest page
-router.get('/guest', function(req, res) {
+router.get('/guest', function(req, res){
     if (req.signedCookies.name)
     {
-        res.redirect('/play')
+        res.redirect('/play');
     }
     else
     {
-        res.render('game', {token : req.csrfToken(), head: head, foot: foot});
+        res.render('game', {token: req.csrfToken(), head: head, foot: foot});
     }
 });
 
 // GET play page
-router.get('/play', check, function(req, res) {
+router.get('/play', check, function(req, res){
     res.render('play', {head: head, foot: foot});
 });
 
 // GET practice page
-router.get(/^\/practice|h2h|challenge|solo$/, check, function(req, res) {
-    res.render('game', {token : req.csrfToken(), mode : req.originalUrl, head: head, foot: foot});
+router.get(/^\/practice|h2h|challenge|solo$/, check, function(req, res){
+    res.render('game', {token: req.csrfToken(), mode: req.originalUrl, head: head, foot: foot});
 });
 
 router.post(/^\/h2h|practice|solo|challenge$/, onGame);
@@ -142,7 +142,7 @@ router.get('/stats', check, function(req, res){
         if(err)
         {
             console.log(err.message);
-            req.flash('err', 'Error fetching stats...');
+            req.flash('Error fetching stats...');
             res.redirect('/game');
         }
         else if(!doc.played)

@@ -28,15 +28,15 @@
     <body>
         {{{head}}}
         <br><br>
-        <h3 class="reg">{{flash.info}}</h3>
+        <h3 class="reg">{{msg}}</h3>
         <h1>Let's get started</h1>
         <h2>Registration is completely free and takes only a minute. <br />(Depending on your internet connection, of course)<br /> Already registered ? Login <a href="/login" class="link">here</a></h2>
         <form method="POST" action="/register">
-            <input type="hidden" name="_csrf" value="{{ token }}">
-            <input type="text" name="name" placeholder="User" value="{{ flash.name }}" required /> <br><br>
-            <input type="email" name="email" placeholder="Email" value="{{ flash.email }}" required/> <br><br>
+            <input type="hidden" name="_csrf" value="{{token}}">
+            <input type="text" name="name" placeholder="User" required /> <br><br>
+            <input type="email" name="email" placeholder="Email" required/> <br><br>
             <input type="password" name="password" placeholder="Password" pattern=".{6,}" title="Six or more characters." required/> <br><br>
-            <input type="password" name="confirm" placeholder="Confirm"  pattern=".{6,}" title="Six or more characters." required/><br><br><label class="reg err" for="confirm">{{flash.err}}</label> <br><br>
+            <input type="password" name="confirm" placeholder="Confirm"  pattern=".{6,}" title="Six or more characters." required/><br><br> <br><br>
             <input type="submit" id="begin" value="I am ready"/>
         </form>
     </body>

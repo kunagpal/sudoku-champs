@@ -20,7 +20,7 @@ var path = require('path'),
     app = require(path.join(__dirname, '..', 'app')),
     server = require('http').createServer(app),
     mongo = require('mongodb').MongoClient.connect,
-    port = normalizePort(process.env.PORT || '3000');
+    port = normalizePort(process.env.PORT || '5000');
 
 
 function normalizePort(val)

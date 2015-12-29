@@ -1,5 +1,5 @@
 # sudoku-champs
-The source code repository for the sudoku-champs initiative.
+## The source code repository for the sudoku-champs initiative.
 
 ### The website is hosted [here] (https://www.sudokuchamps.herokuapp.com)
 ### Please report any bugs / issues [here] (https://www.github.com/kunagpal/sudoku-champs)
@@ -11,7 +11,6 @@ The source code repository for the sudoku-champs initiative.
 ##### Navigate to the project directory, and install all dependencies using 'npm i'
 ##### Install security dependency manually using 'npm i bcryptjs' (Microsoft Windows only) 
 ##### Create a .env file with the following contents:
-
       PASSWORD=value
       FB_ID=value
       FB_KEY=value
@@ -23,3 +22,8 @@ The source code repository for the sudoku-champs initiative.
 ##### Run the localhost MongoDB server, mongod.
 ##### Run the server using 'npm start'
 ##### View the website at localhost:3000
+
+> TODO
+- [ ] UI Overhaul
+- [ ] Semantic functionality completeness
+- [ ] Render speed up

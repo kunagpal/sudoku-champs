@@ -67,15 +67,34 @@ foot = "<footer>"+
 // view engine setup
 app.set('view engine', 'hbs');
 app.set('case sensitive routing', true);
-app.set('port', 3000);
+app.set('port', 5000);
 app.set('views', path.join(__dirname, 'views'));
 app.use(require('morgan')('dev'));
 app.use(bodyParser.json());
 app.use(require('cookie-parser')("secret"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(require('express-session')({ secret : 'session secret key', resave : '', saveUninitialized : ''}));
-app.use(require('flash')());
+app.use(require('express-session')({secret: 'session secret key', resave: '', saveUninitialized: ''}));
+app.use(function(req, res, next){
+    if(!req.session.flash)
+    {
+        req.session.flash = req.session.flash || [];
+    }
+
+    req.flash = function(content)
+    {
+        if(content)
+        {
+            this.session.flash.push(content);
+        }
+        else
+        {
+            return this.session.flash.pop();
+        }
+    };
+
+    next();
+});
 app.use(passport.initialize());
 app.use(require('csurf')());
 app.use('/', index);
@@ -84,19 +103,17 @@ app.use('/', users);
 app.enable('trust proxy');
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+app.use(function(req, res){
+    res.redirect('/');
 });
 
-// error handler
-app.use(function(err, req, res, next) {
+// error handler, do not remove the parameter 'next' from the method signature
+app.use(function(err, req, res, next){
     status = err.status || 500;
     res.status(status);
     if(err.code === 'EBADCSRFTOKEN')
     {
-        req.flash('err', 'That form submission had expired, please retry.');
+        req.flash('That form submission had expired, please retry.');
         res.redirect(req.headers.referer);
     }
     else

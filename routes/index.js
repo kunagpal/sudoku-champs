@@ -47,19 +47,26 @@ try
 }
 catch(err)
 {
-    bcrypt = require('bcryptjs');
+    try
+    {
+        bcrypt = require('bcryptjs');
+    }
+    catch(err)
+    {
+        throw 'Failure to compile run time requirement Bcrypt(js)';
+    }
 }
 
-router.get('/', function(req, res) {
+router.get('/', function(req, res){
     res.render('index', {head: head, foot: foot});
 });
 
 // GET leaderboard
-router.get('/leader', function(req, res) {
+router.get('/leader', function(req, res){
     i = 0;
     lead = [{}];
     flag = !req.signedCookies.name;
-    db.find({}, op, frame).toArray(function(err, docs) {
+    db.find({}, op, frame).toArray(function(err, docs){
         if(err)
         {
             console.log(err.message);
@@ -85,19 +92,19 @@ router.get('/leader', function(req, res) {
                 }
             }
 
-            res.render('leader', {lead : lead, head: head, foot: foot});
+            res.render('leader', {lead: lead, head: head, foot: foot});
         }
     });
 });
 
 // POST login page
-router.post('/login', function(req, res) {
+router.post('/login', function(req, res){
     res.clearCookie('user', {});
 
     db.find({_id : req.body.name}, {}, {'limit' : 1}).next(function(err, doc){
         if(err || !doc)
         {
-            req.flash('err', 'Incorrect credentials!');
+            req.flash('Incorrect credentials!');
             res.redirect('/login');
         }
         else
@@ -113,8 +120,7 @@ router.post('/login', function(req, res) {
             }
             else
             {
-                req.flash('err', 'Incorrect credentials!');
-                req.flash('name', req.body.name);
+                req.flash('Incorrect credentials!');
                 res.redirect('/login');
             }
         }
@@ -129,7 +135,7 @@ router.post('/register', function(req, res) {
             if(err)
             {
                 console.log(err.message);
-                req.flash('err', 'An unexpected error has occurred. Please retry.');
+                req.flash('An unexpected error has occurred. Please retry.');
                 res.redirect('/register');
             }
             else
@@ -145,7 +151,7 @@ router.post('/register', function(req, res) {
                     if(err)
                     {
                         console.log(err.message);
-                        req.flash('err', 'That username is already taken, please choose a different one.');
+                        req.flash('That username is already taken, please choose a different one.');
                         res.redirect('/register');
                     }
                     else
@@ -173,9 +179,7 @@ router.post('/register', function(req, res) {
     }
     else
     {
-        req.flash('info', 'Passwords do not match!');
-        req.flash('name', req.body.name);
-        req.flash('email', req.body.email);
+        req.flash('Passwords do not match!');
         res.redirect('/register');
     }
 });
@@ -194,24 +198,24 @@ router.post('/forgot', function(req, res) {
             if(err)
             {
                 console.log(err.message);
-                req.flash('err', 'An unexpected error has occurred. Please retry.');
+                req.flash('An unexpected error has occurred. Please retry.');
                 res.redirect('/forgot');
             }
             else if(!doc)
             {
-                req.flash('info', 'No matches found!');
+                req.flash('No matches found!');
                 res.redirect('/forgot');
             }
             else
             {
                 message.header.to = req.body.email;
-                email.send(message, function(err) {
+                email.send(message, function(err){
                     if(err)
                     {
                         console.log(err.message);
                     }
 
-                    req.flash(err ? 'err' : 'info', err ? 'Email sending error...' : 'An email has been sent to ' + req.body.email + ' with further instructions.');
+                    req.flash(err ? 'Email sending error...' : 'An email has been sent to ' + req.body.email + ' with further instructions.');
                     res.redirect('/login');
                 });
             }
@@ -220,50 +224,50 @@ router.post('/forgot', function(req, res) {
 });
 
 // GET reset token page
-router.get('/reset/:token', function(req, res) {
-    db.find({token: req.params.token, expire: {$gt: Date.now()}}, {limit : 1}).next(function(err, doc) {
+router.get('/reset/:token', function(req, res){
+    db.find({token: req.params.token, expire: {$gt: Date.now()}}, {limit : 1}).next(function(err, doc){
         if (err || !doc)
         {
-            req.flash('err', 'No matches found!');
+            req.flash('No matches found!');
             res.redirect('/forgot');
         }
         else
         {
-            res.render('reset', {token: req.csrfToken(), flash: req.flash(), head: head, foot: foot});
+            res.render('reset', {token: req.csrfToken(), msg: req.flash(), head: head, foot: foot});
         }
     });
 });
 
 // POST reset token page
-router.post('/reset/:token', function(req, res) {
+router.post('/reset/:token', function(req, res){
     if(req.body.password === req.body.confirm)
     {
         var query =
         {
-            token : req.params.token,
-            expire :
+            token: req.params.token,
+            expire:
             {
                 $gt: Date.now()
             }
         },
         op =
         {
-            $set :
+            $set:
             {
-                hash : bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
+                hash: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
             },
-            $unset :
+            $unset:
             {
-                token : '',
-                expire : ''
+                token: '',
+                expire: ''
             }
         };
 
-        db.findOneAndUpdate(query, op, function(err, doc) {
+        db.findOneAndUpdate(query, op, function(err, doc){
             if(err || !doc)
             {
                 console.log(err.message);
-                req.flash('err', 'This password reset link is either invalid or has expired. Please retry.');
+                req.flash('This password reset link is either invalid or has expired. Please retry.');
                 res.redirect('/forgot');
             }
             else
@@ -273,14 +277,14 @@ router.post('/reset/:token', function(req, res) {
                 message.header.subject = 'Password change successful!';
                 message.attach_alternative("Hey there," + doc.value._id + ".<br>We're just writing in to let you "
                     + "know that the recent password change for your account with Sudoku Champs was successful." +
-                                                "<br><br>Regards,<br>The Sudoku Champs team.");
-                email.send(message, function(err) {
+                    "<br><br>Regards,<br>The Sudoku Champs team.");
+                email.send(message, function(err){
                     if(err)
                     {
                         console.log(err.message);
                     }
 
-                    req.flash(err ? 'err' : 'info', err ? 'Email send failure' : 'Updated successfully!');
+                    req.flash(err ? 'Email send failure' : 'Updated successfully!');
                     res.redirect('/login');
                 });
             }
@@ -288,22 +292,29 @@ router.post('/reset/:token', function(req, res) {
     }
     else
     {
-        req.flash('info', 'Passwords do not match!');
+        req.flash('Passwords do not match!');
         res.render('reset', {token: req.csrfToken(), head: head, foot: foot});
     }
 });
 
-router.get('/check/:query', function(req, res) {
-    db.find({_id : req.params.query}, function(err, doc){
-        if(err)
-        {
-            console.log(err.message);
-        }
-        else
-        {
-            res.send(+!doc);
-        }
-    });
+router.get('/check/:query', function(req, res){
+    if(req.headers.referer && req.headers.host === req.originalUrl.split('/')[2])
+    {
+        db.find({_id: req.params.query}, function(err, doc){
+            if(err)
+            {
+                console.log(err.message);
+            }
+            else
+            {
+                res.send(+!doc);
+            }
+        });
+    }
+    else
+    {
+        res.redirect('/');
+    }
 });
 
 module.exports = router;
