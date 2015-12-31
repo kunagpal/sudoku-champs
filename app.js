@@ -27,8 +27,16 @@ var index,
     social,
     status,
     path = require('path'),
+    helmet = require('helmet')(),
     passport = require('passport'),
-    bodyParser = require('body-parser');
+    parser = require('body-parser'),
+    body = parser.json(),
+    morgan = require('morgan')('dev'),
+    url = parser.urlencoded({extended:true}),
+    cookie = require('cookie-parser')("secret"),
+    stat = express.static(path.join(__dirname, 'public'), {maxAge:86400000*30}),
+    //cache = express.cache(path.join(__dirname, 'public'), {maxAge:86400000*30}),
+    session = require('express-session')({secret: 'session secret key', resave: '', saveUninitialized: ''});
 
 check = function(req, res, next)
 {
@@ -69,16 +77,18 @@ app.set('view engine', 'hbs');
 app.set('case sensitive routing', true);
 app.set('port', 5000);
 app.set('views', path.join(__dirname, 'views'));
-app.use(require('morgan')('dev'));
-app.use(bodyParser.json());
-app.use(require('cookie-parser')("secret"));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(require('express-session')({secret: 'session secret key', resave: '', saveUninitialized: ''}));
+app.use(helmet);
+app.use(morgan);
+app.use(body);
+app.use(cookie);
+app.use(url);
+//app.use(cache);
+app.use(stat);
+app.use(session);
 app.use(function(req, res, next){
     if(!req.session.flash)
     {
-        req.session.flash = req.session.flash || [];
+        req.session.flash = [];
     }
 
     req.flash = function(content)
