@@ -15,27 +15,29 @@
 *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var express = require('express');
-var app = express();
-app.use(require('compression')());
 if(!process.env.NODE_ENV)
 {
     require('dotenv').load();
 }
+
 var index,
     users,
     social,
     status,
     path = require('path'),
+    async = require('async'),
+    csrf = require('csurf')(),
+    express = require('express'),
+    app = express(),
     helmet = require('helmet')(),
-    passport = require('passport'),
     parser = require('body-parser'),
     body = parser.json(),
     morgan = require('morgan')('dev'),
+    compress = require('compression')(),
     url = parser.urlencoded({extended:true}),
-    cookie = require('cookie-parser')("secret"),
+    passport = require('passport').initialize(),
+    cookie = require('cookie-parser')(process.env.COOKIE_SECET || "secret"),
     stat = express.static(path.join(__dirname, 'public'), {maxAge:86400000*30}),
-    //cache = express.cache(path.join(__dirname, 'public'), {maxAge:86400000*30}),
     session = require('express-session')({secret: 'session secret key', resave: '', saveUninitialized: ''});
 
 check = function(req, res, next)
@@ -71,18 +73,17 @@ foot = "<footer>"+
                 "</ul>"+
             "</nav>"+
         "</footer>";
-
+app.use(compress);
 // view engine setup
 app.set('view engine', 'hbs');
 app.set('case sensitive routing', true);
-app.set('port', 5000);
+app.set('port', 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.use(helmet);
 app.use(morgan);
 app.use(body);
 app.use(cookie);
 app.use(url);
-//app.use(cache);
 app.use(stat);
 app.use(session);
 app.use(function(req, res, next){
@@ -105,8 +106,8 @@ app.use(function(req, res, next){
 
     next();
 });
-app.use(passport.initialize());
-app.use(require('csurf')());
+app.use(passport);
+app.use(csrf);
 app.use('/', index);
 app.use('/', social);
 app.use('/', users);
