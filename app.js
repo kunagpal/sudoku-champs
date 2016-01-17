@@ -37,8 +37,28 @@ var index,
     url = parser.urlencoded({extended:true}),
     passport = require('passport').initialize(),
     cookie = require('cookie-parser')(process.env.COOKIE_SECET || "secret"),
-    stat = express.static(path.join(__dirname, 'public'), {maxAge:86400000*30}),
-    session = require('express-session')({secret: 'session secret key', resave: '', saveUninitialized: ''});
+    stat = express.static(path.join(__dirname, 'public'), {maxAge:86400000 * 30}),
+    session = require('express-session')({secret: 'session secret key', resave: '', saveUninitialized: ''}),
+    flash = function(req, res, next){
+        if(!req.session.flash)
+        {
+            req.session.flash = [];
+        }
+
+        req.flash = function(content)
+        {
+            if(content)
+            {
+                this.session.flash.push(content);
+            }
+            else
+            {
+                return this.session.flash.pop();
+            }
+        };
+
+        next();
+    };
 
 check = function(req, res, next)
 {
@@ -73,41 +93,26 @@ foot = "<footer>"+
                 "</ul>"+
             "</nav>"+
         "</footer>";
-app.use(compress);
+app.use(function(req, res, next)
+    {
+        async.each([compress, helmet, morgan, body, url, stat, session], function(middleware, callback){
+            middleware(req, res, callback);
+        }, next);
+    }
+);
+//app.use(compress);
 // view engine setup
 app.set('view engine', 'hbs');
 app.set('case sensitive routing', true);
 app.set('port', 3000);
 app.set('views', path.join(__dirname, 'views'));
-app.use(helmet);
-app.use(morgan);
-app.use(body);
-app.use(cookie);
-app.use(url);
-app.use(stat);
-app.use(session);
-app.use(function(req, res, next){
-    if(!req.session.flash)
+app.use(function(req, res, next)
     {
-        req.session.flash = [];
+        async.each([cookie, flash, passport, csrf], function(middleware, callback){
+            middleware(req, res, callback);
+        }, next);
     }
-
-    req.flash = function(content)
-    {
-        if(content)
-        {
-            this.session.flash.push(content);
-        }
-        else
-        {
-            return this.session.flash.pop();
-        }
-    };
-
-    next();
-});
-app.use(passport);
-app.use(csrf);
+);
 app.use('/', index);
 app.use('/', social);
 app.use('/', users);

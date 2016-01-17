@@ -16,6 +16,7 @@
 */
 
 var path = require('path'),
+    exit = require('forever').stop,
     debug = require('debug')('sudokuchamps'),
     app = require(path.join(__dirname, '..', 'app')),
     server = require('http').createServer(app),
@@ -73,7 +74,7 @@ function onListening()
 mongo(process.env.MONGO || 'mongodb://127.0.0.1:27017/project', function(err, database){
     if(err)
     {
-        throw err;
+        //throw err;
     }
     else
     {
@@ -90,7 +91,7 @@ mongo(process.env.MONGO || 'mongodb://127.0.0.1:27017/project', function(err, da
             }
 
             database.close();
-            process.exit(0);
+            exit();
         });
     }
 });
