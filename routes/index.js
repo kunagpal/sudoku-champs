@@ -109,20 +109,27 @@ router.post('/login', function(req, res){
         }
         else
         {
-            if (bcrypt.compareSync(req.body.password, doc.hash))
-            {
-                temp = req.session.route;
-                delete req.session.route;
-                res.cookie('user', req.body.name, {maxAge: 86400000, signed: true});
-                res.cookie('best', doc.best, {maxAge: 86400000, signed: true});
-                res.cookie('worst', doc.worst, {maxAge: 86400000, signed: true});
-                res.redirect(ref[temp] || '/play');
-            }
-            else
-            {
-                req.flash('Incorrect credentials!');
-                res.redirect('/login');
-            }
+            bcrypt.compare(req.body.password, doc.hash, function(err, result){
+                if(err)
+                {
+                    req.flash('Unexpected error occurred, please re-try.');
+                    res.redirect('/login');
+                }
+                else if(result)
+                {
+                    temp = req.session.route;
+                    delete req.session.route;
+                    res.cookie('user', req.body.name, {maxAge: 86400000, signed: true});
+                    res.cookie('best', doc.best, {maxAge: 86400000, signed: true});
+                    res.cookie('worst', doc.worst, {maxAge: 86400000, signed: true});
+                    res.redirect(ref[temp] || '/play');
+                }
+                else
+                {
+                    req.flash('Incorrect credentials!');
+                    res.redirect('/login');
+                }
+            });
         }
     });
 });
@@ -143,34 +150,44 @@ router.post('/register', function(req, res) {
                 user._id = req.body.name;
                 user.dob = new Date();
                 user.num = parseInt(num) + 1;
-                user.hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
                 user.email = req.body.email;
                 user.strategy = 'local';
 
-                db.insertOne(user, {w : 1}, function(err){
+                bcrypt.hash(req.body.password, 10, function(err, hash){
                     if(err)
                     {
-                        console.log(err.message);
-                        req.flash('That username is already taken, please choose a different one.');
+                        req.flash('An unexpected error occurred, please re-try.');
                         res.redirect('/register');
                     }
                     else
                     {
-                        res.cookie('user', user._id, {maxAge: 86400000, signed: true});
-                        res.cookie('best', user.best, {maxAge: 86400000, signed: true});
-                        res.cookie('worst', user.worst, {maxAge: 86400000, signed: true});
-
-                        message.header.to = user.email;
-                        message.header.subject = "Registration successful!";
-
-                        message.attach_alternative("Hey there " + user._id + ",<br>Welcome to Sudoku Champs!<br><br>Regards,<br>The Sudoku champs team");
-                        email.send(message, function(err){
+                        user.hash = hash;
+                        db.insertOne(user, {w : 1}, function(err){
                             if(err)
                             {
                                 console.log(err.message);
+                                req.flash('That username is already taken, please choose a different one.');
+                                res.redirect('/register');
                             }
+                            else
+                            {
+                                res.cookie('user', user._id, {maxAge: 86400000, signed: true});
+                                res.cookie('best', user.best, {maxAge: 86400000, signed: true});
+                                res.cookie('worst', user.worst, {maxAge: 86400000, signed: true});
 
-                            res.redirect('/play');
+                                message.header.to = user.email;
+                                message.header.subject = "Registration successful!";
+
+                                message.attach_alternative("Hey there " + user._id + ",<br>Welcome to Sudoku Champs!<br><br>Regards,<br>The Sudoku champs team");
+                                email.send(message, function(err){
+                                    if(err)
+                                    {
+                                        console.log(err.message);
+                                    }
+
+                                    res.redirect('/play');
+                                });
+                            }
                         });
                     }
                 });
@@ -254,7 +271,7 @@ router.post('/reset/:token', function(req, res){
         {
             $set:
             {
-                hash: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
+                hash: ''
             },
             $unset:
             {
@@ -263,29 +280,41 @@ router.post('/reset/:token', function(req, res){
             }
         };
 
-        db.findOneAndUpdate(query, op, function(err, doc){
-            if(err || !doc)
+        bcrypt.hash(req.body.password, 10, function(err, hash){
+            if(err)
             {
-                console.log(err.message);
-                req.flash('This password reset link is either invalid or has expired. Please retry.');
-                res.redirect('/forgot');
+                req.flash('An unexpected error has occured, please re-try.');
+                res.redirect('/reset/' + req.params,token);
             }
             else
             {
-                message.header.to = doc.value.email;
-                console.log(doc.value.email);
-                message.header.subject = 'Password change successful!';
-                message.attach_alternative("Hey there," + doc.value._id + ".<br>We're just writing in to let you "
-                    + "know that the recent password change for your account with Sudoku Champs was successful." +
-                    "<br><br>Regards,<br>The Sudoku Champs team.");
-                email.send(message, function(err){
-                    if(err)
+                op.$set.hash = hash;
+
+                db.findOneAndUpdate(query, op, function(err, doc){
+                    if(err || !doc)
                     {
                         console.log(err.message);
+                        req.flash('This password reset link is either invalid or has expired. Please retry.');
+                        res.redirect('/forgot');
                     }
+                    else
+                    {
+                        message.header.to = doc.value.email;
+                        console.log(doc.value.email);
+                        message.header.subject = 'Password change successful!';
+                        message.attach_alternative("Hey there," + doc.value._id + ".<br>We're just writing in to let you "
+                            + "know that the recent password change for your account with Sudoku Champs was successful." +
+                            "<br><br>Regards,<br>The Sudoku Champs team.");
+                        email.send(message, function(err){
+                            if(err)
+                            {
+                                console.log(err.message);
+                            }
 
-                    req.flash(err ? 'Email send failure' : 'Updated successfully!');
-                    res.redirect('/login');
+                            req.flash(err ? 'Email send failure' : 'Updated successfully!');
+                            res.redirect('/login');
+                        });
+                    }
                 });
             }
         });
@@ -301,14 +330,7 @@ router.get('/check/:query', function(req, res){
     if(req.headers.referer && req.headers.host === req.originalUrl.split('/')[2])
     {
         db.find({_id: req.params.query}, function(err, doc){
-            if(err)
-            {
-                console.log(err.message);
-            }
-            else
-            {
-                res.send(+!doc);
-            }
+            res.send(+!doc);
         });
     }
     else
