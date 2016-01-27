@@ -69,7 +69,7 @@ router.get('/leader', function(req, res){
     db.find({}, op, frame).toArray(function(err, docs){
         if(err)
         {
-            console.log(err.message);
+            console.error(err.message);
             res.redirect('/game');
         }
         else
@@ -101,7 +101,7 @@ router.get('/leader', function(req, res){
 router.post('/login', function(req, res){
     res.clearCookie('user', {});
 
-    db.find({_id : req.body.name}, {}, {'limit' : 1}).next(function(err, doc){
+    db.find({_id : req.body.name, $or: [{strategy: 'local'}, {strategy: 'admin'}]}, {}, {'limit' : 1}).next(function(err, doc){
         if(err || !doc)
         {
             req.flash('Incorrect credentials!');
@@ -119,9 +119,12 @@ router.post('/login', function(req, res){
                 {
                     temp = req.session.route;
                     delete req.session.route;
-                    res.cookie('user', req.body.name, {maxAge: 86400000, signed: true});
-                    res.cookie('best', doc.best, {maxAge: 86400000, signed: true});
-                    res.cookie('worst', doc.worst, {maxAge: 86400000, signed: true});
+                    res.cookie(doc.strategy === 'local' ? 'user' : 'admin', req.body.name, {maxAge: 86400000, signed: true});
+                    if(doc.strategy === 'local')
+                    {
+                        res.cookie('best', doc.best, {maxAge: 86400000, signed: true});
+                        res.cookie('worst', doc.worst, {maxAge: 86400000, signed: true});
+                    }
                     res.redirect(ref[temp] || '/play');
                 }
                 else
@@ -141,7 +144,7 @@ router.post('/register', function(req, res) {
         db.count(function(err, num){
             if(err)
             {
-                console.log(err.message);
+                console.error(err.message);
                 req.flash('An unexpected error has occurred. Please retry.');
                 res.redirect('/register');
             }
@@ -165,7 +168,7 @@ router.post('/register', function(req, res) {
                         db.insertOne(user, {w : 1}, function(err){
                             if(err)
                             {
-                                console.log(err.message);
+                                console.error(err.message);
                                 req.flash('That username is already taken, please choose a different one.');
                                 res.redirect('/register');
                             }
@@ -182,7 +185,7 @@ router.post('/register', function(req, res) {
                                 email.send(message, function(err){
                                     if(err)
                                     {
-                                        console.log(err.message);
+                                        console.error(err.message);
                                     }
 
                                     res.redirect('/play');
@@ -214,7 +217,7 @@ router.post('/forgot', function(req, res) {
         db.updateOne({email : req.body.email, _id : req.body.name, strategy : 'local'}, {$set:{token : token, expire : Date.now() + 3600000}}, function(err, doc){
             if(err)
             {
-                console.log(err.message);
+                console.error(err.message);
                 req.flash('An unexpected error has occurred. Please retry.');
                 res.redirect('/forgot');
             }
@@ -229,7 +232,7 @@ router.post('/forgot', function(req, res) {
                 email.send(message, function(err){
                     if(err)
                     {
-                        console.log(err.message);
+                        console.error(err.message);
                     }
 
                     req.flash(err ? 'Email sending error...' : 'An email has been sent to ' + req.body.email + ' with further instructions.');
@@ -293,7 +296,7 @@ router.post('/reset/:token', function(req, res){
                 db.findOneAndUpdate(query, op, function(err, doc){
                     if(err || !doc)
                     {
-                        console.log(err.message);
+                        console.error(err.message);
                         req.flash('This password reset link is either invalid or has expired. Please retry.');
                         res.redirect('/forgot');
                     }
@@ -308,7 +311,7 @@ router.post('/reset/:token', function(req, res){
                         email.send(message, function(err){
                             if(err)
                             {
-                                console.log(err.message);
+                                console.error(err.message);
                             }
 
                             req.flash(err ? 'Email send failure' : 'Updated successfully!');
@@ -323,6 +326,17 @@ router.post('/reset/:token', function(req, res){
     {
         req.flash('Passwords do not match!');
         res.render('reset', {token: req.csrfToken(), head: head, foot: foot});
+    }
+});
+
+router.get('/admin', function(req, res){
+    if(req.signedCookies.admin || !process.env.NODE_ENV)
+    {
+        res.render('admin');
+    }
+    else
+    {
+        res.redirect('/login');
     }
 });
 

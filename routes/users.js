@@ -43,7 +43,7 @@ var opt =
         db.updateOne({_id : req.signedCookies.user}, opt, function(err){
             if(err)
             {
-                console.log(err.message);
+                console.error(err.message);
                 next(err);
             }
             else
@@ -71,7 +71,7 @@ router.post('/logout', function(req, res){
     db.updateOne({_id: req.signedCookies.name}, {$inc: {visit: 1}}, function(err) {
         if(err)
         {
-            console.log(err.message);
+            console.error(err.message);
             req.flash('An unexpected error has occurred. Please retry.');
             res.redirect('/');
         }
@@ -141,7 +141,7 @@ router.get('/stats', check, function(req, res){
     db.find({_id : req.signedCookies.name}, op).limit(1).next(function(err, doc){
         if(err)
         {
-            console.log(err.message);
+            console.error(err.message);
             req.flash('Error fetching stats...');
             res.redirect('/game');
         }

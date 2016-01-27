@@ -48,7 +48,7 @@ var ref =
                 email.send(message, function(err){
                     if(err)
                     {
-                        console.log(err.message);
+                        console.error(err.message);
                     }
 
                     return res.redirect('/play');
