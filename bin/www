@@ -77,5 +77,4 @@ mongo(process.env.MONGO || 'mongodb://127.0.0.1:27017/project', function(err, da
 
     process.on('SIGINT', onExit);
     process.on('SIGTERM', onExit);
-    process.on('SIGKILL', onExit);
 });

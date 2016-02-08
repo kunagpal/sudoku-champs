@@ -38,6 +38,7 @@ var ref =
             }
             if (!user)
             {
+                req.flash('Error fetching details, please re-try.');
                 return res.redirect('/login');
             }
             else

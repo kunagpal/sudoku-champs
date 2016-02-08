@@ -10,9 +10,15 @@
   "main": "./bin/www",
   "private": true,
   "scripts": {
-    "start": "forever bin/www",
-    "stop": "forever stop bin/www",
-    "restart": "forever restart bin/www"
+    "test": "node node_modules/.bin/mocha tests --recursive",
+    "start": "node node_modules/.bin/forever ./bin/www",
+    "stop": "node node_modules/.bin/forever stop ./bin/www",
+    "restart": "node node_modules/.bin/forever restart ./bin/www"
+  },
+  "precommit": {
+    "run": ["test"],
+    "silent": false,
+    "colors": true
   },
   "cacheDirectories": [
     "node_modules"
@@ -33,24 +39,26 @@
     "cookie-parser": "^1.4.1",
     "csurf": "^1.8.3",
     "debug": "^2.2.0",
-    "emailjs": "^1.0.1",
+    "emailjs": "^1.0.2",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "forever": "^0.15.1",
     "hbs": "^4.0.0",
     "helmet": "^1.1.0",
-    "mongodb": "^2.1.4",
+    "mongodb": "^2.1.6",
     "morgan": "^1.6.1",
     "passport": "^0.3.2",
-    "passport-facebook": "^2.0.0",
-    "passport-google-oauth": "^0.2.0",
-    "passport-twitter": "^1.0.3"
+    "passport-facebook": "^2.1.0",
+    "passport-google-oauth": "^1.0.0",
+    "passport-twitter": "^1.0.4"
   },
   "optionalDependencies": {
     "bcrypt": "^0.8.5"
   },
   "devDependencies": {
     "dotenv": "^2.0.0",
+    "mocha": "^2.4.5",
+    "pre-commit": "^1.1.2",
     "yuicompressor": "^2.4.8"
   },
   "repository": {
