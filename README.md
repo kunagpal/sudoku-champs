@@ -1,3 +1,10 @@
+[![Code Climate](https://codeclimate.com/github/kunagpal/sudoku-champs/badges/gpa.svg)](https://codeclimate.com/github/kunagpal/sudoku-champs)
+[![Test Coverage](https://codeclimate.com/github/kunagpal/sudoku-champs/badges/coverage.svg)](https://codeclimate.com/github/kunagpal/sudoku-champs/coverage)
+[![Issue Count](https://codeclimate.com/github/kunagpal/sudoku-champs/badges/issue_count.svg)](https://codeclimate.com/github/kunagpal/sudoku-champs)
+[![Dependency Status](https://david-dm.org/kunagpal/sudoku-champs.svg)](https://david-dm.org/kunagpal/sudoku-champs)
+[![codecov.io](https://codecov.io/github/kunagpal/sudoku-champs/coverage.svg?branch=master)](https://codecov.io/github/kunagpal/sudoku-champs?branch=master)
+[![Circle CI](https://circleci.com/gh/kunagpal/sudoku-champs.svg?style=svg)](https://circleci.com/gh/kunagpal/sudoku-champs)
+
 # sudoku-champs
 ## The source code repository for the sudoku-champs initiative.
 
@@ -9,7 +16,7 @@
 ##### Download and install the latest version of Node.Js from [here] (https://nodejs.org/en/download/)
 ##### Download and install MongoDB from [here] (https://www.mongodb.org/downloads)
 ##### Navigate to the project directory, and install all dependencies using 'npm i'
-##### Install security dependency manually using 'npm i bcryptjs' (Microsoft Windows only) 
+##### Install security dependency manually using 'npm i bcryptjs' (Microsoft Windows only)
 ##### Create a .env file with the following contents:
       PASSWORD=value
       FB_ID=value
