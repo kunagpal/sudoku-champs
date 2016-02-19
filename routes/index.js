@@ -80,7 +80,7 @@ router.get('/leader', function(req, res){
                 if(docs[j]._id === req.signedCookies.name)
                 {
                     flag = true;
-                    docs[j].rank = parseInt(j) + 1;
+                    docs[j].rank = parseInt(j, 10) + 1;
                     lead.push(docs[j]);
                 }
                 else if(lead.length < 6)
@@ -153,7 +153,7 @@ router.post('/register', function(req, res) {
             {
                 user._id = req.body.name;
                 user.dob = new Date();
-                user.num = parseInt(num) + 1;
+                user.num = parseInt(num, 10) + 1;
                 user.email = req.body.email;
                 user.strategy = 'local';
 
@@ -338,19 +338,6 @@ router.get('/admin', function(req, res){
     else
     {
         res.redirect('/login');
-    }
-});
-
-router.get('/check/:query', function(req, res){
-    if(req.headers.referer && req.headers.host === req.originalUrl.split('/')[2])
-    {
-        db.find({_id: req.params.query}, function(err, doc){
-            res.send(+!doc);
-        });
-    }
-    else
-    {
-        res.redirect('/');
     }
 });
 

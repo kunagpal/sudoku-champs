@@ -15,20 +15,64 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+var i;
+var lead;
+var flag;
 var router = require('express').Router();
 
 var api = function(req, res, next)
 {
-    if(req.signedCookies.name || (req.headers.referer && req.headers.host === req.url.split('/')[2]))
+    if(!req.headers.referer)
+    {
+        res.redirect('/');
+    }
+    if(req.signedCookies.name || (req.headers.referer.split('/')[2] === req.url))
     {
         next();
     }
     else
     {
-        res.redirect('/');
+        res.end();
     }
 };
 
-router.get('/leaderboard', function(req, res){
+router.get('/register/:name', api, function(req, res){
+    db.find({_id: req.params.name}, function(err, doc){
+        res.send(+!doc);
+    });
+});
 
+router.get('/leaderboard', api, function(req, res){
+    i = 0;
+    lead = [{}];
+    flag = !req.signedCookies.name;
+    db.find({}, op, frame).toArray(function(err, docs){
+        if(err)
+        {
+            console.error(err.message);
+            res.redirect('/game');
+        }
+        else
+        {
+            for(j = 0; j < docs.length; ++j)
+            {
+                if(docs[j]._id === req.signedCookies.name)
+                {
+                    flag = true;
+                    docs[j].rank = parseInt(j, 10) + 1;
+                    lead.push(docs[j]);
+                }
+                else if(lead.length < 6)
+                {
+                    lead.push(docs[j]);
+                }
+                else if(flag)
+                {
+                    break;
+                }
+            }
+
+            res.json(lead);
+        }
+    });
 });

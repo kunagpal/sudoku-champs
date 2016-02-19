@@ -3,19 +3,19 @@ function solveSudoku(inputBoard, stats) {
   stats['easy'] = true;
   var board = JSON.parse(JSON.stringify(inputBoard));
   var possibilities = [[], [], [], [], [], [], [], [], []];
-  
+
   for(var i = 0; i < 9; i++) {
     for(var j = 0; j < 9; j++) {
       possibilities[i][j] = [false, true, true, true, true, true, true, true, true, true];
     }
   }
-  
+
   var solved = false;
   var impossible = false;
   var mutated = false;
   var needCheckFreedoms = false;
   var loopCount = 0;
-  
+
   outerLoop: while(!solved && !impossible) {
     solved = true;
     mutated = false;
@@ -225,7 +225,7 @@ function checkFreedoms(board, i, j, possibilities, zoneRow, zoneCol)
       lastDigitCube = k;
     }
   }
-  if(remainingCube == 1)
+  if(remainingCube === 1)
   {
     answer = lastDigitCube;
   }
@@ -250,7 +250,7 @@ function solveByGuessing(board, possibilities, leastFree, stats)
   var randSpot = leastFree[randIndex];
   var guesses = [];
   var currentPos = possibilities[randSpot[0]][randSpot[1]];
-  
+
   for(i = 1; i <= 9; i++)
   {
     if(currentPos[i])
@@ -302,26 +302,26 @@ function shuffleArray(array)
     last = next;
     return next / m;
   };
-  
+
   Math.enableFakeRandom = function() {
     Math.random = fakeRandom;
   };
-  
+
   Math.disableFakeRandom = function() {
     Math.random = randomBackup;
   };
-  
+
   Math.fakeRandomSeed = function(seed) {
     last = seed;
   }
-  
+
 })();
 
 
 function generatePuzzle(difficulty)
 {
-  if(difficulty !== 1 && difficulty !== 2 && 
-    difficulty !== 3 && difficulty !== 4  && 
+  if(difficulty !== 1 && difficulty !== 2 &&
+    difficulty !== 3 && difficulty !== 4  &&
     difficulty !== 5)
   {
     difficulty = 1;
@@ -340,7 +340,7 @@ function generatePuzzle(difficulty)
     {
       break;
     }
-    if(difficulty == 1 && knownCount <= 35)
+    if(difficulty === 1 && knownCount <= 35)
     {
       break;
     }
@@ -419,7 +419,7 @@ function verifySolution(board, onlyFullySolved)
       {
         rows[i][digit] = true;
       }
-      
+
       if(digit in cols[j])
       {
         resp['badCol'] = j;
@@ -595,13 +595,13 @@ function getCurrentBoard()
       {
         value = child.value;
       }
-      else if(child.tagName == 'SPAN')
+      else if(child.tagName === 'SPAN')
       {
         value = child.textContent;
       }
       if(value.match(/^[1-9]$/))
       {
-        value = parseInt(value);
+        value = parseInt(value, 10);
       }
       else
       {
@@ -638,11 +638,11 @@ function init() {
     }
     currentErrors = [];
   };
-  
+
   amazeButton.addEventListener('click', function() {
     if(!amazing)
     {
-      var level = parseInt(difficulty.options[difficulty.selectedIndex].value);
+      var level = parseInt(difficulty.options[difficulty.selectedIndex].value, 10);
       amazing = true;
       clearErrors();
       finishedCalculatingDiv.style.display = 'none';
@@ -655,14 +655,14 @@ function init() {
       });
     }
   }, false);
-  
+
   document.getElementById('checkButton').addEventListener('click', function() {
     clearErrors();
     var board = getCurrentBoard();
     var result = verifySolution(board);
     if(result['valid'])
     {
-      var validMessages = [ "LOOKIN GOOD", "KEEP GOING", "AWESOME", "EXCELLENT", 
+      var validMessages = [ "LOOKIN GOOD", "KEEP GOING", "AWESOME", "EXCELLENT",
         "NICE", "SWEET", "LOOKS GOOD TO ME"];
       if(verifySolution(board, true)['valid'])
       {
@@ -671,7 +671,7 @@ function init() {
             var temp = clock.getTime().time - 1;
             document.getElementsByName('win')[0].value = 1;
             document.getElementsByName('time')[0].value = temp;
-            winBlock.innerHTML = 'Solved in ' + parseInt(temp / 60) + ' minutes ' + (temp % 60) + ' seconds.' + winBlock.innerHTML;
+            winBlock.innerHTML = 'Solved in ' + parseInt(temp / 60, 10) + ' minutes ' + (temp % 60) + ' seconds.' + winBlock.innerHTML;
             winBlock.style.display = 'block';
             document.getElementById('close').addEventListener('click', function() {
                 winBlock.style.display = 'none';
@@ -731,12 +731,12 @@ function init() {
       errorsFoundSpan.style.display = 'block';
     }
   }, false);
-  
+
   document.getElementById('newGameButton').addEventListener('click', function() {
     if(!started)
     {
         clearErrors();
-        var value = parseInt(difficulty.options[difficulty.selectedIndex].value);
+        var value = parseInt(difficulty.options[difficulty.selectedIndex].value, 10);
         currentPuzzle = generatePuzzle(value);
         renderBoard(currentPuzzle);
         started = true;

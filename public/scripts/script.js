@@ -44,10 +44,10 @@ addEventListener('DOMContentLoaded', function() {
                 else
                 {
                     ver = Math.pow(-1, index);
-                    hor = Math.pow(-1, parseInt(index / 2));
+                    hor = Math.pow(-1, parseInt(index / 2, 10));
                 }
-                ver = (parseInt(id[1]) + ver) % 9;
-                hor = (parseInt(id[2]) + hor) % 9;
+                ver = (parseInt(id[1], 10) + ver) % 9;
+                hor = (parseInt(id[2], 10) + hor) % 9;
                 ver = (ver > -1) ? ver.toString() : '8';
                 hor = (hor > -1) ? hor.toString() : '8';
             }

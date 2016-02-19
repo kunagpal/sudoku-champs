@@ -32,13 +32,13 @@ var opt =
     router = require('express').Router(),
     onGame = function(req, res)
     {
-        opt.$inc.win = parseInt(req.body.win);
-        opt.$inc.loss = parseInt(req.body.loss);
-        opt.$inc.time = parseInt(req.body.time);
-        opt.$set.prevTime = parseInt(req.body.time);
+        opt.$inc.win = parseInt(req.body.win, 10);
+        opt.$inc.loss = parseInt(req.body.loss, 10);
+        opt.$inc.time = parseInt(req.body.time, 10);
+        opt.$set.prevTime = parseInt(req.body.time, 10);
         opt.$set.prevType = req.headers.referer.split('/')[3];
-        opt.$set.best = Math.min(req.signedCookies.best, parseInt(req.body.time));
-        opt.$set.worst = Math.max(req.signedCookies.worst, parseInt(req.body.time));
+        opt.$set.best = Math.min(req.signedCookies.best, parseInt(req.body.time, 10));
+        opt.$set.worst = Math.max(req.signedCookies.worst, parseInt(req.body.time, 10));
 
         db.updateOne({_id : req.signedCookies.user}, opt, function(err){
             if(err)
@@ -57,7 +57,7 @@ var opt =
     quote = require(path.join(__dirname, '..', 'database', 'quote')),
     rand = function(arg)
     {
-        return arg[parseInt(Math.random() * 10000000000000000) % arg.length];
+        return arg[parseInt(Math.random() * 10000000000000000, 10) % arg.length];
     },
     op = {dob : 0, hash : 0, email : 0, token : 0, expires : 0, form : 0, num : 0};
 
@@ -152,12 +152,12 @@ router.get('/stats', check, function(req, res){
         else
         {
             temp = [doc.practice, doc.h2h, doc.challenge, doc.solo].sort();
-            doc.fav = doc.practice == temp[3] ? 'Practice' : doc.challenge == temp[3] ? 'Challenge' : doc.solo == temp[3] ? 'Solo' : 'Head to head';
+            doc.fav = doc.practice === temp[3] ? 'Practice' : doc.challenge === temp[3] ? 'Challenge' : doc.solo === temp[3] ? 'Solo' : 'Head to head';
             doc.fav += ' (' + temp[3] + ' of ' + doc.played + ' games)';
-            doc.avg = parseInt(doc.time / doc.played);
-            doc.avg = parseInt(doc.avg / 60) + ' : ' + (doc.avg % 60 > 9 ? '' : '0') + doc.avg % 60;
-            doc.best = doc.best != Number.MAX_VALUE ? parseInt(doc.best / 60) + ' : ' + (doc.best % 60 > 9 ? '' : '0') + doc.best % 60 : 'NA';
-            doc.worst = doc.worst != -1 ? parseInt(doc.worst / 60) + ' : ' + (doc.worst % 60 > 9 ? '' : '0') + doc.worst % 60 : 'NA';
+            doc.avg = parseInt(doc.time / doc.played, 10);
+            doc.avg = parseInt(doc.avg / 60, 10) + ' : ' + (doc.avg % 60 > 9 ? '' : '0') + doc.avg % 60;
+            doc.best = doc.best != Number.MAX_VALUE ? parseInt(doc.best / 60, 10) + ' : ' + (doc.best % 60 > 9 ? '' : '0') + doc.best % 60 : 'NA';
+            doc.worst = doc.worst != -1 ? parseInt(doc.worst / 60, 10) + ' : ' + (doc.worst % 60 > 9 ? '' : '0') + doc.worst % 60 : 'NA';
             res.render('stats', {stats : doc, flash: req.flash(), head: head, foot: foot});
         }
     });
