@@ -59,7 +59,18 @@ var opt =
     {
         return arg[parseInt(Math.random() * 10000000000000000, 10) % arg.length];
     },
-    op = {dob : 0, hash : 0, email : 0, token : 0, expires : 0, form : 0, num : 0};
+    op = {dob : 0, hash : 0, email : 0, token : 0, expires : 0, form : 0, num : 0},
+    check = function(req, res, next)
+    {
+        if(req.signedCookies.user || req.signedCookies.admin || !process.env.NODE_ENV)
+        {
+            next();
+        }
+        else
+        {
+            res.redirect('/login');
+        }
+    };
 
 // GET logout page
 router.get('/logout', check, function(req, res){

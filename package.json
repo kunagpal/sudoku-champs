@@ -52,7 +52,8 @@
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.0",
     "passport-google-oauth": "^1.0.0",
-    "passport-twitter": "^1.0.4"
+    "passport-twitter": "^1.0.4",
+    "raven": "^0.10.0"
   },
   "optionalDependencies": {
     "bcrypt": "^0.8.5"

@@ -58,7 +58,6 @@ catch(err)
 }
 
 router.get('/', function(req, res){
-    console.log(req.url, req.headers.host);
     res.render('index', {head: head, foot: foot});
 });
 

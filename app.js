@@ -20,10 +20,7 @@ if(!process.env.NODE_ENV)
     require('dotenv').load();
 }
 
-var index,
-    users,
-    social,
-    status,
+var status,
     path = require('path'),
     async = require('async'),
     csrf = require('csurf')(),
@@ -35,11 +32,19 @@ var index,
     morgan = require('morgan')('dev'),
     compress = require('compression')(),
     url = parser.urlencoded({extended:true}),
+    raven = require('raven').middleware.express,
+    error = raven.errorHandler(),
+    request = raven.requestHandler(),
     passport = require('passport').initialize(),
+    api = require(path.join(__dirname, 'routes', 'api')),
+    index = require(path.join(__dirname, 'routes', 'index')),
+    users = require(path.join(__dirname, 'routes', 'users')),
+    social = require(path.join(__dirname, 'routes', 'social')),
     cookie = require('cookie-parser')(process.env.COOKIE_SECET || "secret"),
     stat = express.static(path.join(__dirname, 'public'), {maxAge:86400000 * 30}),
     session = require('express-session')({secret: 'session secret key', resave: '', saveUninitialized: ''}),
-    flash = function(req, res, next){
+    flash = function(req, res, next)
+    {
         if(!req.session.flash)
         {
             req.session.flash = [];
@@ -60,22 +65,6 @@ var index,
         next();
     };
 
-check = function(req, res, next)
-{
-    if(req.signedCookies.user || req.signedCookies.admin || !process.env.NODE_ENV)
-    {
-        next();
-    }
-    else
-    {
-        res.redirect('/login');
-    }
-};
-
-users = require(path.join(__dirname, 'routes', 'users'));
-index = require(path.join(__dirname, 'routes', 'index'));
-social = require(path.join(__dirname, 'routes', 'social'));
-
 head = "<nav>"+
             "<ul>"+
                 "<li><a href='/'>HOME</a></li>"+
@@ -95,7 +84,7 @@ foot = "<footer>"+
         "</footer>";
 app.use(function(req, res, next)
     {
-        async.each([compress, helmet, morgan, body, url, stat, session], function(middleware, callback){
+        async.each([compress, helmet, request, morgan, body, url, stat, session], function(middleware, callback){
             middleware(req, res, callback);
         }, next);
     }
@@ -118,10 +107,12 @@ app.use('/', social);
 app.use('/', users);
 app.enable('trust proxy');
 
-// catch 404 and forward to error handler
+// catch 404 and redirect to index
 app.use(function(req, res){
     res.redirect('/');
 });
+
+app.use(error);
 
 // error handler, do not remove the parameter 'next' from the method signature
 app.use(function(err, req, res, next){
