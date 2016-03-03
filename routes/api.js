@@ -18,6 +18,9 @@
 var i;
 var lead;
 var flag;
+var speed;
+var colour;
+var request = require('request');
 var router = require('express').Router();
 
 var api = function(req, res, next)
@@ -76,3 +79,27 @@ router.get('/leaderboard', api, function(req, res){
         }
     });
 });
+
+router.get('/speed', function(req, res){
+    request('https://www.googleapis.com/pagespeedonline/v2/runPagespeed?fields=ruleGroups&url=http://' + 'gpl.ieeecsvit.com',
+    function(error, result, info){
+        if(error || result.statusCode != 200)
+        {
+            res.end();
+        }
+
+        speed = JSON.parse(info).ruleGroups.SPEED.score;
+        colour = speed > 89 ? 'green' : (speed > 74 ? 'yellow' : 'red');
+        request(`https://img.shields.io/badge/Page%20speed-${speed}-${colour}.svg`, function(err, response, data){
+            if(err || response.statusCode !== 200)
+            {
+                res.end();
+            }
+
+            res.set('Content-Type', 'image/svg+xml');
+            res.send(data);
+        });
+    });
+});
+
+module.exports = router;

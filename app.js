@@ -32,10 +32,10 @@ var status,
     morgan = require('morgan')('dev'),
     compress = require('compression')(),
     url = parser.urlencoded({extended:true}),
-    raven = require('raven').middleware.express,
-    error = raven.errorHandler(),
-    request = raven.requestHandler(),
     passport = require('passport').initialize(),
+    raven = require('raven').middleware.express,
+    error = raven.errorHandler(process.env.SENTRY),
+    request = raven.requestHandler(process.env.SENTRY),
     api = require(path.join(__dirname, 'routes', 'api')),
     index = require(path.join(__dirname, 'routes', 'index')),
     users = require(path.join(__dirname, 'routes', 'users')),
@@ -105,6 +105,7 @@ app.use(function(req, res, next)
 app.use('/', index);
 app.use('/', social);
 app.use('/', users);
+app.use('/', api);
 app.enable('trust proxy');
 
 // catch 404 and redirect to index
@@ -112,7 +113,10 @@ app.use(function(req, res){
     res.redirect('/');
 });
 
-app.use(error);
+if(process.env.NODE_ENV)
+{
+    app.use(error);
+}
 
 // error handler, do not remove the parameter 'next' from the method signature
 app.use(function(err, req, res, next){

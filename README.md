@@ -4,6 +4,7 @@
 [![Dependency Status](https://david-dm.org/kunagpal/sudoku-champs.svg)](https://david-dm.org/kunagpal/sudoku-champs)
 [![codecov.io](https://codecov.io/github/kunagpal/sudoku-champs/coverage.svg?branch=master)](https://codecov.io/github/kunagpal/sudoku-champs?branch=master)
 [![Circle CI](https://circleci.com/gh/kunagpal/sudoku-champs.svg?style=svg)](https://circleci.com/gh/kunagpal/sudoku-champs)
+[![Page Speed](https://sudoku-champs.herokuapp.com/speed)](https://developers.google.com/speed/pagespeed/insights/?url=sudokuchamps.herokuapp.com)
 
 # sudoku-champs
 ## The source code repository for the sudoku-champs initiative.
@@ -25,6 +26,7 @@
       TW_KEY=value
       GO_ID=value
       GO_KEY=value
+      SENTRY=value
 
 ##### Run the localhost MongoDB server, mongod.
 ##### Run the server using 'npm start'
