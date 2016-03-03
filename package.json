@@ -10,6 +10,8 @@
   "main": "./bin/www",
   "private": true,
   "scripts": {
+    "deploy": "git push heroku master",
+    "log": "heroku logs --app sudokuchamps",
     "test": "node node_modules/.bin/mocha tests --recursive",
     "start": "node node_modules/.bin/forever ./bin/www",
     "stop": "node node_modules/.bin/forever stop ./bin/www",

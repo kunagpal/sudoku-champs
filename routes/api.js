@@ -81,7 +81,7 @@ router.get('/leaderboard', api, function(req, res){
 });
 
 router.get('/speed', function(req, res){
-    request('https://www.googleapis.com/pagespeedonline/v2/runPagespeed?fields=ruleGroups&url=http://' + 'gpl.ieeecsvit.com',
+    request('https://www.googleapis.com/pagespeedonline/v2/runPagespeed?fields=ruleGroups&url=http://' + req.headers.host,
     function(error, result, info){
         if(error || result.statusCode != 200)
         {
