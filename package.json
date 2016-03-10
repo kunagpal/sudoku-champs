@@ -10,9 +10,10 @@
   "main": "./bin/www",
   "private": true,
   "scripts": {
+    "check": "npm-check -u",
     "deploy": "git push heroku master",
     "log": "heroku logs --app sudokuchamps",
-    "test": "node node_modules/.bin/mocha tests --recursive",
+    "test": "node node_modules/.bin/mocha tests --recursive -R dot",
     "start": "node node_modules/.bin/forever ./bin/www",
     "stop": "node node_modules/.bin/forever stop ./bin/www",
     "restart": "node node_modules/.bin/forever restart ./bin/www"
@@ -43,6 +44,7 @@
     "cookie-parser": "^1.4.1",
     "csurf": "^1.8.3",
     "debug": "^2.2.0",
+    "ejs": "^2.4.1",
     "emailjs": "^1.0.4",
     "express": "^4.13.4",
     "express-session": "^1.13.0",

@@ -16,3 +16,20 @@
  */
 
 var assert = require('assert');
+var mongo = require('mongodb').MongoClient.connect;
+
+before(function(done){
+    mongo('mongodb://127.0.0.1/testgpl', function(err, db){
+        if(err)
+        {
+            throw 'Please ensure that mongod is running as a localhost instance and is accepting connections on port 27017'
+        }
+
+        testDb = db;
+        done();
+    });
+});
+
+describe('Authentication tests', function(){
+    //console.log(testDb);
+});
