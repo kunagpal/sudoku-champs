@@ -207,6 +207,12 @@ router.post('/register', function(req, res) {
 // POST forgot password page
 router.post('/forgot', function(req, res) {
     crypto.randomBytes(20, function(err, buf) {
+        if(err)
+        {
+            req.flash('An unexpected error had occurred, please retry.');
+            res.redirect('/forgot/password');
+        }
+
         token = buf.toString('hex');
         message.header.subject = 'Time to get back in the game';
         message.attach_alternative("Hey there, " + req.body.name + ".<br>A little birdie told us that you were having troubles with your Sudoku champs password.<br>" +

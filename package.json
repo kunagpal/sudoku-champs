@@ -13,10 +13,10 @@
     "check": "npm-check -u",
     "deploy": "git push heroku master",
     "log": "heroku logs --app sudokuchamps",
-    "test": "node node_modules/.bin/mocha tests --recursive -R dot",
     "start": "node node_modules/.bin/forever ./bin/www",
     "stop": "node node_modules/.bin/forever stop ./bin/www",
-    "restart": "node node_modules/.bin/forever restart ./bin/www"
+    "restart": "node node_modules/.bin/forever restart ./bin/www",
+    "test": "node node_modules/.bin/mocha tests --recursive -R dot"
   },
   "precommit": {
     "run": [
@@ -25,9 +25,6 @@
     "silent": false,
     "colors": true
   },
-  "cacheDirectories": [
-    "node_modules"
-  ],
   "contributors": [
     {
       "name": "Kunal Nagpal",

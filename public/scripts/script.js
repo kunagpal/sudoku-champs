@@ -18,7 +18,6 @@ addEventListener('DOMContentLoaded', function() {
             id = 'c' + id;
         }
         temp = window.event.keyCode;
-        console.log(temp);
         switch(temp)
         {
             case 65 : temp = 37; // left, a

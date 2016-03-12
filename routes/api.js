@@ -31,7 +31,7 @@ var api = function(req, res, next)
     }
     if(req.signedCookies.name || (req.headers.referer.split('/')[2] === req.url))
     {
-        next();
+        return next();
     }
     else
     {
@@ -39,8 +39,14 @@ var api = function(req, res, next)
     }
 };
 
-router.get('/register/:name', api, function(req, res){
+router.get('/register/:name', api, function(req, res, next){
     db.find({_id: req.params.name}, function(err, doc){
+        if(err)
+        {
+            res.status(403);
+            return next(err);
+        }
+
         res.send(+!doc);
     });
 });
@@ -77,28 +83,6 @@ router.get('/leaderboard', api, function(req, res){
 
             res.json(lead);
         }
-    });
-});
-
-router.get('/speed', function(req, res){
-    request('https://www.googleapis.com/pagespeedonline/v2/runPagespeed?fields=ruleGroups&url=http://' + req.headers.host,
-    function(error, result, info){
-        if(error || result.statusCode != 200)
-        {
-            res.end();
-        }
-
-        speed = JSON.parse(info).ruleGroups.SPEED.score;
-        colour = speed > 89 ? 'green' : (speed > 74 ? 'yellow' : 'red');
-        request(`https://img.shields.io/badge/Page%20speed-${speed}-${colour}.svg`, function(err, response, data){
-            if(err || response.statusCode !== 200)
-            {
-                res.end();
-            }
-
-            res.set('Content-Type', 'image/svg+xml');
-            res.send(data);
-        });
     });
 });
 

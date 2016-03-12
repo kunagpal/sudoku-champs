@@ -30,7 +30,7 @@ var opt =
     temp = [],
     path = require('path'),
     router = require('express').Router(),
-    onGame = function(req, res)
+    onGame = function(req, res, next)
     {
         opt.$inc.win = parseInt(req.body.win, 10);
         opt.$inc.loss = parseInt(req.body.loss, 10);
@@ -44,7 +44,7 @@ var opt =
             if(err)
             {
                 console.error(err.message);
-                next(err);
+                return next(err);
             }
             else
             {
@@ -64,7 +64,7 @@ var opt =
     {
         if(req.signedCookies.user || req.signedCookies.admin || !process.env.NODE_ENV)
         {
-            next();
+            return next();
         }
         else
         {
@@ -168,7 +168,7 @@ router.get('/stats', check, function(req, res){
             doc.avg = parseInt(doc.time / doc.played, 10);
             doc.avg = parseInt(doc.avg / 60, 10) + ' : ' + (doc.avg % 60 > 9 ? '' : '0') + doc.avg % 60;
             doc.best = doc.best != Number.MAX_VALUE ? parseInt(doc.best / 60, 10) + ' : ' + (doc.best % 60 > 9 ? '' : '0') + doc.best % 60 : 'NA';
-            doc.worst = doc.worst != -1 ? parseInt(doc.worst / 60, 10) + ' : ' + (doc.worst % 60 > 9 ? '' : '0') + doc.worst % 60 : 'NA';
+            doc.worst = doc.worst !== -1 ? parseInt(doc.worst / 60, 10) + ' : ' + (doc.worst % 60 > 9 ? '' : '0') + doc.worst % 60 : 'NA';
             res.render('stats', {stats : doc, flash: req.flash(), head: head, foot: foot});
         }
     });

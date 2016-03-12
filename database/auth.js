@@ -15,7 +15,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var user,
+var key,
+    user,
     path = require('path'),
     passport = require('passport'),
     callback = function(token, refresh, profile, done)
@@ -47,25 +48,19 @@ var user,
     record = require(path.join(__dirname, 'user')),
     twitter = require('passport-twitter').Strategy,
     facebook = require('passport-facebook').Strategy,
-    google = require('passport-google-oauth').OAuth2Strategy;
+    google = require('passport-google-oauth').OAuth2Strategy,
+    strategies = {
+        'FB': facebook,
+        'TW': twitter,
+        'GO': google
+    };
 
-passport.use(new facebook({
-        clientID :  process.env.FB_ID,
-        clientSecret : process.env.FB_KEY,
-        callbackURL : ref[process.env.NODE_ENV] + 'FB'
-    }, callback
-));
-
-passport.use(new twitter({
-        consumerKey : process.env.TW_ID,
-        consumerSecret : process.env.TW_KEY,
-        callbackURL : ref[process.env.NODE_ENV] + 'TW'
-    }, callback
-));
-
-passport.use(new google({
-        clientID : process.env.GO_ID,
-        clientSecret : process.env.GO_KEY,
-        callbackURL : ref[process.env.NODE_ENV] + 'GO'
-    }, callback
-));
+for(key in strategies)
+{
+    passport.use(new strategies[key]({
+            clientID :  process.env.FB_ID,
+            clientSecret : process.env.FB_KEY,
+            callbackURL : ref[process.env.NODE_ENV] + key
+        }, callback
+    ));
+}
