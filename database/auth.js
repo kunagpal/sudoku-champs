@@ -28,11 +28,7 @@ var key,
             user.profile = profile.id;
             user._id = profile.displayName;
             user.strategy = profile.provider;
-
-            if(profile.provider !== 'twitter')
-            {
-                user.email = profile.emails[0].value;
-            }
+            user.email = profile.emails[0].value;
 
             db.findOneAndUpdate({_id: profile.displayName, strategy: profile.provider}, {$setOnInsert : user}, {upsert : true}, function(err, doc)
             {
@@ -46,21 +42,19 @@ var key,
         "production" : "http://sudokuchamps.herokuapp.com/"
     },
     record = require(path.join(__dirname, 'user')),
-    twitter = require('passport-twitter').Strategy,
     facebook = require('passport-facebook').Strategy,
     google = require('passport-google-oauth').OAuth2Strategy,
     strategies = {
         'FB': facebook,
-        'TW': twitter,
         'GO': google
     };
 
 for(key in strategies)
 {
     passport.use(new strategies[key]({
-            clientID :  process.env.FB_ID,
-            clientSecret : process.env.FB_KEY,
-            callbackURL : ref[process.env.NODE_ENV] + key
+            clientID: process.env[`${key}_ID`],
+            clientSecret: process.env[`${key}_KEY`],
+            callbackURL: ref[process.env.NODE_ENV] + key
         }, callback
     ));
 }
