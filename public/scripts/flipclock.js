@@ -65,7 +65,7 @@ Base.prototype = {
 			var ancestor = this[source];
 			if (ancestor && (typeof value === "function") && // overriding a method?
 				// the valueOf() comparison is to avoid circular references
-				(!ancestor.valueOf || ancestor.valueOf() != value.valueOf()) &&
+				(!ancestor.valueOf || ancestor.valueOf() !== value.valueOf()) &&
 				/\bbase\b/.test(value)) {
 				// get the underlying method
 				var method = value.valueOf();
@@ -87,7 +87,7 @@ Base.prototype = {
 		} else if (source) { // extending with an object literal
 			var extend = Base.prototype.extend;
 			// if this object has a customised extend method then use it
-			if (!Base._prototyping && typeof this != "function") {
+			if (!Base._prototyping && typeof this !== "function") {
 				extend = this.extend || extend;
 			}
 			var proto = {toSource: null};
@@ -96,7 +96,7 @@ Base.prototype = {
 			// if we are prototyping then include the constructor
 			var i = Base._prototyping ? 0 : 1;
 			while (key = hidden[i++]) {
-				if (source[key] != proto[key]) {
+				if (source[key] !== proto[key]) {
 					extend.call(this, key, source[key]);
 
 				}
@@ -537,7 +537,7 @@ var FlipClock;
 				var list = t.lists[i];
 
 				if(list) {
-					if(!doNotAddPlayClass && digit != list.digit) {
+					if(!doNotAddPlayClass && digit !== list.digit) {
 						list.play();
 					}
 
@@ -854,7 +854,7 @@ var FlipClock;
 					t.flip();
 
 					if(typeof callback === "function") {
-						callback();
+						return callback();
 					}
 				});
 			}
@@ -1045,7 +1045,7 @@ var FlipClock;
 				this.digit = digit;
 			}
 
-			if(this.digit != this.lastDigit) {
+			if(this.digit !== this.lastDigit) {
 				var $delete = this.$el.find('.'+this.classes.before).removeClass(this.classes.before);
 
 				this.$el.find('.'+this.classes.active).removeClass(this.classes.active)
@@ -1242,7 +1242,7 @@ var FlipClock;
 		 */
 
 		constructor: function(factory, time, options) {
-			if(typeof options != "object") {
+			if(typeof options !== "object") {
 				options = {};
 			}
 
@@ -1973,7 +1973,7 @@ var FlipClock;
 
 		constructor: function(factory, options) {
 
-			if(typeof options != "object") {
+			if(typeof options !== "object") {
 				options = {};
 			}
 
@@ -2328,7 +2328,7 @@ var FlipClock;
 		 */
 
 		flip: function(time, doNotAddPlayClass) {
-			if(this.meridiumText != this.getMeridium()) {
+			if(this.meridiumText !== this.getMeridium()) {
 				this.meridiumText = this.getMeridium();
 				this.meridium.find('a').html(this.meridiumText);
 			}

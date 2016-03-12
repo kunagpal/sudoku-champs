@@ -259,11 +259,11 @@ function solveByGuessing(board, possibilities, leastFree, stats)
     }
   }
   shuffleArray(guesses);
-  for(var i = 0; i < guesses.length; i++)
+  for(var i = 0; i < guesses.length; ++i)
   {
     board[randSpot[0]][randSpot[1]] = guesses[i];
     var result = solveSudoku(board, stats);
-    if(result != null)
+    if(result !== null)
     {
       return result;
     }
