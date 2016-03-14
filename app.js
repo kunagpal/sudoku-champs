@@ -65,23 +65,6 @@ var status,
         next();
     };
 
-head = "<nav>"+
-            "<ul>"+
-                "<li><a href='/'>HOME</a></li>"+
-                "<li><a href='/play'>PLAY</a></li>"+
-                "<li><a href='/rules'>RULES</a></li>"+
-                "<li><a href='/leader'>LEADERBOARD</a></li>"+
-            "</ul>"+
-        "</nav>";
-foot = "<footer>"+
-            "<nav>"+
-                "<ul>"+
-                    "<li><a href='/logout'>I wish to leave</a></li>"+
-                    "<li><a href='/privacy'>Privacy</a></li>"+
-                    "<li><a href='/forum'>Forum</a></li>"+
-                "</ul>"+
-            "</nav>"+
-        "</footer>";
 app.use(function(req, res, next)
     {
         async.each([compress, helmet, request, morgan, body, url, stat, session], function(middleware, callback){
@@ -91,7 +74,7 @@ app.use(function(req, res, next)
 );
 //app.use(compress);
 // view engine setup
-app.set('view engine', 'hbs');
+app.set('view engine', 'ejs');
 app.set('case sensitive routing', true);
 app.set('port', 3000);
 app.set('views', path.join(__dirname, 'views'));

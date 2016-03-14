@@ -58,7 +58,7 @@ catch(err)
 }
 
 router.get('/', function(req, res){
-    res.render('index', {head: head, foot: foot});
+    res.render('index');
 });
 
 // GET leaderboard
