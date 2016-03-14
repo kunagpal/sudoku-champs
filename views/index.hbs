@@ -20,8 +20,9 @@
     <head>
         <meta charset="utf-8"/>
         <title>Home | Sudoku Champs</title>
-        <link href="https://cdn.jsdelivr.net/picnicss/4.1.3/picnic.min.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel='stylesheet' href="https://cdn.jsdelivr.net/picnicss/5.1.0/picnic.min.css">
+        <link rel='stylesheet' href="https://cdn.jsdelivr.net/picnicss/5.1.0/plugins.min.css">
         <link rel="icon" type="image/png" href="http://res.cloudinary.com/kunagpal/main.jpg">
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -30,15 +31,78 @@
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
             ga('create', 'UA-60481560-1', 'auto');ga('send', 'pageview');
         </script>
+        <style>
+            .inv {color: #7F8C8D;}
+            footer {margin: 0;}
+            body {color: #34495E;}
+            nav {background: #2C2C2C;}
+            a {background: transparent;}
+            #rules {background: #3498DB; color: whitesmoke;}
+            #about {background: #E67E22; color: whitesmoke;}
+            #privacy {background: #1ABC9C; color: #261A3B;}
+            .panel {
+                width: 100%;
+                height: 100%;
+                position: relative;
+                text-align: center;
+                background: #ECF0F1;
+            }
+            .container {
+                top: 50%;
+                left: 50%;
+                position: absolute;
+                transform: translate(-50%, -50%);
+            }
+        </style>
     </head>
     <body>
-        {{{head}}}
-        <h1>Sudoku Champs</h1>
-        <h2>Where the good compete to become the best of the rest.</h2>
-        <img src="http://res.cloudinary.com/kunagpal/main.jpg" id="main"/>
-        <h3>Because you just have to solve them all.</h3>
-        <br><br>
-        <a href="/login" id="begin">Get Started</a>
+        <nav class="demo">
+            <a class="brand" href="#">
+                <img class="logo" src="http://res.cloudinary.com/kunagpal/main.jpg" />
+                <span class="inv">Sudoku Champs</span>
+            </a>
+            <input id="res" type="checkbox" class="show">
+            <label for="res" class="burger pseudo button">
+                <span class="inv">&#9776</span>
+            </label>
+            <div class="menu">
+                <a href="#about" class="pseudo button">
+                    <span class="inv">About</span>
+                </a>
+                <a href="#rules" class="pseudo button">
+                    <span class="inv">Rules</span>
+                </a>
+                <a href="#privacy" class="pseudo button">
+                    <span class="inv">Privacy</span>
+                </a>
+                <a href="#" class="pseudo button">
+                    <span class="inv">Login</span>
+                </a>
+                <a href="#" class="pseudo button">
+                    <span class="inv">Register</span>
+                </a>
+            </div>
+        </nav>
+        <div class="panel" id="#">
+            <div class="container">
+                <h2>Where the good compete to become the best of the rest.</h2>
+                <img src="http://res.cloudinary.com/kunagpal/main.jpg" id="main" />
+            </div>
+        </div>
+        <div class="panel" id="about">
+            <div class="container">
+                About
+            </div>
+        </div>
+        <div class="panel" id="rules">
+            <div class="container">
+                Rules
+            </div>
+        </div>
+        <div class="panel" id="privacy">
+            <div class="container">
+                Privacy
+            </div>
+        </div>
     </body>
-    {{{foot}}}
 </html>
