@@ -1,27 +1,9 @@
-<!--
-*  Sudoku Champs <sudokuchampster@gmail.com>
-*
-*  This program is free software: you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation, either version 3 of the License, or
-*  (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-
 <!DOCTYPE html>
 <html class="center">
     <head>
         <meta charset="utf-8"/>
         <title>Home | Sudoku Champs</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel='stylesheet' href="https://cdn.jsdelivr.net/picnicss/5.1.0/picnic.min.css">
         <link rel='stylesheet' href="https://cdn.jsdelivr.net/picnicss/5.1.0/plugins.min.css">
         <link rel="icon" type="image/png" href="http://res.cloudinary.com/kunagpal/main.jpg">
         <script>
@@ -32,26 +14,51 @@
             ga('create', 'UA-60481560-1', 'auto');ga('send', 'pageview');
         </script>
         <style>
-            .inv {color: #7F8C8D;}
-            footer {margin: 0;}
-            body {color: #34495E;}
-            nav {background: #2C2C2C;}
-            a {background: transparent;}
-            #rules {background: #3498DB; color: whitesmoke;}
-            #about {background: #E67E22; color: whitesmoke;}
-            #privacy {background: #1ABC9C; color: #261A3B;}
+            .inv {
+                color: #7F8C8D;
+            }
+
+            body {
+                color: #34495E;
+            }
+
+            nav {
+                background: #2C2C2C;
+            }
+
+            a {
+                background: transparent;
+            }
+
+            #rules {
+                background: #3498DB;
+                color: whitesmoke;
+            }
+
+            #about {
+                background: #E67E22;
+                color: whitesmoke;
+            }
+
+            #privacy {
+                background: #1ABC9C;
+                color: #261A3B;
+            }
+
+            p, ol {
+                text-align: left;
+            }
+
             .panel {
                 width: 100%;
                 height: 100%;
-                position: relative;
+                padding: 0 10%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 text-align: center;
                 background: #ECF0F1;
-            }
-            .container {
-                top: 50%;
-                left: 50%;
-                position: absolute;
-                transform: translate(-50%, -50%);
+                flex-direction: column;
             }
         </style>
     </head>
@@ -84,25 +91,52 @@
             </div>
         </nav>
         <div class="panel" id="#">
-            <div class="container">
-                <h2>Where the good compete to become the best of the rest.</h2>
-                <img src="http://res.cloudinary.com/kunagpal/main.jpg" id="main" />
-            </div>
+            <h1>Where the good compete to become the best of the rest.</h1>
+            <img src="http://res.cloudinary.com/kunagpal/main.jpg" id="main" />
         </div>
         <div class="panel" id="about">
-            <div class="container">
-                About
-            </div>
+            <h1>About</h1>
         </div>
         <div class="panel" id="rules">
-            <div class="container">
-                Rules
-            </div>
+            <h1>Rules</h1>
+            <h2>Some games are meant to be played without rules. This is not one of them.</h2>
+            <ol>
+                <li>
+                    The game ends when:
+                    <ol>
+                        <li>The player / opponent completes the puzzle.</li>
+                        <li>The player concedes the game.</li>
+                    </ol>
+                </li>
+                <li>
+                    For head to head games, the score depends on the time taken to solve the grid, and the number of
+                    unsolved cells.
+                </li>
+                <li>
+                    Ranking depends on:
+                    <ol>
+                        <li>Points: Win: 2, Loss: 0, Tie: 1.</li>
+                        <li>Matches won.</li>
+                        <li>Matches played.</li>
+                        <li>Number of forfeits, if any.</li>
+                        <li>Reputation.</li>
+                    </ol>
+                </li>
+                <li>Practice mode results do not affect user ranking.</li>
+                <li>Leaving any match midway results in an instant loss.</li>
+            </ol>
         </div>
         <div class="panel" id="privacy">
-            <div class="container">
-                Privacy
-            </div>
+            <h1>Privacy</h1>
+            <p>
+                Normally, we would rant on and on about how your privacy and rights are of utmost importance to us, and
+                also a little bit on how we take several undisclosed steps towards maintaining that position. However,
+                we also realize that in this day and age, our smart users have better things to do and more challenging
+                Sudoku to solve, so we'll cut to the chase: We don't distribute user contact details. We never did, and
+                we never will. Your contact details are only used to keep you in the game, and out of the hands of
+                spammers. We hate spam as much as all of you do, possibly more. <br><br>
+                Now that all the nonsense is done away with, let's move on to the <a href="/play" class="link">game</a>.
+            </p>
         </div>
     </body>
 </html>

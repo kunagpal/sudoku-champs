@@ -74,7 +74,7 @@ var opt =
 
 // GET logout page
 router.get('/logout', check, function(req, res){
-    res.render('logout', {main: rand(quote.title), quit: rand(quote.away), stay: rand(quote.stay), token: req.csrfToken(), head: head, foot: foot});
+    res.render('logout', {main: rand(quote.title), quit: rand(quote.away), stay: rand(quote.stay), token: req.csrfToken()});
 });
 
 // POST logout page
@@ -105,23 +105,18 @@ router.get('/login', function(req, res){
     }
     else
     {
-        res.render('login', {token : req.csrfToken(), msg: req.flash(), head: head, foot: foot});
+        res.render('login', {token : req.csrfToken(), msg: req.flash()});
     }
-});
-
-// GET forum page
-router.get('/forum', check, function(req, res){
-    res.render('forum', {head: head, foot: foot});
 });
 
 //GET rules
 router.get(/^\/rules|privacy|solved$/, function(req, res){
-    res.render(req.originalUrl.slice(1), {head: head, foot: foot});
+    res.render(req.originalUrl.slice(1));
 });
 
 // GET forgot password page
 router.get(/^\/forgot|register|settings$/, function(req, res){
-    res.render(req.originalUrl.slice(1), {token: req.csrfToken(), msg: req.flash(), head: head, foot: foot});
+    res.render(req.originalUrl.slice(1), {token: req.csrfToken(), msg: req.flash()});
 });
 
 // GET guest page
@@ -132,18 +127,18 @@ router.get('/guest', function(req, res){
     }
     else
     {
-        res.render('game', {token: req.csrfToken(), head: head, foot: foot});
+        res.render('game', {token: req.csrfToken()});
     }
 });
 
 // GET play page
 router.get('/play', check, function(req, res){
-    res.render('play', {head: head, foot: foot});
+    res.render('play');
 });
 
 // GET practice page
 router.get(/^\/practice|h2h|challenge|solo$/, check, function(req, res){
-    res.render('game', {token: req.csrfToken(), mode: req.originalUrl, head: head, foot: foot});
+    res.render('game', {token: req.csrfToken(), mode: req.originalUrl});
 });
 
 router.post(/^\/h2h|practice|solo|challenge$/, onGame);
@@ -158,7 +153,7 @@ router.get('/stats', check, function(req, res){
         }
         else if(!doc.played)
         {
-            res.render('stats', {flash: req.flash(), stats : 0, head: head, foot: foot});
+            res.render('stats', {flash: req.flash(), stats : 0});
         }
         else
         {
@@ -169,7 +164,7 @@ router.get('/stats', check, function(req, res){
             doc.avg = parseInt(doc.avg / 60, 10) + ' : ' + (doc.avg % 60 > 9 ? '' : '0') + doc.avg % 60;
             doc.best = doc.best !== Number.MAX_VALUE ? parseInt(doc.best / 60, 10) + ' : ' + (doc.best % 60 > 9 ? '' : '0') + doc.best % 60 : 'NA';
             doc.worst = doc.worst !== -1 ? parseInt(doc.worst / 60, 10) + ' : ' + (doc.worst % 60 > 9 ? '' : '0') + doc.worst % 60 : 'NA';
-            res.render('stats', {stats : doc, flash: req.flash(), head: head, foot: foot});
+            res.render('stats', {stats : doc, flash: req.flash()});
         }
     });
 });

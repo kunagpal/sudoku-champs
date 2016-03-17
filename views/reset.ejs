@@ -1,26 +1,10 @@
-<!--
-*  Sudoku Champs <sudokuchampster@gmail.com>
-*
-*  This program is free software: you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation, either version 3 of the License, or
-*  (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-
 <!DOCTYPE html>
 <html class="center">
     <head>
         <meta charset="utf-8"/>
         <title>Reset | Sudoku Champs</title>
-        <link href="https://cdn.jsdelivr.net/picnicss/4.1.3/picnic.min.css">
+        <link href="https://cdn.jsdelivr.net/picnicss/5.1.0/picnic.min.css">
+        <link href="https://cdn.jsdelivr.net/picnicss/5.1.0/plugins.min.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/png" href="http://res.cloudinary.com/kunagpal/main.jpg">
         <script>
@@ -32,17 +16,14 @@
         </script>
     </head>
     <body>
-        {{{head}}}
-        <br><br>
-        <h3 class="reg">{{msg}}</h3>
+        <h3 class="reg"><%= msg%></h3>
         <h1>Reset Password</h1>
         <h2>The closest thing to resurrection in today's digital world.</h2>
         <form method="POST">
-            <input type="hidden" name="_csrf" value="{{ token }}">
+            <input type="hidden" name="_csrf" value="<%= token %>">
             <input type="password" placeholder="Password" name="password" autofocus/> <br><br>
             <input type="password" placeholder="Confirm password" id="confirm" name="confirm"/> <br><br>
             <input type="submit" value="Bring me back!" id="begin"/>
         </form>
     </body>
-    {{{foot}}}
 </html>

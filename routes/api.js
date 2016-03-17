@@ -18,9 +18,6 @@
 var i;
 var lead;
 var flag;
-var speed;
-var colour;
-var request = require('request');
 var router = require('express').Router();
 
 var api = function(req, res, next)

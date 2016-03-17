@@ -92,7 +92,7 @@ router.get('/leader', function(req, res){
                 }
             }
 
-            res.render('leader', {lead: lead, head: head, foot: foot});
+            res.render('leader', {lead: lead});
         }
     });
 });
@@ -259,7 +259,7 @@ router.get('/reset/:token', function(req, res){
         }
         else
         {
-            res.render('reset', {token: req.csrfToken(), msg: req.flash(), head: head, foot: foot});
+            res.render('reset', {token: req.csrfToken(), msg: req.flash()});
         }
     });
 });
@@ -331,7 +331,7 @@ router.post('/reset/:token', function(req, res){
     else
     {
         req.flash('Passwords do not match!');
-        res.render('reset', {token: req.csrfToken(), head: head, foot: foot});
+        res.render('reset', {token: req.csrfToken()});
     }
 });
 
