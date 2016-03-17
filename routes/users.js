@@ -97,18 +97,6 @@ router.post('/logout', function(req, res){
     res.clearCookie('worst', {});
 });
 
-// GET login page
-router.get('/login', function(req, res){
-    if(req.signedCookies.name)
-    {
-        res.redirect('/');
-    }
-    else
-    {
-        res.render('login', {token : req.csrfToken(), msg: req.flash()});
-    }
-});
-
 //GET rules
 router.get(/^\/rules|privacy|solved$/, function(req, res){
     res.render(req.originalUrl.slice(1));

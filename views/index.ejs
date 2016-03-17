@@ -2,14 +2,14 @@
 <html class="center">
     <head>
         <meta charset="utf-8"/>
-        <title>Home | Sudoku Champs</title>
+        <title>Sudoku Champs</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel='stylesheet' href="https://cdn.jsdelivr.net/picnicss/5.1.0/plugins.min.css">
         <link rel="icon" type="image/png" href="http://res.cloudinary.com/kunagpal/main.jpg">
+        <link type="text/css" rel='stylesheet' href="https://cdn.jsdelivr.net/picnicss/5.1.0/plugins.min.css">
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
             ga('create', 'UA-60481560-1', 'auto');ga('send', 'pageview');
         </script>
@@ -17,7 +17,8 @@
             span{color:#7F8C8D;}body{color:#34495E;}nav{background:#2C2C2C;}a{background:transparent;}
             #rules{background:#3498DB;color:whitesmoke;}#about{background:#E67E22;color:whitesmoke;}
             #privacy{background:#1ABC9C;color:#261A3B;}.panel{width:100%;height:100%;padding:0 10%;
-            display:flex;align-items:center;justify-content:center;background:#ECF0F1;flex-direction:column;position:relative;}
+            display:flex;align-items:center;justify-content:center;background:#ECF0F1;flex-direction:column;}
+            a>label{display:inline-block;width:100%;}
         </style>
     </head>
     <body>
@@ -32,8 +33,7 @@
                 <a href="#about" class="pseudo button"><span>About</span></a>
                 <a href="#rules" class="pseudo button"><span>Rules</span></a>
                 <a href="#privacy" class="pseudo button"><span>Privacy</span></a>
-                <a href="#" class="pseudo button"><span>Login</span></a>
-                <a href="#" class="pseudo button"><span>Register</span></a>
+                <a class="pseudo button"><label for="switch"><span>Sign In / Up</span></label></a>
             </div>
         </nav>
         <div class="panel" id="#">
@@ -48,19 +48,16 @@
             <h1>Rules</h1>
             <h2>Some games are meant to be played without rules. This is not one of them.</h2>
             <ol>
-                <li>
-                    The game ends when:
+                <li>The game ends when:
                     <ol>
                         <li>The player / opponent completes the puzzle.</li>
                         <li>The player concedes the game.</li>
                     </ol>
                 </li>
-                <li>
-                    For head to head games, the score depends on the time taken to solve the grid, and the number of
+                <li>For head to head games, the score depends on the time taken to solve the grid, and the number of
                     unsolved cells.
                 </li>
-                <li>
-                    Ranking depends on:
+                <li>Ranking depends on:
                     <ol>
                         <li>Points: Win: 2, Loss: 0, Tie: 1.</li>
                         <li>Matches won.</li>
@@ -75,14 +72,13 @@
         </div>
         <div class="panel" id="privacy">
             <h1>Privacy</h1>
-            <p>
-                Normally, we would rant on and on about how your privacy and rights are of utmost importance to us, and
-                also a little bit on how we take several undisclosed steps towards maintaining that position. However,
-                we also realize that in this day and age, our smart users have better things to do and more challenging
-                Sudoku to solve, so we'll cut to the chase: We don't distribute user contact details. We never did, and
-                we never will. Your contact details are only used to keep you in the game, and out of the hands of
-                spammers. We hate spam as much as all of you do, possibly more. <br><br>
-                Now that all the nonsense is done away with, let's move on to the <a href="/play" class="link">game</a>.
+            <p>Normally, we would rant on and on about how your privacy and rights are of utmost importance to us, and
+               also a little bit on how we take several undisclosed steps towards maintaining that position. However,
+               we also realize that in this day and age, our smart users have better things to do and more challenging
+               Sudoku to solve, so we'll cut to the chase: We don't distribute user contact details. We never did, and
+               we never will. Your contact details are only used to keep you in the game, and out of the hands of
+               spammers. We hate spam as much as all of you do, possibly more. <br><br>
+               Now that all the nonsense is done away with, let's move on to the <a href="/play" class="link">game</a>.
             </p>
         </div>
     </body>

@@ -58,13 +58,13 @@ catch(err)
 }
 
 router.get('/', function(req, res){
-    res.render('index');
+    res.render('index', {token: req.csrfToken()});
 });
 
 // GET leaderboard
 router.get('/leader', function(req, res){
     i = 0;
-    lead = [{}];
+    lead = [];
     flag = !req.signedCookies.name;
     db.find({}, op, frame).toArray(function(err, docs){
         if(err)

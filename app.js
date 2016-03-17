@@ -113,8 +113,6 @@ app.use(function(err, req, res, next){
     else
     {
         res.render('error', {
-            head: head,
-            foot: foot,
             status: status,
             message: err.message,
             session: process.env.NODE_ENV,
