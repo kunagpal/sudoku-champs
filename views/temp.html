@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/picnicss/5.1.0/plugins.min.css"/>
+        <style>
+            footer{text-align: center;}
+        </style>
+    </head>
+    <body>
+        <label for="modal" class="button">Sign in / up</label>
+        <div class="modal">
+            <input id="modal" type="checkbox"/>
+            <label for="modal" class="overlay"></label>
+            <article>
+                <header>
+                    <h3>Sudoku Champs</h3>
+                    <label for="modal" class="close">&times;</label>
+                </header>
+                <section class="content">
+                    <div class="tabs two">
+                        <input id='tab-1' type='radio' name='tabgroupB' checked>
+                        <label class="pseudo button toggle" for="tab-1">Sign In</label>
+                        <input id='tab-2' type='radio' name='tabgroupB'>
+                        <label class="pseudo button toggle" for="tab-2">Sign up</label>
+                        <div class="row">
+                            <form>
+                                <input type="hidden" name="_csrf" value="<%= token %>">
+                                <label for="email">Email:</label>
+                                <input id="email" name="name" type="email" autocomplete="on" autofocus required>
+                                <label for="pass">Password:</label>
+                                <input id="pass" type="password" name="password" required>
+                                <input type="submit" value="Submit">
+                            </form>
+                            <form>
+                                <input type="hidden" name="_csrf" value="<%= token %>">
+                                <label for="emailId">Email:</label>
+                                <input id="emailId" name="email" type="email" autofocus required>
+                                <label for="password">Password:</label>
+                                <input id="password" type="password" name="password" required>
+                                <label for="confirm">Confirm password:</label>
+                                <input id="confirm" type="password" name="confirm" required>
+                                <input type="submit" value="Submit">
+                            </form>
+                        </div>
+                    </div>
+                </section>
+                <footer>
+                    <p>Or, sign up with one of your social accounts.</p>
+                    <a href="/fb"><img src="https://res.cloudinary.com/kunagpal/fb.jpg"/></a>
+                    <a href="/go"><img src="https://res.cloudinary.com/kunagpal/go.jpg"/></a>
+                </footer>
+            </article>
+        </div>
+    </body>
+</html>
