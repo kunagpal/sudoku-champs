@@ -14,17 +14,18 @@
             ga('create', 'UA-60481560-1', 'auto');ga('send', 'pageview');
         </script>
         <style>
-            span{color:#7F8C8D;}body{color:#34495E;}nav{background:#2C2C2C;}a{background:transparent;}
-            #rules{background:#3498DB;color:whitesmoke;}#about{background:#E67E22;color:whitesmoke;}
-            #privacy{background:#1ABC9C;color:#261A3B;}.panel{width:100%;height:100%;padding:0 10%;
-            display:flex;align-items:center;justify-content:center;background:#ECF0F1;flex-direction:column;}
-            a>label{display:inline-block;width:100%;}
+            span{color:#7F8C8D;}body{color:#34495E;}nav{background:#2C2C2C;}#rules{background:#3498DB;color:whitesmoke;}
+            form>label{width:38%;text-align:center;}.panel{width:100%;height:100%;padding:0 10%;display:flex;align-items:center;
+            justify-content:center;background:#ECF0F1;flex-direction:column;}#about{background:#E67E22;color:whitesmoke;}
+            input[type='submit'],form>a{left:50%;position:relative;transform:translateX(-50%);}form>input{width:60%;margin:1%auto;}
+            label{display:inline-block;}#privacy{background:#1ABC9C;color:#261A3B;}.mid{text-align:center;padding-top:0;}
+            .half{width:49%!important;}a>label{width:100%;}article{padding:1%!important;}
         </style>
     </head>
     <body>
-        <nav class="demo">
+        <nav>
             <a class="brand" href="#">
-                <img class="logo" src="http://res.cloudinary.com/kunagpal/main.jpg" />
+                <img class="logo" src="http://res.cloudinary.com/kunagpal/main.jpg">
                 <span>Sudoku Champs</span>
             </a>
             <input id="res" type="checkbox" class="show">
@@ -36,9 +37,47 @@
                 <a class="pseudo button"><label for="modal"><span>Sign In / Up</span></label></a>
             </div>
         </nav>
+        <div class="modal">
+            <input id="modal" type="checkbox"/>
+            <label for="modal" class="overlay"></label>
+            <article class="content">
+                <div class="tabs two">
+                    <input id='tab-1' type='radio' name='tabgroupB' checked>
+                    <label class="pseudo button toggle half" for="tab-1">Sign In</label>
+                    <input id='tab-2' type='radio' name='tabgroupB'>
+                    <label class="pseudo button toggle half" for="tab-2">Sign up</label>
+                    <div class="row">
+                        <form>
+                            <input type="hidden" name="_csrf" value="<%= token %>">
+                            <label for="email">Email</label>
+                            <input id="email" name="name" type="email" autocomplete="on" autofocus required>
+                            <label for="pass">Password</label>
+                            <input id="pass" type="password" name="password" required>
+                            <input type="submit" value="Submit"><br>
+                            <a href="/forgot" class="pseudo button">Forgot password ?</a>
+                        </form>
+                        <form>
+                            <input type="hidden" name="_csrf" value="<%= token %>">
+                            <label for="emailId">Email</label>
+                            <input id="emailId" name="email" type="email" autofocus required>
+                            <label for="password">Password</label>
+                            <input id="password" type="password" name="password" required>
+                            <label for="confirm">Confirm password</label>
+                            <input id="confirm" type="password" name="confirm" required>
+                            <input type="submit" value="Submit">
+                        </form>
+                    </div>
+                </div>
+                <div class="mid">
+                    <p>Or, sign up with one of your social accounts</p>
+                    <a href="/auth/fb"><img src="https://res.cloudinary.com/kunagpal/fb.jpg"></a>
+                    <a href="/auth/go"><img src="https://res.cloudinary.com/kunagpal/go.jpg"></a>
+                </div>
+            </article>
+        </div>
         <div class="panel" id="#">
             <h1>Where the good compete to become the best of the rest.</h1>
-            <img src="http://res.cloudinary.com/kunagpal/main.jpg" id="main" />
+            <img src="http://res.cloudinary.com/kunagpal/main.jpg" id="main">
         </div>
         <div class="panel" id="about">
             <h1>About</h1>
