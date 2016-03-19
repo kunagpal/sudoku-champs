@@ -21,7 +21,7 @@
     <body>
         <div class="row">
             <div>
-                <h1>Forgot Password ?</h1>
+                <h1>Forgot password ?</h1>
                 <h2>Never worry, you can still be a sudoku champ.</h2>
                 Enter your username and email address in the provided field, and a password reset email will be sent
                 to your email address.
@@ -30,8 +30,8 @@
                 <h3><%= msg %></h3>
                 <form method="POST" action="/forgot" class="demo">
                     <input type="hidden" name="_csrf" value="<%=token%>">
-                    <input type="text" name="name" placeholder="Username" autofocus autocomplete="on" required /> <br><br>
-                    <input type="email" name="email" placeholder="Email Address" autocomplete="on" required/> <br><br>
+                    <input type="text" name="name" placeholder="Username" autofocus autocomplete="on" required> <br><br>
+                    <input type="email" name="email" placeholder="Email Address" autocomplete="on" required> <br><br>
                     <input type="submit" value="Submit" class="button"/>
                 </form>
             </div>
