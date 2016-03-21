@@ -101,7 +101,7 @@ router.get('/leader', function(req, res){
 router.post('/login', function(req, res){
     res.clearCookie('user', {});
 
-    db.find({_id : req.body.name, $or: [{strategy: 'local'}, {strategy: 'admin'}]}, {}, {'limit' : 1}).next(function(err, doc){
+    db.find({_id : req.body.email, $or: [{strategy: 'local'}, {strategy: 'admin'}]}, {}, {'limit' : 1}).next(function(err, doc){
         if(err || !doc)
         {
             req.flash('Incorrect credentials!');
@@ -119,7 +119,7 @@ router.post('/login', function(req, res){
                 {
                     temp = req.session.route;
                     delete req.session.route;
-                    res.cookie(doc.strategy === 'local' ? 'user' : 'admin', req.body.name, {maxAge: 86400000, signed: true});
+                    res.cookie(doc.strategy === 'local' ? 'user' : 'admin', req.body.email, {maxAge: 86400000, signed: true});
                     if(doc.strategy === 'local')
                     {
                         res.cookie('best', doc.best, {maxAge: 86400000, signed: true});

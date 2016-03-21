@@ -47,16 +47,16 @@
                     <input id='tab-2' type='radio' name='tabgroupB'>
                     <label class="pseudo button toggle half" for="tab-2">Sign up</label>
                     <div class="row">
-                        <form>
+                        <form method="post" action="/login">
                             <input type="hidden" name="_csrf" value="<%= token %>">
                             <label for="email">Email</label>
-                            <input id="email" name="name" type="email" autocomplete="on" autofocus required>
+                            <input id="email" name="email" type="email" autocomplete="on" autofocus required>
                             <label for="pass">Password</label>
                             <input id="pass" type="password" name="password" required>
                             <input type="submit" value="Submit"><br>
                             <a href="/forgot" class="pseudo button">Forgot password ?</a>
                         </form>
-                        <form>
+                        <form method="post" action="/register">
                             <input type="hidden" name="_csrf" value="<%= token %>">
                             <label for="emailId">Email</label>
                             <input id="emailId" name="email" type="email" autofocus required>
