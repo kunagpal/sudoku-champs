@@ -16,10 +16,9 @@
  */
 
 var i,
-    j,
-    temp,
     lead,
     flag,
+    temp,
     token,
     bcrypt,
     ref =
@@ -64,41 +63,6 @@ router.get('/', function(req, res){
     }
 
     res.render('index', {token: req.csrfToken()});
-});
-
-// GET leaderboard
-router.get('/leader', function(req, res){
-    i = 0;
-    lead = [];
-    flag = !req.signedCookies.user;
-
-    db.find({}, op, frame).toArray(function(err, docs){
-        if(err)
-        {
-            console.error(err.message);
-            return res.redirect('/home');
-        }
-
-        for(j = 0; j < docs.length; ++j)
-        {
-            if(docs[j]._id === req.signedCookies.user)
-            {
-                flag = true;
-                docs[j].rank = parseInt(j, 10) + 1;
-                lead.push(docs[j]);
-            }
-            else if(lead.length < 6)
-            {
-                lead.push(docs[j]);
-            }
-            else if(flag)
-            {
-                break;
-            }
-        }
-
-        res.render('leader', {lead: lead});
-    });
 });
 
 // POST login page
@@ -176,9 +140,6 @@ router.post('/register', function(req, res) {
                     }
 
                     res.cookie('user', user._id, {maxAge: 86400000, signed: true});
-                    res.cookie('best', user.best, {maxAge: 86400000, signed: true});
-                    res.cookie('worst', user.worst, {maxAge: 86400000, signed: true});
-
                     message.header.to = user.email;
                     message.header.subject = "Registration successful!";
 
@@ -200,6 +161,44 @@ router.post('/register', function(req, res) {
         req.flash('Passwords do not match!');
         res.redirect('/');
     }
+});
+
+// GET leaderboard page
+router.get('/leader', function(req, res){
+    res.render('leader');
+});
+
+router.get('/leaderboard', function(req, res){
+    i = 0;
+    lead = [];
+    flag = !req.signedCookies.name;
+    db.find({}, op, frame).toArray(function(err, docs){
+        if(err)
+        {
+            console.error(err.message);
+            return res.redirect('/game');
+        }
+
+        for(j = 0; j < docs.length; ++j)
+        {
+            if(docs[j]._id === req.signedCookies.name)
+            {
+                flag = true;
+                docs[j].rank = parseInt(j, 10) + 1;
+                lead.push(docs[j]);
+            }
+            else if(lead.length < 6)
+            {
+                lead.push(docs[j]);
+            }
+            else if(flag)
+            {
+                break;
+            }
+        }
+
+        res.json(lead);
+    });
 });
 
 // POST forgot password page

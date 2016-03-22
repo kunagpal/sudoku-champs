@@ -108,7 +108,7 @@ router.get('/guest', function(req, res){
         return res.redirect('/play');
     }
 
-    res.render('game', {token: req.csrfToken()});
+    res.render('game', {token: req.csrfToken(), mode: 'guest'});
 });
 
 // GET play page
@@ -146,10 +146,5 @@ router.get('/stats', check, function(req, res){
         res.render('stats', {stats : doc, flash: req.flash()});
     });
 });
-
-//GET generic route
-//router.get(/\/.*/, function(req, res){
-//    res.redirect('/');
-//});
 
 module.exports = router;

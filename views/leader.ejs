@@ -20,27 +20,25 @@
     </head>
     <body>
         <h1>Where Goliaths stand, with the Davids not so far behind...</h1>
-        <% if(lead) { %>
-            <table>
-                <tr>
-                    <th>Rank</th>
-                    <th>Legend</th>
-                    <th>Score</th>
-                    <th>Matches</th>
-                    <th>Streak</th>
-                </tr>
-                <% for(i = 0; i < lead.length; ++i){ %>
-                    <tr class="<%=lead[i].rank ? 'reg' : ''%>">
-                        <td><%= lead[i].rank || i + 1%></td>
-                        <td><%= lead[i]._id %></td>
-                        <td><%= lead[i].points %></td>
-                        <td><%= lead[i].played %></td>
-                        <td><%= lead[i].streak %></td>
-                    </tr>
-                <% } %>
-            </table>
-        <%} else {%>
-            <h2>Looks like the top spot is reserved for you. <br>What are you waiting for? Play some matches and make it yours!</h2>
-        <% } %>
+        <table>
+            <tr><th>Rank</th><th>Legend</th><th>Score</th><th>Matches</th><th>Streak</th></tr>
+        </table>
     </body>
+    <script>
+        var i,j,lead,tr,td,req=new XMLHttpRequest(),ref=['rank', '_id', 'points', 'played', 'streak'];
+        var board=document.getElementsByTagName('table')[0];
+        req.open('get','/leaderboard',true);
+        req.addEventListener('load',function(){
+            lead = JSON.parse(req.response);
+            for(i=0;i<lead.length;++i){
+                tr=document.createElement('tr');
+                for(j =0;j<5;++j){
+                    td=document.createElement('td');
+                    tr.innerHTML=lead[i][ref[j]];
+                    tr.appendChild(td);
+                }
+                board.appendChild(tr);
+            }
+        }, false);req.send();
+    </script>
 </html>

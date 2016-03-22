@@ -1,85 +1,93 @@
 <!DOCTYPE html>
 <html class="center">
-      <head>
-          <meta charset="utf-8"/>
-          <title>Stats | Sudoku Champs</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/picnicss/5.1.0/plugins.min.css">
-          <link rel="icon" type="image/png" href="http://res.cloudinary.com/kunagpal/main.jpg">
-          <script>
-              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-              ga('create','UA-60481560-1','auto');ga('send','pageview');
-          </script>
-      </head>
-      <body>
-            <%if (stats) { %>
-                <h1>Number crunching</h1>
-                <table id="stats">
-                    <tr>
-                        <th>COMPUTE</th>
-                        <th>CRUNCH</th>
-                        <th>ANALYZE</th>
-                        <th>REPEAT</th>
-                    </tr>
-                    <% with (stats) { %>
-                        <tr>
-                            <td rowspan="5">
-                                PLAYED
-                                <p class="val"><%= played %></p>
-                            </td>
-                            <td rowspan="4">
-                                BEST
-                                <p class="val"><%= best %></p>
-                            </td>
-                            <td rowspan="4" colspan="2">
-                                AVERAGE
-                                <p class="val"><%= avg %></p>
-                            </td>
-                        </tr>
-                        <tr></tr>
-                        <tr></tr>
-                        <tr></tr>
-                        <tr>
-                            <td rowspan="4" colspan="2">
-                                FAVOURITE GAME MODE
-                                <p class="val"><%= fav %></p>
-                            </td>
-                            <td rowspan="4">
-                                WORST
-                                <p class="val"><%= worst %></p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td rowspan="5">
-                                WINS
-                                <p class="val"><%= win %></p>
-                            </td>
-                        </tr>
-                        <tr></tr>
-                        <tr></tr>
-                        <tr>
-                            <td rowspan="7" colspan="3">
-                                AWESOME GRAPH!
-                                <p class="val"></p>
-                            </td>
-                        </tr>
-                        <tr></tr>
-                        <tr>
-                            <td rowspan="5">
-                                LOSSES
-                                <p class="val"><%= loss %></p>
-                            </td>
-                        </tr>
-                    <% } %>
-                </table>
-                <br><br><br><br><br><br><br><br><br><br><br><br><br>
-                <h2>Hover over a section for details</h2>
-            <%} else { %>
-                <h1>Whoa. Looks like there are no statistics to your name.</h1>
-                <h2>Well, what are you waiting for? Get out there and rack 'em up!</h2>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Stats | Sudoku Champs</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/picnicss/5.1.0/plugins.min.css">
+        <link rel="icon" type="image/png" href="http://res.cloudinary.com/kunagpal/main.jpg">
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create','UA-60481560-1','auto');ga('send','pageview');
+        </script>
+    </head>
+    <body>
+        <%if (stats) { %>
+        <h1>Number crunching</h1>
+        <table id="stats">
+            <tr>
+                <th>COMPUTE</th>
+                <th>CRUNCH</th>
+                <th>ANALYZE</th>
+                <th>REPEAT</th>
+            </tr>
+            <% with (stats) { %>
+                <tr>
+                    <td rowspan="5">
+                        PLAYED
+                        <p class="val"><%= played %></p>
+                    </td>
+                    <td rowspan="4">
+                        BEST
+                        <p class="val"><%= best %></p>
+                    </td>
+                        <td rowspan="4" colspan="2">
+                        AVERAGE
+                        <p class="val"><%= avg %></p>
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                    <td rowspan="4" colspan="2">
+                        FAVOURITE GAME MODE
+                        <p class="val"><%= fav %></p>
+                    </td>
+                    <td rowspan="4">
+                        WORST
+                        <p class="val"><%= worst %></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="5">
+                        WINS
+                        <p class="val"><%= win %></p>
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                    <td rowspan="7" colspan="3">
+                        AWESOME GRAPH!
+                        <p class="val"></p>
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td rowspan="5">
+                        LOSSES
+                        <p class="val"><%= loss %></p>
+                    </td>
+                </tr>
             <% } %>
-      </body>
+        </table>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <h2>Hover over a section for details</h2>
+        <%} else { %>
+            <h1>Whoa. Looks like there are no statistics to your name.</h1>
+            <h2>Well, what are you waiting for? Get out there and rack 'em up!</h2>
+        <% } %>
+    </body>
+    <script>
+        var req = new XMLHttpRequest();
+        var dash = document.getElementsByTagName('table')[0];
+        req.open('get', '/stats', true);
+        req.addEventListener('load', function(){
+
+        }, false);
+    </script>
 </html>
