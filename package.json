@@ -52,8 +52,7 @@
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.0",
     "passport-google-oauth": "^1.0.0",
-    "raven": "^0.10.0",
-    "request": "^2.69.0"
+    "raven": "^0.10.0"
   },
   "optionalDependencies": {
     "bcrypt": "^0.8.5"

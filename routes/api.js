@@ -16,24 +16,28 @@
  */
 
 var i;
+var temp;
 var lead;
 var flag;
+var referer;
 var router = require('express').Router();
 
 var api = function(req, res, next)
 {
     if(!req.headers.referer)
     {
-        res.redirect('/');
+        return res.redirect('/');
     }
-    if(req.signedCookies.name || (req.headers.referer.split('/')[2] === req.url))
+
+    temp = req.url.split('/')[1];
+    referer = req.headers.referer.split('/');
+
+    if(req.signedCookies.name || (referer.slice(-1)[0] === temp && referer[2] === req.headers.host))
     {
         return next();
     }
-    else
-    {
-        res.end();
-    }
+
+    res.end();
 };
 
 router.get('/register/:name', api, function(req, res, next){

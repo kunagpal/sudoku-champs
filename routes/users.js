@@ -46,12 +46,10 @@ var opt =
                 console.error(err.message);
                 return next(err);
             }
-            else
-            {
-                res.cookie('best', opt.$set.best, {maxAge : 86400000, signed : true});
-                res.cookie('worst', opt.$set.worst, {maxAge : 86400000, signed : true});
-                res.redirect(req.headers.referer);
-            }
+
+            res.cookie('best', opt.$set.best, {maxAge : 86400000, signed : true});
+            res.cookie('worst', opt.$set.worst, {maxAge : 86400000, signed : true});
+            res.redirect(req.headers.referer);
         });
     },
     quote = require(path.join(__dirname, '..', 'database', 'quote')),
@@ -66,10 +64,8 @@ var opt =
         {
             return next();
         }
-        else
-        {
-            res.redirect('/login');
-        }
+
+        res.redirect('/login');
     };
 
 // GET logout page
@@ -84,12 +80,10 @@ router.post('/logout', function(req, res){
         {
             console.error(err.message);
             req.flash('An unexpected error has occurred. Please retry.');
-            res.redirect('/');
+            return res.redirect('/');
         }
-        else
-        {
-            res.redirect('/login');
-        }
+
+        res.redirect('/login');
     });
 
     res.clearCookie('user', {});
@@ -111,12 +105,10 @@ router.get(/^\/forgot|register|settings$/, function(req, res){
 router.get('/guest', function(req, res){
     if (req.signedCookies.name)
     {
-        res.redirect('/play');
+        return res.redirect('/play');
     }
-    else
-    {
-        res.render('game', {token: req.csrfToken()});
-    }
+
+    res.render('game', {token: req.csrfToken()});
 });
 
 // GET play page
@@ -137,23 +129,21 @@ router.get('/stats', check, function(req, res){
         {
             console.error(err.message);
             req.flash('Error fetching stats...');
-            res.redirect('/game');
+            return res.redirect('/game');
         }
-        else if(!doc.played)
+        if(!doc.played)
         {
-            res.render('stats', {flash: req.flash(), stats : 0});
+            return res.render('stats', {flash: req.flash(), stats : 0});
         }
-        else
-        {
-            temp = [doc.practice, doc.h2h, doc.challenge, doc.solo].sort();
-            doc.fav = doc.practice === temp[3] ? 'Practice' : doc.challenge === temp[3] ? 'Challenge' : doc.solo === temp[3] ? 'Solo' : 'Head to head';
-            doc.fav += ' (' + temp[3] + ' of ' + doc.played + ' games)';
-            doc.avg = parseInt(doc.time / doc.played, 10);
-            doc.avg = parseInt(doc.avg / 60, 10) + ' : ' + (doc.avg % 60 > 9 ? '' : '0') + doc.avg % 60;
-            doc.best = doc.best !== Number.MAX_VALUE ? parseInt(doc.best / 60, 10) + ' : ' + (doc.best % 60 > 9 ? '' : '0') + doc.best % 60 : 'NA';
-            doc.worst = doc.worst !== -1 ? parseInt(doc.worst / 60, 10) + ' : ' + (doc.worst % 60 > 9 ? '' : '0') + doc.worst % 60 : 'NA';
-            res.render('stats', {stats : doc, flash: req.flash()});
-        }
+
+        temp = [doc.practice, doc.h2h, doc.challenge, doc.solo].sort();
+        doc.fav = doc.practice === temp[3] ? 'Practice' : doc.challenge === temp[3] ? 'Challenge' : doc.solo === temp[3] ? 'Solo' : 'Head to head';
+        doc.fav += ' (' + temp[3] + ' of ' + doc.played + ' games)';
+        doc.avg = parseInt(doc.time / doc.played, 10);
+        doc.avg = parseInt(doc.avg / 60, 10) + ' : ' + (doc.avg % 60 > 9 ? '' : '0') + doc.avg % 60;
+        doc.best = doc.best !== Number.MAX_VALUE ? parseInt(doc.best / 60, 10) + ' : ' + (doc.best % 60 > 9 ? '' : '0') + doc.best % 60 : 'NA';
+        doc.worst = doc.worst !== -1 ? parseInt(doc.worst / 60, 10) + ' : ' + (doc.worst % 60 > 9 ? '' : '0') + doc.worst % 60 : 'NA';
+        res.render('stats', {stats : doc, flash: req.flash()});
     });
 });
 

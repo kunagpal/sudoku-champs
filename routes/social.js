@@ -41,20 +41,18 @@ var ref =
                 req.flash('Error fetching details, please re-try.');
                 return res.redirect('/login');
             }
-            else
-            {
-                res.cookie('user', user._id, {maxAge: 86400000, signed: true});
-                message.header.to = user.email;
-                message.attach_alternative("Hey there " + user._id + ",<br>Welcome to Sudoku Champs!<br><br>Regards,<br>The Sudoku champs team");
-                email.send(message, function(err){
-                    if(err)
-                    {
-                        console.error(err.message);
-                    }
 
-                    return res.redirect('/play');
-                });
-            }
+            res.cookie('user', user._id, {maxAge: 86400000, signed: true});
+            message.header.to = user.email;
+            message.attach_alternative("Hey there " + user._id + ",<br>Welcome to Sudoku Champs!<br><br>Regards,<br>The Sudoku champs team");
+            email.send(message, function(err){
+                if(err)
+                {
+                    console.error(err.message);
+                }
+
+                return res.redirect('/play');
+            });
         })(req, res, next);
     },
     router = require('express').Router();
