@@ -97,7 +97,7 @@ router.get(/^\/rules|privacy|solved$/, function(req, res){
 });
 
 // GET forgot password page
-router.get(/^\/forgot|register|settings$/, function(req, res){
+router.get(/^\/forgot|settings$/, function(req, res){
     res.render(req.originalUrl.slice(1), {token: req.csrfToken(), msg: req.flash()});
 });
 

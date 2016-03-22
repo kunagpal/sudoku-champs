@@ -76,7 +76,7 @@ router.get('/leader', function(req, res){
         if(err)
         {
             console.error(err.message);
-            return res.redirect('/game');
+            return res.redirect('/home');
         }
 
         for(j = 0; j < docs.length; ++j)
@@ -149,7 +149,7 @@ router.post('/register', function(req, res) {
             {
                 console.error(err.message);
                 req.flash('An unexpected error has occurred. Please retry.');
-                return res.redirect('/register');
+                return res.redirect('/');
             }
 
             user._id = req.body.name;
@@ -162,7 +162,7 @@ router.post('/register', function(req, res) {
                 if(err)
                 {
                     req.flash('An unexpected error occurred, please re-try.');
-                    return res.redirect('/register');
+                    return res.redirect('/');
                 }
 
                 user.hash = hash;
@@ -172,7 +172,7 @@ router.post('/register', function(req, res) {
                     {
                         console.error(err.message);
                         req.flash('That username is already taken, please choose a different one.');
-                        return res.redirect('/register');
+                        return res.redirect('/');
                     }
 
                     res.cookie('user', user._id, {maxAge: 86400000, signed: true});
@@ -198,7 +198,7 @@ router.post('/register', function(req, res) {
     else
     {
         req.flash('Passwords do not match!');
-        res.redirect('/register');
+        res.redirect('/');
     }
 });
 

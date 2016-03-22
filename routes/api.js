@@ -16,10 +16,8 @@
  */
 
 var i;
-var temp;
 var lead;
 var flag;
-var referer;
 var router = require('express').Router();
 
 var api = function(req, res, next)
@@ -28,11 +26,7 @@ var api = function(req, res, next)
     {
         return res.redirect('/');
     }
-
-    temp = req.url.split('/')[1];
-    referer = req.headers.referer.split('/');
-
-    if(req.signedCookies.name || (referer.slice(-1)[0] === temp && referer[2] === req.headers.host))
+    if(req.signedCookies.user || (req.headers.referer.split('/')[2] === req.headers.host))
     {
         return next();
     }
@@ -40,15 +34,15 @@ var api = function(req, res, next)
     res.end();
 };
 
-router.get('/register/:name', api, function(req, res, next){
-    db.find({_id: req.params.name}, function(err, doc){
+router.get('/register/:email', api, function(req, res, next){
+    db.find({_id: req.params.email}).limit(1).next(function(err, doc){
         if(err)
         {
             res.status(403);
             return next(err);
         }
 
-        res.send(+!doc);
+        res.json(+!doc);
     });
 });
 
@@ -60,30 +54,28 @@ router.get('/leaderboard', api, function(req, res){
         if(err)
         {
             console.error(err.message);
-            res.redirect('/game');
+            return res.redirect('/game');
         }
-        else
-        {
-            for(j = 0; j < docs.length; ++j)
-            {
-                if(docs[j]._id === req.signedCookies.name)
-                {
-                    flag = true;
-                    docs[j].rank = parseInt(j, 10) + 1;
-                    lead.push(docs[j]);
-                }
-                else if(lead.length < 6)
-                {
-                    lead.push(docs[j]);
-                }
-                else if(flag)
-                {
-                    break;
-                }
-            }
 
-            res.json(lead);
+        for(j = 0; j < docs.length; ++j)
+        {
+            if(docs[j]._id === req.signedCookies.name)
+            {
+                flag = true;
+                docs[j].rank = parseInt(j, 10) + 1;
+                lead.push(docs[j]);
+            }
+            else if(lead.length < 6)
+            {
+                lead.push(docs[j]);
+            }
+            else if(flag)
+            {
+                break;
+            }
         }
+
+        res.json(lead);
     });
 });
 

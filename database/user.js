@@ -19,7 +19,6 @@ module.exports =
 {
         _id : '',
         dob : '',
-        email : '',
         win : 0,
         loss : 0,
         tied : 0,

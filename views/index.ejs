@@ -11,11 +11,11 @@
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-            ga('create', 'UA-60481560-1', 'auto');ga('send', 'pageview');
+            ga('create','UA-60481560-1','auto');ga('send','pageview');
         </script>
         <style>
             span{color:#7F8C8D;}body{color:#34495E;}nav{background:#2C2C2C;}#rules{background:#3498DB;color:whitesmoke;}
-            form>label{width:38%;text-align:center;}.panel{width:100vw;height:100vh;padding:0 10%;display:flex;align-items:center;
+            form>label{width:38%;text-align:center;}.panel{width:100%;height:100%;padding:0 10%;display:flex;align-items:center;
             justify-content:center;background:#ECF0F1;flex-direction:column;}#about{background:#E67E22;color:whitesmoke;}
             input[type='submit'],form>a{left:50%;position:relative;transform:translateX(-50%);}form>input{width:60%;margin:1%auto;}
             label{display:inline-block;}#privacy{background:#1ABC9C;color:#261A3B;}.mid{text-align:center;padding-top:0;}
@@ -29,7 +29,7 @@
                 <span>Sudoku Champs</span>
             </a>
             <input id="res" type="checkbox" class="show">
-            <label for="res" class="burger pseudo button"><span>&#8801;</span></label>
+            <label for="res" class="burger pseudo button"><span>|||||</span></label>
             <div class="menu">
                 <a href="#about" class="pseudo button"><span>About</span></a>
                 <a href="#rules" class="pseudo button"><span>Rules</span></a>
@@ -50,21 +50,21 @@
                         <form method="post" action="/login">
                             <input type="hidden" name="_csrf" value="<%= token %>">
                             <label for="email">Email</label>
-                            <input id="email" name="email" type="email" autocomplete="on" autofocus required>
+                            <input id="email" name="email" type="email" autocomplete="on" placeholder="foo@bar.com" required>
                             <label for="pass">Password</label>
-                            <input id="pass" type="password" name="password" required>
+                            <input id="pass" type="password" name="password" placeholder="********" required>
                             <input type="submit" value="Submit"><br>
                             <a href="/forgot" class="pseudo button">Forgot password ?</a>
                         </form>
                         <form method="post" action="/register">
                             <input type="hidden" name="_csrf" value="<%= token %>">
                             <label for="emailId">Email</label>
-                            <input id="emailId" name="email" type="email" autofocus required>
+                            <input id="emailId" name="email" type="email" placeholder="foo@bar.com" required>
                             <label for="password">Password</label>
-                            <input id="password" type="password" name="password" required>
+                            <input id="password" type="password" name="password" placeholder="********" required>
                             <label for="confirm">Confirm password</label>
-                            <input id="confirm" type="password" name="confirm" required>
-                            <input type="submit" value="Submit">
+                            <input id="confirm" type="password" name="confirm" placeholder="********" required>
+                            <input id="submit" type="submit" value="Submit">
                         </form>
                     </div>
                 </div>
@@ -121,4 +121,22 @@
             </p>
         </div>
     </body>
+    <script>
+        var req = new XMLHttpRequest();
+        var email = document.getElementById('emailId');
+        var button = document.getElementById('submit');
+        var ref={'1':{col:'green'},'0':{col:'red',txt:'This email address is already taken.'}};
+        email.addEventListener('blur',function(){
+            if(this.value)
+            {
+                req.open('get','/register/'+this.value,true);
+                req.addEventListener('load',function(){
+                    button.disabled=ref[req.response].txt || 0;
+                    email.style.borderColor=ref[req.response].col;
+                    email.title=ref[req.response].txt || email.title;
+                },false);
+                req.send();
+            }
+        }, false);
+    </script>
 </html>
