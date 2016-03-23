@@ -36,7 +36,7 @@ router.get('/register/:email', api, function(req, res, next){
     db.find({_id: req.params.email}).limit(1).next(function(err, doc){
         if(err)
         {
-            res.status(403);
+            res.status(422);
             return next(err);
         }
 
@@ -48,13 +48,8 @@ router.get('/stats', api, function(req, res){
     db.find({_id : req.signedCookies.user}, op).limit(1).next(function(err, doc){
         if(err)
         {
-            console.error(err.message);
-            req.flash('Error fetching stats...');
-            return res.redirect('/game');
-        }
-        if(!doc.played)
-        {
-            return res.render('stats', {flash: req.flash(), stats : 0});
+            res.status(422);
+            return next(err);
         }
 
         temp = [doc.practice, doc.h2h, doc.challenge, doc.solo].sort();

@@ -4,8 +4,10 @@ function solveSudoku(inputBoard, stats) {
   var board = JSON.parse(JSON.stringify(inputBoard));
   var possibilities = [[], [], [], [], [], [], [], [], []];
 
-  for(var i = 0; i < 9; i++) {
-    for(var j = 0; j < 9; j++) {
+  for(var i = 0; i < 9; ++i)
+  {
+    for(var j = 0; j < 9; ++j)
+    {
       possibilities[i][j] = [false, true, true, true, true, true, true, true, true, true];
     }
   }
@@ -22,16 +24,17 @@ function solveSudoku(inputBoard, stats) {
     loopCount++;
     var leastFree = [];
     var leastRemaining = 9;
-    for(i = 0; i < 9; i++)
+
+    for(i = 0; i < 9; ++i)
     {
-      for(j = 0; j < 9; j++)
+      for(j = 0; j < 9; ++j)
       {
         if(board[i][j] === 0)
         {
           solved = false;
           var currentPos = possibilities[i][j];
-          var zoneRow;
-          var zoneCol;
+          var zoneRow, zoneCol;
+
           if(loopCount === 1)
           {
             zoneRow = getZone(i) * 3;
@@ -44,21 +47,25 @@ function solveSudoku(inputBoard, stats) {
             zoneRow = currentPos[10];
             zoneCol = currentPos[11];
           }
+
           var wasMutated =  reducePossibilities(board, i, j, currentPos, zoneRow, zoneCol);
+
           if(wasMutated)
           {
             mutated = true;
           }
-          var remaining = 0;
-          var lastDigit = 0;
-          for(var k = 1; k <= 9; k++)
+
+          var remaining = 0, lastDigit = 0;
+
+          for(var k = 1; k <= 9; ++k)
           {
             if(currentPos[k])
             {
-              remaining++;
+              ++remaining;
               lastDigit = k;
             }
           }
+
           if(remaining === 0)
           {
             impossible = true;
@@ -70,9 +77,10 @@ function solveSudoku(inputBoard, stats) {
             mutated = true;
             continue;
           }
-            if(needCheckFreedoms)
-            {
+          if(needCheckFreedoms)
+          {
             var solution = checkFreedoms(board, i, j, possibilities, zoneRow, zoneCol);
+
             if(solution !== 0)
             {
               board[i][j] = solution;
@@ -92,6 +100,7 @@ function solveSudoku(inputBoard, stats) {
         }
       }
     }
+
     if(mutated === false && solved === false)
     {
       if(needCheckFreedoms === false)
@@ -100,17 +109,14 @@ function solveSudoku(inputBoard, stats) {
         stats['medium'] = true;
         continue;
       }
+
       return solveByGuessing(board, possibilities, leastFree, stats);
     }
   }
-  if(impossible)
-  {
-    return null;
-  }
-  else {
-    return board;
-  }
+
+  return impossible ? null : board;
 }
+
 function getZone(i)
 {
   if(i < 3)
@@ -130,27 +136,26 @@ function getZone(i)
 function reducePossibilities(board, row, column, currentPos, zoneRow, zoneCol)
 {
   var mutated = false;
-  for(var k = 0; k < 9; k++)
+
+  for(var k = 0; k < 9; ++k)
   {
-    if(currentPos[board[row][k]] || currentPos[board[k][column]])
-    {
-      mutated = true;
-    }
+    mutated = (currentPos[board[row][k]] || currentPos[board[k][column]]);
     currentPos[board[row][k]] = false;
     currentPos[board[k][column]] = false;
   }
-  for(var x = zoneRow; x <= (zoneRow + 2); x++)
+  for(var x = zoneRow; x <= (zoneRow + 2); ++x)
   {
-    for(var y = zoneCol; y <= (zoneCol + 2); y++)
+    for(var y = zoneCol; y <= (zoneCol + 2); ++y)
     {
-      var zoneDigit = board[x][y];
-      if(currentPos[zoneDigit])
+      if(currentPos[board[x][y]])
       {
         mutated = true;
       }
-      currentPos[zoneDigit] = false;
+
+      currentPos[board[x][y]] = false;
     }
   }
+
   return mutated;
 }
 
@@ -161,37 +166,32 @@ function checkFreedoms(board, i, j, possibilities, zoneRow, zoneCol)
   var uniquePosRow = currentPos.slice(0);
   var uniquePosCol = currentPos.slice(0);
   var uniquePosCube = currentPos.slice(0);
-  for(k = 0; k < 9; k++)
+
+  for(k = 0; k < 9; ++k)
   {
-    for(var l = 1; l <= 9; l++)
+    for(var l = 1; l < 10; ++l)
     {
-      if(board[i][k] === 0 && possibilities[i][k][l] && k !== j)
-      {
-        uniquePosRow[l] = false;
-      }
-      if(board[k][j] === 0 && possibilities[k][j][l] && k !== i)
-      {
-        uniquePosCol[l] = false;
-      }
+      uniquePosRow[l] = !(board[i][k] === 0 && possibilities[i][k][l] && k !== j);
+      uniquePosCol[l] = !(board[k][j] === 0 && possibilities[k][j][l] && k !== i);
     }
   }
-  var remainingRow = 0;
-  var remainingCol = 0;
-  var lastDigitRow = 0;
-  var lastDigitCol = 0;
-    for(k = 1; k <= 9; k++)
-    {
+
+  var remainingRow = 0, remainingCol = 0, lastDigitRow = 0, lastDigitCol = 0;
+
+  for(k = 1; k < 10; ++k)
+  {
     if(uniquePosRow[k])
     {
-      remainingRow++;
+      ++remainingRow;
       lastDigitRow = k;
     }
     if(uniquePosCol[k])
     {
-      remainingCol++;
+      ++remainingCol;
       lastDigitCol = k;
     }
   }
+
   if(remainingRow === 1)
   {
     answer = lastDigitRow;
@@ -202,33 +202,34 @@ function checkFreedoms(board, i, j, possibilities, zoneRow, zoneCol)
     answer = lastDigitCol;
     return answer;
   }
-  for(var x = zoneRow; x <= (zoneRow + 2); x++)
+
+  for(var x = zoneRow; x <= (zoneRow + 2); ++x)
   {
-    for(var y = zoneCol; y <= (zoneCol + 2); y++)
+    for(var y = zoneCol; y <= (zoneCol + 2); ++y)
     {
-      for(l = 1; l <= 9; l++)
+      for(l = 1; l < 10; ++l)
       {
-        if(board[x][y] === 0 && possibilities[x][y][l] && (x !== i || y !== j))
-        {
-          uniquePosCube[l] = false;
-        }
+        uniquePosCube[l] = !(!board[x][y] && possibilities[x][y][l] && (x !== i || y !== j));
       }
     }
   }
-  var remainingCube = 0;
-  var lastDigitCube = 0;
-  for(var k = 1; k <= 9; k++)
+
+  var remainingCube = 0, lastDigitCube = 0;
+
+  for(var k = 1; k < 10; ++k)
   {
     if(uniquePosCube[k])
     {
-      remainingCube++;
+      ++remainingCube;
       lastDigitCube = k;
     }
   }
+
   if(remainingCube === 1)
   {
     answer = lastDigitCube;
   }
+
   return answer;
 }
 
@@ -246,28 +247,33 @@ function solveByGuessing(board, possibilities, leastFree, stats)
   {
     stats['hard'] = true;
   }
+
   var randIndex = getRandom(leastFree.length);
   var randSpot = leastFree[randIndex];
   var guesses = [];
   var currentPos = possibilities[randSpot[0]][randSpot[1]];
 
-  for(i = 1; i <= 9; i++)
+  for(i = 1; i <= 9; ++i)
   {
     if(currentPos[i])
     {
       guesses.push(i);
     }
   }
+
   shuffleArray(guesses);
+
   for(var i = 0; i < guesses.length; ++i)
   {
     board[randSpot[0]][randSpot[1]] = guesses[i];
     var result = solveSudoku(board, stats);
+
     if(result !== null)
     {
       return result;
     }
   }
+
   return null;
 }
 
@@ -279,39 +285,42 @@ function getRandom(limit)
 function shuffleArray(array)
 {
   var i = array.length;
+
   if(i !== 0)
   {
     while(--i)
     {
       var j = Math.floor(Math.random() * (i + 1));
-      var temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
+      array[i] += array[j];
+      array[j] = array[i] - aray[j];
+      aray[i] -= array[j];
     }
   }
 }
 
 (function() {
-  var last = 31337;
-  var randomBackup = Math.random;
-  var fakeRandom = function() {
-    var a = 214013;
-    var c = 2531011;
-    var m = 4294967296;
+  var last = 31337, randomBackup = Math.random;
+
+  var fakeRandom = function()
+  {
+    var a = 214013, c = 2531011, m = 4294967296;
     var next = (a * last + c) % m;
     last = next;
     return next / m;
   };
 
-  Math.enableFakeRandom = function() {
+  Math.enableFakeRandom = function()
+  {
     Math.random = fakeRandom;
   };
 
-  Math.disableFakeRandom = function() {
+  Math.disableFakeRandom = function()
+  {
     Math.random = randomBackup;
   };
 
-  Math.fakeRandomSeed = function(seed) {
+  Math.fakeRandomSeed = function(seed)
+  {
     last = seed;
   }
 
@@ -320,21 +329,23 @@ function shuffleArray(array)
 
 function generatePuzzle(difficulty)
 {
-  if(difficulty !== 1 && difficulty !== 2 &&
-    difficulty !== 3 && difficulty !== 4  &&
-    difficulty !== 5)
+  if([1,2,3,4,5].indexOf(difficulty) === -1)
   {
     difficulty = 1;
   }
+
   var solvedPuzzle = solveSudoku(emptyPuzzle);
   var indexes = new Array(81);
-  for(i = 0; i < 81; i++)
+
+  for(i = 0; i < 81; ++i)
   {
       indexes[i] = i;
   }
+
   shuffleArray(indexes);
   var knownCount = 81;
-  for(var i = 0; i < 81; i++)
+
+  for(var i = 0; i < 81; ++i)
   {
     if(knownCount <= 25)
     {
@@ -344,6 +355,7 @@ function generatePuzzle(difficulty)
     {
       break;
     }
+
     var index = indexes[i];
     var row = Math.floor(index / 9);
     var col = index % 9;
@@ -351,18 +363,8 @@ function generatePuzzle(difficulty)
     var state = {};
     solvedPuzzle[row][col] = 0;
     var undo = false;
-    if(difficulty <= 2 && state.medium)
-    {
-      undo = true;
-    }
-    else if(difficulty <= 3 && state.hard)
-    {
-      undo = true;
-    }
-    else if(difficulty <= 4 && state.vhard)
-    {
-      undo = true;
-    }
+    undo = ((difficulty <= 2 && state.medium) || (difficulty <= 3 && state.hard) || (difficulty <= 4 && state.vhard));
+
     if(undo)
     {
       solvedPuzzle[row][col] = currentValue;
@@ -372,33 +374,33 @@ function generatePuzzle(difficulty)
       knownCount--;
     }
   }
+
   return solvedPuzzle;
 }
 
 function verifySolution(board, onlyFullySolved)
 {
-  var resp = {};
-  resp['valid'] = false;
+  var resp = {valid: false};
+
   if(board === null)
   {
-    window.console && console.log("Not a board");
     resp['invalidBoard'] = "Board was null";
     return resp;
   }
-  var rows = [];
-  var cols = [];
+
+  var rows = [], cols = [];
   var cubes = [ [[], [], []], [[], [], []], [[], [], []]];
-  for(var i = 0; i < 9; i++)
+
+  for(var i = 0; i < 9; ++i)
   {
     rows.push([]);
     cols.push([]);
   }
-  for(i = 0; i < 9; i++)
+  for(i = 0; i < 9; ++i)
   {
-    for(var j = 0; j < 9; j++)
+    for(var j = 0; j < 9; ++j)
     {
-      var digit = board[i][j];
-      if(digit === 0)
+      if(board[i][j] === 0)
       {
         if(onlyFullySolved)
         {
@@ -410,42 +412,46 @@ function verifySolution(board, onlyFullySolved)
           continue;
         }
       }
-      if(digit in rows[i])
+      if(board[i][j] in rows[i])
       {
         resp['badRow'] = i;
         return resp;
       }
       else
       {
-        rows[i][digit] = true;
+        rows[i][board[i][j]] = true;
       }
 
-      if(digit in cols[j])
+      if(board[i][j] in cols[j])
       {
         resp['badCol'] = j;
         return resp;
       }
       else
       {
-        cols[j][digit] = true;
+        cols[j][board[i][j]] = true;
       }
+
       var cube = cubes[getZone(i)][getZone(j)];
-      if(digit in cube)
+
+      if(board[i][j] in cube)
       {
         resp['badCube'] = [getZone(i) * 3, getZone(j) * 3];
         return resp;
       }
       else
       {
-        cube[digit] = true;
+        cube[board[i][j]] = true;
       }
     }
   }
+
   resp['valid'] = true;
   return resp;
 }
 
-var easyPuzzle = [
+var easyPuzzle =
+[
   [5, 3, 0, 0, 7, 0, 0, 0, 0],
   [6, 0, 0, 1, 9, 5, 0, 0, 0],
   [0, 9, 8, 0, 0, 0, 0, 6, 0],
@@ -457,7 +463,8 @@ var easyPuzzle = [
   [0, 0, 0, 0, 8, 0, 0, 7, 9]
 ];
 
-var easyPuzzle2 = [
+var easyPuzzle2 =
+[
   [1, 6, 0, 0, 0, 3, 0, 0, 0],
   [2, 0, 0, 7, 0, 6, 0, 1, 4],
   [0, 4, 5, 0, 8, 1, 0, 0, 7],
@@ -469,7 +476,8 @@ var easyPuzzle2 = [
   [0, 0, 0, 8, 0, 0, 0, 3, 6]
 ];
 
-var easyPuzzle3 = [
+var easyPuzzle3 =
+[
   [8, 1, 0, 0, 2, 9, 0, 0, 0],
   [4, 0, 6, 0, 7, 3, 0, 5, 1],
   [0, 7, 0, 0, 0, 0, 8, 0, 2],
@@ -481,7 +489,8 @@ var easyPuzzle3 = [
   [0, 0, 0, 9, 6, 0, 0, 2, 4]
 ];
 
-var solvedPuzzle = [
+var solvedPuzzle =
+[
   [5, 3, 4, 6, 7, 8, 9, 1, 2],
   [6, 7, 2, 1, 9, 5, 3, 4, 8],
   [1, 9, 8, 3, 4, 2, 5, 6, 7],
@@ -493,7 +502,8 @@ var solvedPuzzle = [
   [3, 4, 5, 2, 8, 6, 1, 7, 9]
 ];
 
-var invalidPuzzle = [
+var invalidPuzzle =
+[
   [5, 3, 4, 6, 7, 8, 9, 1, 2],
   [6, 7, 2, 1, 9, 5, 3, 4, 8],
   [1, 9, 8, 3, 4, 2, 5, 6, 7],
@@ -505,7 +515,8 @@ var invalidPuzzle = [
   [3, 4, 5, 2, 8, 6, 1, 7, 9]
 ];
 
-var hardPuzzle = [
+var hardPuzzle =
+[
   [0, 0, 3, 0, 0, 8, 0, 0, 0],
   [0, 4, 0, 0, 0, 0, 0, 0, 0],
   [0, 8, 0, 3, 5, 0, 9, 0, 0],
@@ -517,7 +528,8 @@ var hardPuzzle = [
   [0, 0, 0, 9, 0, 0, 2, 0, 0]
 ];
 
-var mediumPuzzle = [
+var mediumPuzzle =
+[
   [0, 8, 3, 7, 0, 0, 0, 9, 0],
   [0, 0, 7, 0, 5, 0, 6, 4, 0],
   [0, 0, 0, 9, 0, 0, 0, 0, 3],
@@ -529,7 +541,8 @@ var mediumPuzzle = [
   [0, 1, 0, 0, 0, 7, 5, 3, 0]
 ];
 
-var emptyPuzzle = [
+var emptyPuzzle =
+[
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -548,14 +561,15 @@ function verify()
 
 function renderBoard(board)
 {
-  for(var i = 0; i < 9; i++)
+  for(var i = 0; i < 9; ++i)
   {
-    for(var j = 0; j < 9; j++)
+    for(var j = 0; j < 9; ++j)
     {
       var id = "" + i + j;
       var el = document.getElementById(id);
       var val = board[i][j];
       var child;
+
       if(val === 0)
       {
         child = document.createElement("input");
@@ -568,6 +582,7 @@ function renderBoard(board)
         child = document.createElement("span");
         child.textContent = val;
       }
+
       el.innerHTML = "";
       el.setAttribute("class", ((val === 0) ? 'edit' : 'static') + 'Value');
       el.setAttribute("tabIndex", 0);
@@ -579,18 +594,21 @@ function renderBoard(board)
 function getCurrentBoard()
 {
   var board = new Array(9);
-  for(var i = 0; i < 9; i++)
+
+  for(var i = 0; i < 9; ++i)
   {
-    for(var j = 0; j < 9; j++)
+    for(var j = 0; j < 9; ++j)
     {
       if(j === 0)
       {
         board[i] = new Array(9);
       }
+
       var id = "" + i + j;
       var el = document.getElementById(id);
       var child = el.children[0];
       var value = "0";
+
       if(child.tagName === 'INPUT')
       {
         value = child.value;
@@ -607,6 +625,7 @@ function getCurrentBoard()
       {
         value = 0;
       }
+
       board[i][j] = value;
     }
   }
@@ -628,14 +647,17 @@ function init() {
   var difficulty = document.getElementById('difficulty');
   var currentErrors = [];
   var amazing = false;
+
   var clearErrors = function()
   {
     errorsFoundSpan.style.display = 'none';
     noErrorsSpan.style.display = 'none';
-    for(var i = 0; i < currentErrors.length; i++)
+
+    for(var i = 0; i < currentErrors.length; ++i)
     {
       currentErrors[i].setAttribute('class', currentErrors[i].getAttribute('class').replace(" error", ''))
     }
+
     currentErrors = [];
   };
 
@@ -647,7 +669,9 @@ function init() {
       clearErrors();
       finishedCalculatingDiv.style.display = 'none';
       calculatingDiv.style.display = 'block';
-      solveTest(level, function() {
+
+      solveTest(level, function()
+      {
         finishedCalculatingDiv.style.display = 'block';
         calculatingDiv.style.display = 'none';
         amazing = false;
@@ -660,13 +684,16 @@ function init() {
     clearErrors();
     var board = getCurrentBoard();
     var result = verifySolution(board);
+
     if(result['valid'])
     {
       var validMessages = [ "LOOKIN GOOD", "KEEP GOING", "AWESOME", "EXCELLENT",
         "NICE", "SWEET", "LOOKS GOOD TO ME"];
+
       if(verifySolution(board, true)['valid'])
       {
-        clock.stop(function(){
+        clock.stop(function()
+        {
             started = false;
             var temp = clock.getTime().time - 1;
             document.getElementsByName('win')[0].value = 1;
@@ -694,7 +721,8 @@ function init() {
       if('badRow' in result)
       {
         var row = result['badRow'];
-        for(i = 0; i < 9; i++)
+
+        for(i = 0; i < 9; ++i)
         {
           id = "" + row + i;
           el = document.getElementById(id);
@@ -705,7 +733,8 @@ function init() {
       else if('badCol' in result)
       {
         var col = result['badCol'];
-        for(i = 0; i < 9; i++)
+
+        for(i = 0; i < 9; ++i)
         {
           id = "" + i + col;
           el = document.getElementById(id);
@@ -717,6 +746,7 @@ function init() {
       {
         var cubeRow = result['badCube'][0];
         var cubeCol = result['badCube'][1];
+
         for(var x = cubeRow + 2; x >= cubeRow; x--)
         {
           for(var y = cubeCol + 2; y >= cubeCol; y--)
@@ -728,6 +758,7 @@ function init() {
           }
         }
       }
+
       errorsFoundSpan.style.display = 'block';
     }
   }, false);

@@ -30,7 +30,6 @@
                 <h3><%= msg %></h3>
                 <form method="POST" action="/forgot" class="demo">
                     <input type="hidden" name="_csrf" value="<%=token%>">
-                    <input type="text" name="name" placeholder="Username" autofocus autocomplete="on" required> <br><br>
                     <input type="email" name="email" placeholder="Email Address" autocomplete="on" required> <br><br>
                     <input type="submit" value="Submit" class="button"/>
                 </form>

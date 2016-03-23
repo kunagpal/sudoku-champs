@@ -158,7 +158,7 @@ router.get('/leaderboard', function(req, res){
         if(err)
         {
             console.error(err.message);
-            return res.redirect('/game');
+            return res.redirect('/home');
         }
 
         for(j = 0; j < docs.length; ++j)
@@ -199,7 +199,7 @@ router.post('/forgot', function(req, res) {
             " reset your password.<br>We would love to have you back as a user.<br> In the event that this password reset was not requested by you, please ignore this" +
             " message and your password shall remain intact.<br>Regards,<br>The Sudoku Champs team.");
 
-        db.updateOne({email : req.body.email, _id : req.body.name, strategy : 'local'}, {$set:{token : token, expire : Date.now() + 3600000}}, function(err, doc){
+        db.updateOne({_id : req.body.email, strategy : 'local'}, {$set:{token : token, expire : Date.now() + 3600000}}, function(err, doc){
             if(err)
             {
                 console.error(err.message);

@@ -36,8 +36,6 @@ var opt =
         opt.$inc.loss = parseInt(req.body.loss, 10);
         opt.$inc.time = parseInt(req.body.time, 10);
         opt.$set.prevTime = parseInt(req.body.time, 10);
-        opt.$set.best = Math.min(req.signedCookies.best, parseInt(req.body.time, 10));
-        opt.$set.worst = Math.max(req.signedCookies.worst, parseInt(req.body.time, 10));
 
         db.updateOne({_id : req.signedCookies.user}, opt, function(err){
             if(err)
