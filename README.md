@@ -35,4 +35,4 @@
 > TODO
 - [ ] UI Overhaul
 - [ ] Semantic functionality completeness
-- [ ] Render speed up
+- [X] Render speed up

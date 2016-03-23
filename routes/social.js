@@ -17,9 +17,9 @@
 
 var ref =
     {
-        'GO': 'google',
-        'TW': 'twitter',
-        'FB': 'facebook'
+        '/GO': 'google',
+        '/TW': 'twitter',
+        '/FB': 'facebook'
     },
     path = require('path'),
     passport = require('passport'),
@@ -30,7 +30,7 @@ var ref =
     }),
     cook = function(req, res, next)
     {
-        passport.authenticate(ref[req.originalUrl.slice(1, 3)], function(err, user)
+        passport.authenticate(ref[req.url], function(err, user)
         {
             if (err)
             {
@@ -51,7 +51,7 @@ var ref =
                     console.error(err.message);
                 }
 
-                return res.redirect('/play');
+                return res.redirect('/home');
             });
         })(req, res, next);
     },

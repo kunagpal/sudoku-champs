@@ -93,7 +93,7 @@ app.enable('trust proxy');
 
 // catch 404 and redirect to index
 app.use(function(req, res){
-    res.redirect('/');
+    res.redirect('/' + req.signedCookies.user ? 'home' : '');
 });
 
 if(process.env.NODE_ENV)

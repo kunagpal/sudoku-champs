@@ -4,8 +4,8 @@
         <meta charset="utf-8"/>
         <title>Stats | Sudoku Champs</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/picnicss/5.1.0/plugins.min.css">
         <link rel="icon" type="image/png" href="http://res.cloudinary.com/kunagpal/main.jpg">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/picnicss/5.1.0/plugins.min.css">
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -15,7 +15,6 @@
         </script>
     </head>
     <body>
-        <%if (stats) { %>
         <h1>Number crunching</h1>
         <table id="stats">
             <tr>
@@ -24,63 +23,62 @@
                 <th>ANALYZE</th>
                 <th>REPEAT</th>
             </tr>
-            <% with (stats) { %>
-                <tr>
-                    <td rowspan="5">
-                        PLAYED
-                        <p class="val"><%= played %></p>
-                    </td>
-                    <td rowspan="4">
-                        BEST
-                        <p class="val"><%= best %></p>
-                    </td>
-                        <td rowspan="4" colspan="2">
-                        AVERAGE
-                        <p class="val"><%= avg %></p>
-                    </td>
-                </tr>
-                <tr></tr>
-                <tr></tr>
-                <tr></tr>
-                <tr>
+            <tr>
+                <td rowspan="5">
+                    PLAYED
+                    <p></p>
+                </td>
+                <td rowspan="4">
+                    BEST
+                    <p></p>
+                </td>
                     <td rowspan="4" colspan="2">
-                        FAVOURITE GAME MODE
-                        <p class="val"><%= fav %></p>
-                    </td>
-                    <td rowspan="4">
-                        WORST
-                        <p class="val"><%= worst %></p>
-                    </td>
-                </tr>
-                <tr>
-                    <td rowspan="5">
-                        WINS
-                        <p class="val"><%= win %></p>
-                    </td>
-                </tr>
-                <tr></tr>
-                <tr></tr>
-                <tr>
-                    <td rowspan="7" colspan="3">
-                        AWESOME GRAPH!
-                        <p class="val"></p>
-                    </td>
-                </tr>
-                <tr></tr>
-                <tr>
-                    <td rowspan="5">
-                        LOSSES
-                        <p class="val"><%= loss %></p>
-                    </td>
-                </tr>
-            <% } %>
+                    AVERAGE
+                    <p></p>
+                </td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td rowspan="4" colspan="2">
+                    FAVOURITE GAME MODE
+                    <p></p>
+                </td>
+                <td rowspan="4">
+                    WORST
+                    <p></p>
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="5">
+                    WINS
+                    <p></p>
+                </td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td rowspan="7" colspan="3">
+                    AWESOME GRAPH!
+                    <p></p>
+                </td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td rowspan="5">
+                    LOSSES
+                    <p></p>
+                </td>
+            </tr>
         </table>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br>
         <h2>Hover over a section for details</h2>
-        <%} else { %>
-            <h1>Whoa. Looks like there are no statistics to your name.</h1>
-            <h2>Well, what are you waiting for? Get out there and rack 'em up!</h2>
-        <% } %>
+        <h1>Let the games begin !</h1>
+        <h2>May the numbers be with you, in more ways than one. <br /> But first, select a game mode...</h2>
+        <a href="/practice">PRACTICE</a>
+        <a href="/challenge">CHALLENGE</a>
+        <a href="/solo">SOLO</a>
+        <a href="/h2h">HEAD TO HEAD</a>
     </body>
     <script>
         var req = new XMLHttpRequest();

@@ -18,17 +18,8 @@
 var i,
     lead,
     flag,
-    temp,
     token,
     bcrypt,
-    ref =
-    [
-        '/h2h',
-        '/solo',
-        '/practice',
-        '/challenge',
-        '/stats'
-    ],
     message,
     path = require('path'),
     crypto = require('crypto'),
@@ -89,17 +80,8 @@ router.post('/login', function(req, res){
                 return res.redirect('/');
             }
 
-            temp = req.session.route;
-            delete req.session.route;
             res.cookie(doc.strategy === 'local' ? 'user' : 'admin', req.body.email, {maxAge: 86400000, signed: true});
-
-            if(doc.strategy === 'local')
-            {
-                res.cookie('best', doc.best, {maxAge: 86400000, signed: true});
-                res.cookie('worst', doc.worst, {maxAge: 86400000, signed: true});
-            }
-
-            res.redirect(ref[temp] || '/play');
+            res.redirect('/home');
         });
     });
 });
@@ -150,7 +132,7 @@ router.post('/register', function(req, res) {
                             console.error(err.message);
                         }
 
-                        res.redirect('/play');
+                        res.redirect('/home');
                     });
                 });
             });
@@ -171,7 +153,7 @@ router.get('/leader', function(req, res){
 router.get('/leaderboard', function(req, res){
     i = 0;
     lead = [];
-    flag = !req.signedCookies.name;
+    flag = !req.signedCookies.user;
     db.find({}, op, frame).toArray(function(err, docs){
         if(err)
         {
@@ -181,7 +163,7 @@ router.get('/leaderboard', function(req, res){
 
         for(j = 0; j < docs.length; ++j)
         {
-            if(docs[j]._id === req.signedCookies.name)
+            if(docs[j]._id === req.signedCookies.user)
             {
                 flag = true;
                 docs[j].rank = parseInt(j, 10) + 1;
@@ -327,12 +309,10 @@ router.post('/reset/:token', function(req, res){
 router.get('/admin', function(req, res){
     if(req.signedCookies.admin || !process.env.NODE_ENV)
     {
-        res.render('admin');
+        return res.render('admin');
     }
-    else
-    {
-        res.redirect('/');
-    }
+
+    res.redirect('/');
 });
 
 module.exports = router;
