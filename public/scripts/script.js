@@ -116,7 +116,7 @@ addEventListener('DOMContentLoaded', function() {
                 console.log('Playing as a guest.');
             }
             document.getElementById('Wrapper').style.visibility = 'visible';
-            clock = $('.clock').FlipClock({clockFace: 'MinuteCounter'});
+            // start counter
             document.getElementById('start').innerText = 'QUIT';
             document.getElementById('start').addEventListener('click', function(){
                 window.location = '/';

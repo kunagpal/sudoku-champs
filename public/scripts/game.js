@@ -12,16 +12,13 @@ function solveSudoku(inputBoard, stats) {
     }
   }
 
-  var solved = false;
-  var impossible = false;
-  var mutated = false;
-  var needCheckFreedoms = false;
-  var loopCount = 0;
+  var solved = false, impossible = false, mutated = false;
+  var needCheckFreedoms = false, loopCount = 0;
 
   outerLoop: while(!solved && !impossible) {
     solved = true;
     mutated = false;
-    loopCount++;
+    ++loopCount;
     var leastFree = [];
     var leastRemaining = 9;
 
@@ -48,13 +45,7 @@ function solveSudoku(inputBoard, stats) {
             zoneCol = currentPos[11];
           }
 
-          var wasMutated =  reducePossibilities(board, i, j, currentPos, zoneRow, zoneCol);
-
-          if(wasMutated)
-          {
-            mutated = true;
-          }
-
+          mutated =  reducePossibilities(board, i, j, currentPos, zoneRow, zoneCol);
           var remaining = 0, lastDigit = 0;
 
           for(var k = 1; k <= 9; ++k)
@@ -161,11 +152,8 @@ function reducePossibilities(board, row, column, currentPos, zoneRow, zoneCol)
 
 function checkFreedoms(board, i, j, possibilities, zoneRow, zoneCol)
 {
-  var answer = 0;
-  var currentPos = possibilities[i][j];
-  var uniquePosRow = currentPos.slice(0);
-  var uniquePosCol = currentPos.slice(0);
-  var uniquePosCube = currentPos.slice(0);
+  var answer = 0, currentPos = possibilities[i][j], uniquePosRow = currentPos.slice(0);
+  var uniquePosCol = currentPos.slice(0), uniquePosCube = currentPos.slice(0);
 
   for(k = 0; k < 9; ++k)
   {
@@ -248,10 +236,8 @@ function solveByGuessing(board, possibilities, leastFree, stats)
     stats['hard'] = true;
   }
 
-  var randIndex = getRandom(leastFree.length);
-  var randSpot = leastFree[randIndex];
-  var guesses = [];
-  var currentPos = possibilities[randSpot[0]][randSpot[1]];
+  var randIndex = getRandom(leastFree.length), randSpot = leastFree[randIndex];
+  var guesses = [], currentPos = possibilities[randSpot[0]][randSpot[1]];
 
   for(i = 1; i <= 9; ++i)
   {
@@ -334,8 +320,7 @@ function generatePuzzle(difficulty)
     difficulty = 1;
   }
 
-  var solvedPuzzle = solveSudoku(emptyPuzzle);
-  var indexes = new Array(81);
+  var solvedPuzzle = solveSudoku(emptyPuzzle), indexes = new Array(81);
 
   for(i = 0; i < 81; ++i)
   {
@@ -347,11 +332,7 @@ function generatePuzzle(difficulty)
 
   for(var i = 0; i < 81; ++i)
   {
-    if(knownCount <= 25)
-    {
-      break;
-    }
-    if(difficulty === 1 && knownCount <= 35)
+    if((knownCount <= 25) || (difficulty === 1 && knownCount <= 35))
     {
       break;
     }
@@ -360,9 +341,9 @@ function generatePuzzle(difficulty)
     var row = Math.floor(index / 9);
     var col = index % 9;
     var currentValue = solvedPuzzle[row][col];
-    var state = {};
+    var state = {}, undo = false;
     solvedPuzzle[row][col] = 0;
-    var undo = false;
+
     undo = ((difficulty <= 2 && state.medium) || (difficulty <= 3 && state.hard) || (difficulty <= 4 && state.vhard));
 
     if(undo)
@@ -565,26 +546,23 @@ function renderBoard(board)
   {
     for(var j = 0; j < 9; ++j)
     {
-      var id = "" + i + j;
-      var el = document.getElementById(id);
-      var val = board[i][j];
-      var child;
+      var el = document.getElementById("" + i + j), child;
 
-      if(val === 0)
+      if(board[i][j] === 0)
       {
         child = document.createElement("input");
         child.setAttribute('maxlength', 1);
-        child.setAttribute('id', 'c' + i.toString() + j.toString());
+        child.setAttribute('id', 'c' + i + j);
         child.addEventListener('input', verify, false);
       }
       else
       {
         child = document.createElement("span");
-        child.textContent = val;
+        child.textContent = board[i][j];
       }
 
       el.innerHTML = "";
-      el.setAttribute("class", ((val === 0) ? 'edit' : 'static') + 'Value');
+      el.setAttribute("class", ((board[i][j] === 0) ? 'edit' : 'static') + 'Value');
       el.setAttribute("tabIndex", 0);
       el.appendChild(child);
     }
@@ -604,10 +582,8 @@ function getCurrentBoard()
         board[i] = new Array(9);
       }
 
-      var id = "" + i + j;
-      var el = document.getElementById(id);
-      var child = el.children[0];
-      var value = "0";
+      var el = document.getElementById("" + i + j);
+      var child = el.children[0], value = "0";
 
       if(child.tagName === 'INPUT')
       {
@@ -629,6 +605,7 @@ function getCurrentBoard()
       board[i][j] = value;
     }
   }
+
   return board;
 }
 
@@ -645,8 +622,7 @@ function init() {
   var noErrorsSpan = document.getElementById('noErrors');
   var errorsFoundSpan = document.getElementById('errorsFound');
   var difficulty = document.getElementById('difficulty');
-  var currentErrors = [];
-  var amazing = false;
+  var currentErrors = [], amazing = false;
 
   var clearErrors = function()
   {
@@ -682,8 +658,7 @@ function init() {
 
   document.getElementById('checkButton').addEventListener('click', function() {
     clearErrors();
-    var board = getCurrentBoard();
-    var result = verifySolution(board);
+    var board = getCurrentBoard(), result = verifySolution(board);
 
     if(result['valid'])
     {
@@ -720,39 +695,31 @@ function init() {
     {
       if('badRow' in result)
       {
-        var row = result['badRow'];
-
         for(i = 0; i < 9; ++i)
         {
-          id = "" + row + i;
-          el = document.getElementById(id);
+          el = document.getElementById("" + result['badRow'] + i);
           el.setAttribute("class", el.getAttribute('class') + " error");
           currentErrors.push(el);
         }
       }
       else if('badCol' in result)
       {
-        var col = result['badCol'];
-
         for(i = 0; i < 9; ++i)
         {
-          id = "" + i + col;
-          el = document.getElementById(id);
+          el = document.getElementById("" + i + result['badCol']);
           el.setAttribute("class", el.getAttribute('class') + " error");
           currentErrors.push(el);
         }
       }
       else if('badCube' in result)
       {
-        var cubeRow = result['badCube'][0];
-        var cubeCol = result['badCube'][1];
+        var cubeRow = result['badCube'][0], cubeCol = result['badCube'][1];
 
-        for(var x = cubeRow + 2; x >= cubeRow; x--)
+        for(var x = cubeRow + 2; x >= cubeRow; --x)
         {
-          for(var y = cubeCol + 2; y >= cubeCol; y--)
+          for(var y = cubeCol + 2; y >= cubeCol; --y)
           {
-            var id = "" + x + y;
-            var el = document.getElementById(id);
+            var el = document.getElementById("" + x + y);
             el.setAttribute("class", el.getAttribute('class') + " error");
             currentErrors.push(el);
           }
@@ -778,7 +745,8 @@ function init() {
     }
   }, false);
    addEventListener('mouseup', function(event) {
-    if(event.which === 1) {
+    if(event.which === 1)
+    {
       noErrorsSpan.style.display = 'none';
     }
   }, false);
