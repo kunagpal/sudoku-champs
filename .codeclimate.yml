@@ -18,6 +18,7 @@ ratings:
   - "**.css"
   - "**.js"
   - "**.md"
+  - "bin/**/*"
 exclude_paths:
 - public/scripts/min/**/*
 - public/styles/min/**/*
