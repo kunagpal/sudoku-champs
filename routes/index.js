@@ -282,7 +282,6 @@ router.post('/reset/:token', function(req, res){
                 }
 
                 message.header.to = doc.value.email;
-                console.log(doc.value.email);
                 message.header.subject = 'Password change successful!';
                 message.attach_alternative("Hey there," + doc.value._id + ".<br>We're just writing in to let you "
                     + "know that the recent password change for your account with Sudoku Champs was successful." +

@@ -12,11 +12,12 @@ engines:
   fixme:
     enabled: true
   markdownlint:
-         enabled: true
+    enabled: true
 ratings:
   paths:
   - "**.css"
   - "**.js"
+  - "**.md"
 exclude_paths:
 - public/scripts/min/**/*
 - public/styles/min/**/*
