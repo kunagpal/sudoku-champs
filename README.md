@@ -8,9 +8,10 @@
 
 # sudoku-champs
 
-## The source code repository for the sudoku-champs initiative.
+## The source code repository for the sudoku-champs initiative
 
 ### The website is hosted [here](https://www.sudokuchamps.herokuapp.com)
+
 ### Please report any bugs / issues [here](https://www.github.com/kunagpal/sudoku-champs)
 
 #### Instructions
@@ -20,6 +21,7 @@
 * In the project's root directory, and install all dependencies with 'npm i'
 * Install security dependency manually using 'npm i bcryptjs' (Microsoft Windows only)
 * Create a .env file with the following contents:
+
 ```
 PASSWORD=value
 FB_ID=value
@@ -39,6 +41,6 @@ SENTRY=value
 
 > Tasks
 
-- [ ] UI Overhaul
-- [ ] Semantic functionality completeness
-- [X] Render speed up
+* [ ] UI Overhaul
+* [ ] Semantic functionality completeness
+* [X] Render speed up

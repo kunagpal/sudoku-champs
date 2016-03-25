@@ -96,8 +96,7 @@ function solveSudoku(inputBoard, stats) {
     {
       if(needCheckFreedoms === false)
       {
-        needCheckFreedoms = true;
-        stats['medium'] = true;
+        needCheckFreedoms = stats['medium'] = true;
         continue;
       }
 
@@ -315,10 +314,7 @@ function shuffleArray(array)
 
 function generatePuzzle(difficulty)
 {
-  if([1,2,3,4,5].indexOf(difficulty) === -1)
-  {
-    difficulty = 1;
-  }
+  difficulty = [1, 2, 3, 4, 5].indexOf(difficulty) + 1 || 1;
 
   var solvedPuzzle = solveSudoku(emptyPuzzle), indexes = new Array(81);
 
@@ -383,35 +379,28 @@ function verifySolution(board, onlyFullySolved)
     {
       if(board[i][j] === 0)
       {
-        if(onlyFullySolved)
-        {
-          resp['notFullySolved'] = "Board still has unknowns";
-          return resp;
-        }
-        else
+        if(!onlyFullySolved)
         {
           continue;
         }
+
+        resp['notFullySolved'] = "Board still has unknowns";
+        return resp;
       }
       if(board[i][j] in rows[i])
       {
         resp['badRow'] = i;
         return resp;
       }
-      else
-      {
-        rows[i][board[i][j]] = true;
-      }
+      rows[i][board[i][j]] = true;
 
       if(board[i][j] in cols[j])
       {
         resp['badCol'] = j;
         return resp;
       }
-      else
-      {
-        cols[j][board[i][j]] = true;
-      }
+
+      cols[j][board[i][j]] = true;
 
       var cube = cubes[getZone(i)][getZone(j)];
 
@@ -420,55 +409,14 @@ function verifySolution(board, onlyFullySolved)
         resp['badCube'] = [getZone(i) * 3, getZone(j) * 3];
         return resp;
       }
-      else
-      {
-        cube[board[i][j]] = true;
-      }
+
+      cube[board[i][j]] = true;
     }
   }
 
   resp['valid'] = true;
   return resp;
 }
-
-var easyPuzzle =
-[
-  [5, 3, 0, 0, 7, 0, 0, 0, 0],
-  [6, 0, 0, 1, 9, 5, 0, 0, 0],
-  [0, 9, 8, 0, 0, 0, 0, 6, 0],
-  [8, 0, 0, 0, 6, 0, 0, 0, 3],
-  [4, 0, 0, 8, 0, 3, 0, 0, 1],
-  [7, 0, 0, 0, 2, 0, 0, 0, 6],
-  [0, 6, 0, 0, 0, 0, 2, 8, 0],
-  [0, 0, 0, 4, 1, 9, 0, 0, 5],
-  [0, 0, 0, 0, 8, 0, 0, 7, 9]
-];
-
-var easyPuzzle2 =
-[
-  [1, 6, 0, 0, 0, 3, 0, 0, 0],
-  [2, 0, 0, 7, 0, 6, 0, 1, 4],
-  [0, 4, 5, 0, 8, 1, 0, 0, 7],
-  [5, 0, 8, 4, 0, 0, 0, 0, 0],
-  [0, 0, 4, 3, 0, 8, 9, 0, 0],
-  [0, 0, 0, 0, 0, 7, 2, 0, 8],
-  [8, 0, 0, 6, 3, 0, 1, 9, 0],
-  [6, 3, 0, 1, 0, 5, 0, 0, 2],
-  [0, 0, 0, 8, 0, 0, 0, 3, 6]
-];
-
-var easyPuzzle3 =
-[
-  [8, 1, 0, 0, 2, 9, 0, 0, 0],
-  [4, 0, 6, 0, 7, 3, 0, 5, 1],
-  [0, 7, 0, 0, 0, 0, 8, 0, 2],
-  [0, 0, 4, 5, 0, 0, 0, 0, 6],
-  [7, 6, 0, 0, 0, 0, 0, 1, 3],
-  [1, 0, 0, 0, 0, 6, 2, 0, 0],
-  [2, 0, 7, 0, 0, 0, 0, 8, 0],
-  [6, 9, 0, 2, 8, 0, 3, 0, 5],
-  [0, 0, 0, 9, 6, 0, 0, 2, 4]
-];
 
 var solvedPuzzle =
 [
@@ -483,19 +431,6 @@ var solvedPuzzle =
   [3, 4, 5, 2, 8, 6, 1, 7, 9]
 ];
 
-var invalidPuzzle =
-[
-  [5, 3, 4, 6, 7, 8, 9, 1, 2],
-  [6, 7, 2, 1, 9, 5, 3, 4, 8],
-  [1, 9, 8, 3, 4, 2, 5, 6, 7],
-  [8, 5, 9, 7, 6, 1, 4, 2, 3],
-  [4, 2, 6, 8, 5, 3, 7, 9, 1],
-  [7, 1, 3, 9, 2, 4, 8, 5, 6],
-  [9, 6, 1, 5, 3, 7, 2, 8, 4],
-  [8, 2, 7, 4, 1, 9, 6, 3, 5],
-  [3, 4, 5, 2, 8, 6, 1, 7, 9]
-];
-
 var hardPuzzle =
 [
   [0, 0, 3, 0, 0, 8, 0, 0, 0],
@@ -507,19 +442,6 @@ var hardPuzzle =
   [0, 0, 8, 0, 1, 4, 0, 7, 0],
   [0, 0, 0, 0, 0, 0, 0, 5, 0],
   [0, 0, 0, 9, 0, 0, 2, 0, 0]
-];
-
-var mediumPuzzle =
-[
-  [0, 8, 3, 7, 0, 0, 0, 9, 0],
-  [0, 0, 7, 0, 5, 0, 6, 4, 0],
-  [0, 0, 0, 9, 0, 0, 0, 0, 3],
-  [0, 0, 0, 1, 0, 0, 0, 0, 7],
-  [0, 6, 9, 2, 0, 4, 3, 8, 0],
-  [7, 0, 0, 0, 0, 9, 0, 0, 0],
-  [9, 0, 0, 0, 0, 3, 0, 0, 0],
-  [0, 5, 6, 0, 2, 0, 4, 0, 0],
-  [0, 1, 0, 0, 0, 7, 5, 3, 0]
 ];
 
 var emptyPuzzle =
@@ -609,147 +531,140 @@ function getCurrentBoard()
   return board;
 }
 
-function init() {
-  var id, el, i, j, k, l;
-  var started;
-  document.getElementById('youWon').style.display = 'none';
-  var currentPuzzle = generatePuzzle();
-  renderBoard(currentPuzzle);
-  var amazeButton = document.getElementById('amazeButton');
-  var calculatingDiv = document.getElementById('calculating');
-  var finishedCalculatingDiv = document.getElementById('finishedCalculating');
-  var winBlock = document.getElementById('youWon');
-  var noErrorsSpan = document.getElementById('noErrors');
-  var errorsFoundSpan = document.getElementById('errorsFound');
-  var difficulty = document.getElementById('difficulty');
-  var currentErrors = [], amazing = false;
+var id, el, i, j, k, l;
+var started;
+document.getElementById('youWon').style.display = 'none';
+var currentPuzzle = generatePuzzle();
+renderBoard(currentPuzzle);
+var amazeButton = document.getElementById('amazeButton');
+var calculatingDiv = document.getElementById('calculating');
+var finishedCalculatingDiv = document.getElementById('finishedCalculating');
+var winBlock = document.getElementById('youWon');
+var noErrorsSpan = document.getElementById('noErrors');
+var errorsFoundSpan = document.getElementById('errorsFound');
+var difficulty = document.getElementById('difficulty');
+var currentErrors = [], amazing = false;
 
-  var clearErrors = function()
+var clearErrors = function()
+{
+  errorsFoundSpan.style.display = 'none';
+  noErrorsSpan.style.display = 'none';
+
+  for(var i = 0; i < currentErrors.length; ++i)
   {
-    errorsFoundSpan.style.display = 'none';
-    noErrorsSpan.style.display = 'none';
+    currentErrors[i].setAttribute('class', currentErrors[i].getAttribute('class').replace(" error", ''))
+  }
 
-    for(var i = 0; i < currentErrors.length; ++i)
+  currentErrors = [];
+};
+
+amazeButton.addEventListener('click', function() {
+  if(!amazing)
+  {
+    var level = parseInt(difficulty.options[difficulty.selectedIndex].value, 10);
+    amazing = true;
+    clearErrors();
+    finishedCalculatingDiv.style.display = 'none';
+    calculatingDiv.style.display = 'block';
+
+    solveTest(level, function()
     {
-      currentErrors[i].setAttribute('class', currentErrors[i].getAttribute('class').replace(" error", ''))
-    }
+      finishedCalculatingDiv.style.display = 'block';
+      calculatingDiv.style.display = 'none';
+      amazing = false;
+      currentPuzzle = hardPuzzle;
+    });
+  }
+}, false);
 
-    currentErrors = [];
-  };
+document.getElementById('checkButton').addEventListener('click', function() {
+  clearErrors();
+  var board = getCurrentBoard(), result = verifySolution(board);
 
-  amazeButton.addEventListener('click', function() {
-    if(!amazing)
+  if(result['valid'])
+  {
+    var validMessages = [ "LOOKIN GOOD", "KEEP GOING", "AWESOME", "EXCELLENT",
+      "NICE", "SWEET", "LOOKS GOOD TO ME"];
+
+    if(verifySolution(board, true)['valid'])
     {
-      var level = parseInt(difficulty.options[difficulty.selectedIndex].value, 10);
-      amazing = true;
-      clearErrors();
-      finishedCalculatingDiv.style.display = 'none';
-      calculatingDiv.style.display = 'block';
-
-      solveTest(level, function()
+      clock.stop(function()
       {
-        finishedCalculatingDiv.style.display = 'block';
-        calculatingDiv.style.display = 'none';
-        amazing = false;
-        currentPuzzle = hardPuzzle;
+          started = false;
+          var temp = clock.getTime().time - 1;
+          document.getElementsByName('win')[0].value = 1;
+          document.getElementsByName('time')[0].value = temp;
+          winBlock.innerHTML = 'Solved in ' + parseInt(temp / 60, 10) + ' minutes ' + (temp % 60) + ' seconds.' + winBlock.innerHTML;
+          winBlock.style.display = 'block';
+          document.getElementById('close').addEventListener('click', function() {
+              winBlock.style.display = 'none';
+          }, false);
+          document.getElementById('new').addEventListener('click', function() {
+              window.onbeforeunload = null;
+              document.getElementById('hidden').click();
+          }, false);
       });
     }
-  }, false);
-
-  document.getElementById('checkButton').addEventListener('click', function() {
-    clearErrors();
-    var board = getCurrentBoard(), result = verifySolution(board);
-
-    if(result['valid'])
-    {
-      var validMessages = [ "LOOKIN GOOD", "KEEP GOING", "AWESOME", "EXCELLENT",
-        "NICE", "SWEET", "LOOKS GOOD TO ME"];
-
-      if(verifySolution(board, true)['valid'])
-      {
-        clock.stop(function()
-        {
-            started = false;
-            var temp = clock.getTime().time - 1;
-            document.getElementsByName('win')[0].value = 1;
-            document.getElementsByName('time')[0].value = temp;
-            winBlock.innerHTML = 'Solved in ' + parseInt(temp / 60, 10) + ' minutes ' + (temp % 60) + ' seconds.' + winBlock.innerHTML;
-            winBlock.style.display = 'block';
-            document.getElementById('close').addEventListener('click', function() {
-                winBlock.style.display = 'none';
-            }, false);
-            document.getElementById('new').addEventListener('click', function() {
-                window.onbeforeunload = null;
-                document.getElementById('hidden').click();
-            }, false);
-        });
-      }
-      else
-      {
-        var randIndex = getRandom(validMessages.length);
-        noErrorsSpan.textContent = validMessages[randIndex];
-        noErrorsSpan.style.display = 'block';
-      }
-    }
     else
     {
-      if('badRow' in result)
+      noErrorsSpan.textContent = validMessages[getRandom(validMessages.length)];
+      noErrorsSpan.style.display = 'block';
+    }
+  }
+  else
+  {
+    if('badRow' in result)
+    {
+      for(i = 0; i < 9; ++i)
       {
-        for(i = 0; i < 9; ++i)
+        el = document.getElementById("" + result['badRow'] + i);
+        el.setAttribute("class", el.getAttribute('class') + " error");
+        currentErrors.push(el);
+      }
+    }
+    else if('badCol' in result)
+    {
+      for(i = 0; i < 9; ++i)
+      {
+        el = document.getElementById("" + i + result['badCol']);
+        el.setAttribute("class", el.getAttribute('class') + " error");
+        currentErrors.push(el);
+      }
+    }
+    else if('badCube' in result)
+    {
+      var cubeRow = result['badCube'][0], cubeCol = result['badCube'][1];
+
+      for(var x = cubeRow + 2; x >= cubeRow; --x)
+      {
+        for(var y = cubeCol + 2; y >= cubeCol; --y)
         {
-          el = document.getElementById("" + result['badRow'] + i);
+          var el = document.getElementById("" + x + y);
           el.setAttribute("class", el.getAttribute('class') + " error");
           currentErrors.push(el);
         }
       }
-      else if('badCol' in result)
-      {
-        for(i = 0; i < 9; ++i)
-        {
-          el = document.getElementById("" + i + result['badCol']);
-          el.setAttribute("class", el.getAttribute('class') + " error");
-          currentErrors.push(el);
-        }
-      }
-      else if('badCube' in result)
-      {
-        var cubeRow = result['badCube'][0], cubeCol = result['badCube'][1];
-
-        for(var x = cubeRow + 2; x >= cubeRow; --x)
-        {
-          for(var y = cubeCol + 2; y >= cubeCol; --y)
-          {
-            var el = document.getElementById("" + x + y);
-            el.setAttribute("class", el.getAttribute('class') + " error");
-            currentErrors.push(el);
-          }
-        }
-      }
-
-      errorsFoundSpan.style.display = 'block';
     }
-  }, false);
 
-  document.getElementById('newGameButton').addEventListener('click', function() {
-    if(!started)
-    {
-        clearErrors();
-        var value = parseInt(difficulty.options[difficulty.selectedIndex].value, 10);
-        currentPuzzle = generatePuzzle(value);
-        renderBoard(currentPuzzle);
-        started = true;
-    }
-    else
-    {
-        window.location = '/guest';
-    }
-  }, false);
-   addEventListener('mouseup', function(event) {
-    if(event.which === 1)
-    {
-      noErrorsSpan.style.display = 'none';
-    }
-  }, false);
-}
+    errorsFoundSpan.style.display = 'block';
+  }
+}, false);
 
-addEventListener('DOMContentLoaded', init, false);
+document.getElementById('newGameButton').addEventListener('click', function() {
+  if(started)
+  {
+    return window.location = '/';
+  }
+
+  clearErrors();
+  var value = parseInt(difficulty.options[difficulty.selectedIndex].value, 10);
+  currentPuzzle = generatePuzzle(value);
+  renderBoard(currentPuzzle);
+  started = true;
+}, false);
+ addEventListener('mouseup', function(event) {
+  if(event.which === 1)
+  {
+    noErrorsSpan.style.display = 'none';
+  }
+}, false);
