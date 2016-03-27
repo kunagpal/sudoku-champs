@@ -16,7 +16,7 @@
     </head>
     <body>
         <h1>Number crunching</h1>
-        <table id="stats">
+        <table>
             <tr>
                 <th>COMPUTE</th>
                 <th>CRUNCH</th>
@@ -85,7 +85,7 @@
         var dash = document.getElementsByTagName('table')[0];
         req.open('get', '/stats', true);
         req.addEventListener('load', function(){
-
+            console.log(req.response);
         }, false);
     </script>
 </html>

@@ -52,7 +52,7 @@ var opt =
     quote = require(path.join(__dirname, '..', 'database', 'quote')),
     check = function(req, res, next)
     {
-        if(req.signedCookies.user || req.signedCookies.admin || !process.env.NODE_ENV)
+        if(req.signedCookies.user)
         {
             return next();
         }

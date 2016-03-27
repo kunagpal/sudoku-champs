@@ -58,7 +58,6 @@ router.get('/', function(req, res){
 
 // POST login page
 router.post('/login', function(req, res){
-
     res.clearCookie('user', {});
 
     db.find({_id : req.body.email, $or: [{strategy: 'local'}, {strategy: 'admin'}]}, {}, {'limit' : 1}).next(function(err, doc){
@@ -90,50 +89,39 @@ router.post('/login', function(req, res){
 router.post('/register', function(req, res) {
     if(req.body.password === req.body.confirm)
     {
-        db.count(function(err, num){
+        user.dob = new Date();
+        user.strategy = 'local';
+        user._id = req.body.email;
+
+        bcrypt.hash(req.body.password, 10, function(err, hash){
             if(err)
             {
-                console.error(err.message);
-                req.flash('An unexpected error has occurred. Please retry.');
+                req.flash('An unexpected error occurred, please re-try.');
                 return res.redirect('/');
             }
 
-            user._id = req.body.name;
-            user.dob = new Date();
-            user.num = parseInt(num, 10) + 1;
-            user.email = req.body.email;
-            user.strategy = 'local';
+            user.hash = hash;
 
-            bcrypt.hash(req.body.password, 10, function(err, hash){
+            db.insertOne(user, {w : 1}, function(err){
                 if(err)
                 {
-                    req.flash('An unexpected error occurred, please re-try.');
+                    console.error(err.message);
+                    req.flash('That username is already taken, please choose a different one.');
                     return res.redirect('/');
                 }
 
-                user.hash = hash;
+                res.cookie('user', user._id.trim().toUpperCase(), {maxAge: 86400000, signed: true});
+                message.header.to = user._id;
+                message.header.subject = "Registration successful!";
 
-                db.insertOne(user, {w : 1}, function(err){
+                message.attach_alternative("Hey there " + user._id.split('@')[0] + ",<br>Welcome to Sudoku Champs!<br><br>Regards,<br>The Sudoku champs team");
+                email.send(message, function(err){
                     if(err)
                     {
                         console.error(err.message);
-                        req.flash('That username is already taken, please choose a different one.');
-                        return res.redirect('/');
                     }
 
-                    res.cookie('user', user._id, {maxAge: 86400000, signed: true});
-                    message.header.to = user.email;
-                    message.header.subject = "Registration successful!";
-
-                    message.attach_alternative("Hey there " + user._id + ",<br>Welcome to Sudoku Champs!<br><br>Regards,<br>The Sudoku champs team");
-                    email.send(message, function(err){
-                        if(err)
-                        {
-                            console.error(err.message);
-                        }
-
-                        res.redirect('/home');
-                    });
+                    res.redirect('/home');
                 });
             });
         });

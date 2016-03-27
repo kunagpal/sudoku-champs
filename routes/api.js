@@ -24,7 +24,7 @@ var api = function(req, res, next)
     {
         return res.redirect('/');
     }
-    if(req.signedCookies.user && (req.headers.referer.split('/')[2] === req.headers.host))
+    if(req.signedCookies.user || (req.headers.referer.split('/')[2] === req.headers.host))
     {
         return next();
     }

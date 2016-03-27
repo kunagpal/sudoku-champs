@@ -19,6 +19,12 @@ var key,
     user,
     path = require('path'),
     passport = require('passport'),
+    record = require(path.join(__dirname, 'user')),
+    email = require(path.join(__dirname, '..', 'database', 'email')),
+    message = email.wrap({
+        from: 'sudokuchampster@gmail.com',
+        subject: 'Registration successful!'
+    }),
     callback = function(token, refresh, profile, done)
     {
         process.nextTick(function() {
@@ -26,35 +32,55 @@ var key,
             user.token = token;
             user.dob = new Date();
             user.profile = profile.id;
-            user._id = profile.displayName;
             user.strategy = profile.provider;
-            user.email = profile.emails[0].value;
+            user._id = profile.emails[0].value;
 
-            db.findOneAndUpdate({_id: profile.displayName, strategy: profile.provider}, {$setOnInsert : user}, {upsert : true}, function(err, doc)
+            db.findOneAndUpdate({_id: profile.emails[0].value, strategy: profile.provider}, {$setOnInsert: user}, {upsert : true}, function(err, doc)
             {
-                return done(err, (doc || {}).value || user);
+                if(err)
+                {
+                    console.error(err.message);
+                    return done(err);
+                }
+                if(doc.value)
+                {
+                    return done(err, user);
+                }
+
+                message.header.to = user._id;
+                message.attach_alternative("Hey there " + user._id.split('@')[0] + ",<br>Welcome to Sudoku Champs!<br><br>Regards,<br>The Sudoku champs team");
+                email.send(message, function(err){
+                    if(err)
+                    {
+                        console.error(err.message);
+                    }
+
+                    return done(null, user);
+                });
             });
         });
     },
     ref =
     {
-        undefined : "http://localhost:3000/",
-        "production" : "http://sudokuchamps.herokuapp.com/"
+        undefined: "http://localhost:3000/",
+        production: "http://sudokuchamps.herokuapp.com/"
     },
-    record = require(path.join(__dirname, 'user')),
     facebook = require('passport-facebook').Strategy,
     google = require('passport-google-oauth').OAuth2Strategy,
-    strategies = {
-        'FB': facebook,
-        'GO': google
+    strategies =
+    {
+        GO: google,
+        FB: facebook
     };
 
 for(key in strategies)
 {
     passport.use(new strategies[key]({
+            enableProof: true,
             clientID: process.env[`${key}_ID`],
             clientSecret: process.env[`${key}_KEY`],
-            callbackURL: ref[process.env.NODE_ENV] + key
+            callbackURL: ref[process.env.NODE_ENV] + key,
+            profileFields: ['id', 'email', 'displayName']
         }, callback
     ));
 }

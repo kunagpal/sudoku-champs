@@ -308,7 +308,6 @@ function shuffleArray(array)
   {
     last = seed;
   }
-
 })();
 
 

@@ -23,14 +23,9 @@ var ref =
     },
     path = require('path'),
     passport = require('passport'),
-    email = require(path.join(__dirname, '..', 'database', 'email')),
-    message = email.wrap({
-        from: 'sudokuchampster@gmail.com',
-        subject: 'Registration successful!'
-    }),
     cook = function(req, res, next)
     {
-        passport.authenticate(ref[req.url], function(err, user)
+        passport.authenticate(ref[req.url.slice(0,3)], function(err, user)
         {
             if (err)
             {
@@ -42,17 +37,8 @@ var ref =
                 return res.redirect('/login');
             }
 
-            res.cookie('user', user._id, {maxAge: 86400000, signed: true});
-            message.header.to = user.email;
-            message.attach_alternative("Hey there " + user._id + ",<br>Welcome to Sudoku Champs!<br><br>Regards,<br>The Sudoku champs team");
-            email.send(message, function(err){
-                if(err)
-                {
-                    console.error(err.message);
-                }
-
-                return res.redirect('/home');
-            });
+            res.cookie('user', user._id.toUpperCase(), {maxAge: 86400000, signed: true});
+            res.redirect('/home');
         })(req, res, next);
     },
     router = require('express').Router();
@@ -70,8 +56,6 @@ router.get('/auth/go', passport.authenticate('google', {
     }
 ));
 
-router.get('/auth/tw', passport.authenticate('twitter', {scope: 'email'}));
-
-router.get(/^\/FB|GO|TW$/, cook);
+router.get(/^\/FB|GO$/, cook);
 
 module.exports = router;
