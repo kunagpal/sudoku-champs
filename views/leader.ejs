@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8"/>
+        <meta charset="utf-8">
         <title>Leaderboard | Sudoku Champs</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/png" href="http://res.cloudinary.com/kunagpal/main.jpg">
@@ -14,31 +14,38 @@
             ga('create','UA-60481560-1','auto');ga('send','pageview');
         </script>
         <style>
-            table{text-align:center;margin:10%;padding:5px;}
-            body{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:15%;}
+            table{margin:10%;padding:5px;}th,td{text-align:center;}body{display:flex;flex-direction:column;align-items:center;
+            justify-content:center;padding:15%;}
         </style>
     </head>
     <body>
         <h1>Where Goliaths stand, with the Davids not so far behind...</h1>
-        <table>
-            <tr><th>Rank</th><th>Legend</th><th>Score</th><th>Matches</th><th>Streak</th></tr>
-        </table>
+        <table><tr><th>Rank</th><th>Player</th><th>Score</th><th>Matches</th><th>Streak</th></tr></table>
     </body>
     <script>
-        var i,j,lead,tr,td,req=new XMLHttpRequest(),ref=['rank', '_id', 'points', 'played', 'streak'];
-        var board=document.getElementsByTagName('table')[0];
+        var i,j,tr,td,req=new XMLHttpRequest(),board=document.getElementsByTagName('tbody')[0];
+        function row(){
+            tr.appendChild(td);
+            for(j in req[i]){
+                td=document.createElement('td');
+                td.innerText=req[i][j];
+                tr.appendChild(td);
+            }
+            board.appendChild(tr);
+        }
         req.open('get','/leaderboard',true);
         req.addEventListener('load',function(){
-            lead = JSON.parse(req.response);
-            for(i=0;i<lead.length;++i){
+            req=JSON.parse(req.response);
+            for(i=0;i<req.length-1;++i){
                 tr=document.createElement('tr');
-                for(j =0;j<5;++j){
-                    td=document.createElement('td');
-                    tr.innerHTML=lead[i][ref[j]];
-                    tr.appendChild(td);
-                }
-                board.appendChild(tr);
+                td=document.createElement('td');
+                td.innerText=i+1;
+                row();
             }
-        }, false);req.send();
+            tr=document.createElement('tr');
+            td=document.createElement('td');
+            td.innerText=(i==5)?req[5].rank:i+1;
+            row();
+        },false);req.send();
     </script>
 </html>

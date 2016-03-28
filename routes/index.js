@@ -139,7 +139,6 @@ router.get('/leader', function(req, res){
 });
 
 router.get('/leaderboard', function(req, res){
-    i = 0;
     lead = [];
     flag = !req.signedCookies.user;
     db.find({}, op, frame).toArray(function(err, docs){
@@ -151,13 +150,18 @@ router.get('/leaderboard', function(req, res){
 
         for(j = 0; j < docs.length; ++j)
         {
+            docs[j]._id = docs[j]._id.split('@')[0];
             if(docs[j]._id === req.signedCookies.user)
             {
+                if(j > 4)
+                {
+                    docs[j].rank = j + 1;
+                }
+
                 flag = true;
-                docs[j].rank = parseInt(j, 10) + 1;
                 lead.push(docs[j]);
             }
-            else if(lead.length < 6)
+            else if(lead.length < 5)
             {
                 lead.push(docs[j]);
             }

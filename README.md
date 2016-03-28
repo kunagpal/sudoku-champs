@@ -12,14 +12,14 @@
 
 ### The website is hosted [here](https://www.sudokuchamps.herokuapp.com)
 
-### Please report any bugs / issues [here](https://www.github.com/kunagpal/sudoku-champs)
+#### Please report any bugs / issues [here](https://www.github.com/kunagpal/sudoku-champs)
 
-#### Instructions
+##### Instructions
 
 * Download and install the latest version of Node.Js from [here](https://nodejs.org/en/download/)
 * Download and install MongoDB from [here](https://www.mongodb.org/downloads)
-* In the project's root directory, and install all dependencies with 'npm i'
-* On Microsoft Windows, run 'npm i bcryptjs'
+* In the project's root directory, and install all dependencies with `npm i`
+* On Microsoft Windows, run `npm i bcryptjs`
 * Create a .env file with the following contents:
 
 ```
@@ -33,11 +33,9 @@ GO_KEY=value
 SENTRY=value
 ```
 
-##### Run the localhost MongoDB server with `mongod`
-
-##### Run the server using 'npm start'
-
-##### View the website at localhost:3000
+* Run the localhost MongoDB server with `mongod`
+* Run the server using `npm start`
+* View the website at localhost:3000
 
 > Tasks
 
