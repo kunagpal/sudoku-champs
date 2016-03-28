@@ -79,7 +79,7 @@ router.post('/login', function(req, res){
                 return res.redirect('/');
             }
 
-            res.cookie(doc.strategy === 'local' ? 'user' : 'admin', req.body.email, {maxAge: 86400000, signed: true});
+            res.cookie(doc.strategy === 'local' ? 'user' : 'admin', req.body.email.split('@')[0], {maxAge: 86400000, signed: true});
             res.redirect('/home');
         });
     });
@@ -110,7 +110,7 @@ router.post('/register', function(req, res) {
                     return res.redirect('/');
                 }
 
-                res.cookie('user', user._id.trim().toUpperCase(), {maxAge: 86400000, signed: true});
+                res.cookie('user', user._id.split('@')[0].trim().toUpperCase(), {maxAge: 86400000, signed: true});
                 message.header.to = user._id;
                 message.header.subject = "Registration successful!";
 

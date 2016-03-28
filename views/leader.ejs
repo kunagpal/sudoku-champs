@@ -24,7 +24,9 @@
     </body>
     <script>
         var i,j,tr,td,req=new XMLHttpRequest(),board=document.getElementsByTagName('tbody')[0];
-        function row(){
+        function* gen(){
+            tr=document.createElement('tr');
+            yield td=document.createElement('td');
             tr.appendChild(td);
             for(j in req[i]){
                 td=document.createElement('td');
@@ -32,20 +34,18 @@
                 tr.appendChild(td);
             }
             board.appendChild(tr);
-        }
+        }var row = gen();
         req.open('get','/leaderboard',true);
         req.addEventListener('load',function(){
             req=JSON.parse(req.response);
             for(i=0;i<req.length-1;++i){
-                tr=document.createElement('tr');
-                td=document.createElement('td');
+                row.next();
                 td.innerText=i+1;
-                row();
-            }
-            tr=document.createElement('tr');
-            td=document.createElement('td');
+                row.next();
+            }row = gen();
+            row.next();
             td.innerText=(i==5)?req[5].rank:i+1;
-            row();
+            row.next();
         },false);req.send();
     </script>
 </html>
