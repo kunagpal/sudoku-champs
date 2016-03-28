@@ -17,14 +17,14 @@
 
 var opt =
     {
-        $set : {},
-        $inc :
+        $set: {},
+        $inc:
         {
-            xp : 1,
-            form : 1,
-            streak : 1,
-            played : 1,
-            challenge : 1
+            xp: 1,
+            form: 1,
+            streak: 1,
+            played: 1,
+            challenge: 1
         }
     },
     path = require('path'),

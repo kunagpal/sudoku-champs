@@ -21,10 +21,22 @@ var i,
     token,
     bcrypt,
     message,
+    op =
+    {
+        $set:
+        {
+            hash: ''
+        },
+        $unset:
+        {
+            token: '',
+            expire: ''
+        }
+    },
     path = require('path'),
     crypto = require('crypto'),
     router = require('express').Router(),
-    op = {name: 1, points: 1, played: 1, streak: 1},
+    slice = {_id:0, name: 1, points: 1, played: 1, streak: 1},
     user = require(path.join(__dirname, '..', 'database', 'user')),
     email = require(path.join(__dirname, '..', 'database', 'email')),
     frame = {sort: [['points', -1], ['played' , 1], ['streak' , -1]]};
@@ -60,7 +72,7 @@ router.get('/', function(req, res){
 router.post('/login', function(req, res){
     res.clearCookie('user', {});
 
-    db.find({email : req.body.email, $or: [{strategy: 'local'}, {strategy: 'admin'}]}).limit(1).next(function(err, doc){
+    db.find({_id: req.body.email, $or: [{strategy: 'local'}, {strategy: 'admin'}]}).limit(1).next(function(err, doc){
         if(err || !doc)
         {
             req.flash('Incorrect credentials!');
@@ -79,7 +91,7 @@ router.post('/login', function(req, res){
                 return res.redirect('/');
             }
 
-            res.cookie(doc.strategy === 'local' ? 'user' : 'admin', doc.name, {maxAge: 86400000, signed: true});
+            res.cookie(doc.strategy === 'local' ? 'user' : 'admin', doc.name, {signed: true});
             res.redirect('/home');
         });
     });
@@ -91,8 +103,8 @@ router.post('/register', function(req, res) {
     {
         user.dob = new Date();
         user.strategy = 'local';
-        user.email = req.body.email;
-        user.name = user.email.split('@')[0].trim();
+        user._id = req.body.email;
+        user.name = user._id.split('@')[0].trim();
 
         bcrypt.hash(req.body.password, 10, function(err, hash){
             if(err)
@@ -142,7 +154,7 @@ router.get('/leader', function(req, res){
 router.get('/leaderboard', function(req, res){
     lead = [];
     flag = !req.signedCookies.user;
-    db.find({}, op, frame).toArray(function(err, docs){
+    db.find({}, slice, frame).toArray(function(err, docs){
         if(err)
         {
             console.error(err.message);
@@ -185,22 +197,22 @@ router.post('/forgot', function(req, res) {
         }
 
         token = buf.toString('hex');
-        db.updateOne({email: req.body.email, strategy: 'local'}, {$set:{token : token, expire : Date.now() + 3600000}}, function(err, doc){
+        db.findOneAndUpdate({_id: req.body.email, strategy: 'local'}, {$set: {token: token, expire: Date.now() + 3600000}}, function(err, doc){
             if(err)
             {
                 console.error(err.message);
                 req.flash('An unexpected error has occurred. Please retry.');
                 return res.redirect('/forgot');
             }
-            if(!doc)
+            if(!doc.value)
             {
                 req.flash('No matches found!');
                 return res.redirect('/forgot');
             }
 
-            message.header.to = req.body.email;
+            message.header.to = doc.value._id;
             message.header.subject = 'Time to get back in the game';
-            message.attach_alternative("Hey there, " + req.body.email.split('@')[0] + ".<br>A little birdie told us that you were having troubles with your Sudoku champs password.<br>" +
+            message.attach_alternative("Hey there, " + doc.value.name + ".<br>A little birdie told us that you were having troubles with your Sudoku champs password.<br>" +
             "That really hurts us, so please click <a href='http://" + req.headers.host + "/reset/" + token + "'>here</a> within sixty minutes of seeing this message in order to" +
             " reset your password.<br>We would love to have you back as a user.<br> In the event that this password reset was not requested by you, please ignore this" +
             " message and your password shall remain intact.<br>Regards,<br>The Sudoku Champs team.");
@@ -233,68 +245,55 @@ router.get('/reset/:token', function(req, res){
 
 // POST reset token page
 router.post('/reset/:token', function(req, res){
-    if(req.body.password === req.body.confirm)
-    {
-        var query =
-        {
-            token: req.params.token,
-            expire:
-            {
-                $gt: Date.now()
-            }
-        },
-        op =
-        {
-            $set:
-            {
-                hash: ''
-            },
-            $unset:
-            {
-                token: '',
-                expire: ''
-            }
-        };
-
-        bcrypt.hash(req.body.password, 10, function(err, hash){
-            if(err)
-            {
-                req.flash('An unexpected error has occured, please re-try.');
-                return res.redirect('/reset/' + req.params,token);
-            }
-
-            op.$set.hash = hash;
-
-            db.findOneAndUpdate(query, op, function(err, doc){
-                if(err || !doc)
-                {
-                    console.error(err.message);
-                    req.flash('This password reset link is either invalid or has expired. Please retry.');
-                    return res.redirect('/forgot');
-                }
-
-                message.header.to = doc.value.email;
-                message.header.subject = 'Password change successful!';
-                message.attach_alternative("Hey there," + doc.value.name + ".<br>We're just writing in to let you "
-                    + "know that the recent password change for your account with Sudoku Champs was successful." +
-                    "<br><br>Regards,<br>The Sudoku Champs team.");
-                email.send(message, function(err){
-                    if(err)
-                    {
-                        console.error(err.message);
-                    }
-
-                    req.flash(err ? 'Email send failure' : 'Updated successfully!');
-                    res.redirect('/');
-                });
-            });
-        });
-    }
-    else
+    if (req.body.password !== req.body.confirm)
     {
         req.flash('Passwords do not match!');
-        res.render('reset', {token: req.csrfToken()});
+        return res.render('reset', {token: req.csrfToken()});
     }
+
+    var query =
+    {
+        token: req.params.token,
+        expire:
+        {
+            $gt: Date.now()
+        }
+    };
+
+    bcrypt.hash(req.body.password, 10, function(err, hash){
+        if(err)
+        {
+            req.flash('An unexpected error has occured, please re-try.');
+            return res.redirect('/reset/' + req.params,token);
+        }
+
+        op.$set.hash = hash;
+
+        db.findOneAndUpdate(query, op, function(err, doc){
+            if(err || !doc.value)
+            {
+                console.error(err.message);
+                req.flash('This password reset link is either invalid or has expired. Please retry.');
+                return res.redirect('/forgot');
+            }
+
+            message.header.to = doc.value.email;
+            message.header.subject = 'Password change successful!';
+            message.attach_alternative("Hey there," + doc.value.name + ".<br>We're just writing in to let you "
+                + "know that the recent password change for your account with Sudoku Champs was successful." +
+                "<br><br>Regards,<br>The Sudoku Champs team.");
+
+            email.send(message, function(err){
+                if(err)
+                {
+                    console.error(err.message);
+                }
+
+                req.flash(err ? 'Email send failure' : 'Updated successfully!');
+                res.redirect('/');
+            });
+        });
+    });
 });
 
 router.get('/admin', function(req, res){

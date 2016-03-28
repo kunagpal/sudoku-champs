@@ -33,7 +33,7 @@ var api = function(req, res, next)
 };
 
 router.get('/register/:email', api, function(req, res, next){
-    db.find({email: req.params.email}).limit(1).next(function(err, doc){
+    db.find({_id: req.params.email}).limit(1).next(function(err, doc){
         if(err)
         {
             res.status(422);
@@ -65,6 +65,10 @@ router.get('/stats', api, function(req, res){
         doc.worst = doc.worst !== -1 ? parseInt(doc.worst / 60, 10) + ' : ' + (doc.worst % 60 > 9 ? '' : '0') + doc.worst % 60 : 'NA';
         res.json(doc);
     });
+});
+
+router.get('/administrator', api, function(req, res){
+    res.json(0);
 });
 
 module.exports = router;

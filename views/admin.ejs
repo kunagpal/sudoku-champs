@@ -16,4 +16,12 @@
     </head>
     <body>
     </body>
+    <script>
+        var req=new XMLHttpRequest();
+        req.open('get','/administrator',true);
+        req.addEventListener('load',function(){
+            console.log(req.response);
+        },false);
+        req.send();
+    </script>
 </html>

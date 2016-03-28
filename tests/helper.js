@@ -15,32 +15,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-module.exports =
-{
-    _id: '',
-    xp: 0,
-    h2h: 0,
-    win: 0,
-    avg: 0,
-    rep: 0,
-    dob: '',
-    solo: 0,
-    loss: 0,
-    tied: 0,
-    help: 0,
-    form: 1,
-    name: '',
-    visit: 0,
-    streak: 0,
-    points: 0,
-    worst: -1,
-    played: 0,
-    ratio: 0.0,
-    practice: 0,
-    prevTime: 0,
-    challenge: 0,
-    strategy: '',
-    prevType: '',
-    highlight: 0,
-    best: Number.MAX_VALUE
-};
+var mongo = require('mongodb').MongoClient.connect;
+
+before(function(done){
+    mongo('mongodb://127.0.0.1/testDb', function(err, db){
+        if(err)
+        {
+            throw 'Please ensure that mongod is running as a localhost instance and is accepting connections on port 27017'
+        }
+
+        testDb = db;
+        done();
+    });
+});

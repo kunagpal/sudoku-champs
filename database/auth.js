@@ -34,9 +34,9 @@ var key,
             user.profile = profile.id;
             user.name = profile.displayName;
             user.strategy = profile.provider;
-            user.email = profile.emails[0].value;
+            user._id = profile.emails[0].value;
 
-            db.findOneAndUpdate({email: profile.emails[0].value, strategy: profile.provider}, {$setOnInsert: user}, {upsert : true}, function(err, doc)
+            db.findOneAndUpdate({_id: user._id, strategy: profile.provider}, {$setOnInsert: user}, {upsert: true}, function(err, doc)
             {
                 if(err)
                 {
@@ -48,7 +48,7 @@ var key,
                     return done(err, user);
                 }
 
-                message.header.to = user.email;
+                message.header.to = user._id;
                 message.attach_alternative("Hey there " + user.name + ",<br>Welcome to Sudoku Champs!<br><br>Regards,<br>The Sudoku champs team");
                 email.send(message, function(err){
                     if(err)
