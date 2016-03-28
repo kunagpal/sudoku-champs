@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="center">
+<html>
     <head>
         <meta charset="utf-8"/>
         <title>Sudoku Champs</title>
@@ -115,28 +115,26 @@
                also a little bit on how we take several undisclosed steps towards maintaining that position. However,
                we also realize that in this day and age, our smart users have better things to do and more challenging
                Sudoku to solve, so we'll cut to the chase: We don't distribute user contact details. We never did, and
-               we never will. Your contact details are only used to keep you in the game, and out of the hands of
-               spammers. We hate spam as much as all of you do, possibly more. <br><br>
-               Now that all the nonsense is done away with, let's move on to the <a href="/play" class="link">game</a>.
+               we never will. Your contact details are only used to keep you in the game, and out of the hands of spammers.
+               We hate spam as much as all of you do, possibly more. Cookies are used to optimize user experience.
             </p>
         </div>
     </body>
     <script>
-        var req = new XMLHttpRequest();
-        var email = document.getElementById('emailId');
-        var button = document.getElementById('submit');
+        var req=new XMLHttpRequest();
+        var email=document.getElementById('emailId');
+        var button=document.getElementById('submit');
         var ref={'1':{col:'green'},'0':{col:'red',txt:'This email address is already taken.'}};
         email.addEventListener('blur',function(){
-            if(this.value)
-            {
+            if(this.value){
                 req.open('get','/register/'+this.value,true);
                 req.addEventListener('load',function(){
-                    button.disabled=ref[req.response].txt || 0;
+                    button.disabled=ref[req.response].txt||0;
                     email.style.borderColor=ref[req.response].col;
-                    email.title=ref[req.response].txt || email.title;
+                    email.title=ref[req.response].txt||email.title;
                 },false);
                 req.send();
             }
-        }, false);
+        },false);
     </script>
 </html>
