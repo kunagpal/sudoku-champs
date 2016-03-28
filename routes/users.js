@@ -37,15 +37,13 @@ var opt =
         opt.$inc.time = parseInt(req.body.time, 10);
         opt.$set.prevTime = parseInt(req.body.time, 10);
 
-        db.updateOne({_id : req.signedCookies.user}, opt, function(err){
+        db.updateOne({name: req.signedCookies.user}, opt, function(err){
             if(err)
             {
                 console.error(err.message);
                 return next(err);
             }
 
-            res.cookie('best', opt.$set.best, {maxAge : 86400000, signed : true});
-            res.cookie('worst', opt.$set.worst, {maxAge : 86400000, signed : true});
             res.redirect(req.headers.referer);
         });
     },

@@ -37,7 +37,7 @@ var ref =
                 return res.redirect('/login');
             }
 
-            res.cookie('user', user._id.toUpperCase(), {maxAge: 86400000, signed: true});
+            res.cookie('user', user.name, {maxAge: 86400000, signed: true});
             res.redirect('/home');
         })(req, res, next);
     },

@@ -24,10 +24,10 @@ var i,
     path = require('path'),
     crypto = require('crypto'),
     router = require('express').Router(),
-    op = {'_id' : 1, 'points' : 1, 'played' : 1, 'streak' : 1},
+    op = {name: 1, points: 1, played: 1, streak: 1},
     user = require(path.join(__dirname, '..', 'database', 'user')),
     email = require(path.join(__dirname, '..', 'database', 'email')),
-    frame = {'sort' : [['points', -1], ['played' , 1], ['streak' , -1]]};
+    frame = {sort: [['points', -1], ['played' , 1], ['streak' , -1]]};
 
 message = email.wrap({from : 'sudokuchampster@gmail.com'});
 
@@ -60,7 +60,7 @@ router.get('/', function(req, res){
 router.post('/login', function(req, res){
     res.clearCookie('user', {});
 
-    db.find({_id : req.body.email, $or: [{strategy: 'local'}, {strategy: 'admin'}]}, {}, {'limit' : 1}).next(function(err, doc){
+    db.find({email : req.body.email, $or: [{strategy: 'local'}, {strategy: 'admin'}]}).limit(1).next(function(err, doc){
         if(err || !doc)
         {
             req.flash('Incorrect credentials!');
@@ -79,7 +79,7 @@ router.post('/login', function(req, res){
                 return res.redirect('/');
             }
 
-            res.cookie(doc.strategy === 'local' ? 'user' : 'admin', req.body.email.split('@')[0], {maxAge: 86400000, signed: true});
+            res.cookie(doc.strategy === 'local' ? 'user' : 'admin', doc.name, {maxAge: 86400000, signed: true});
             res.redirect('/home');
         });
     });
@@ -91,7 +91,8 @@ router.post('/register', function(req, res) {
     {
         user.dob = new Date();
         user.strategy = 'local';
-        user._id = req.body.email;
+        user.email = req.body.email;
+        user.name = user.email.split('@')[0].trim();
 
         bcrypt.hash(req.body.password, 10, function(err, hash){
             if(err)
@@ -110,11 +111,11 @@ router.post('/register', function(req, res) {
                     return res.redirect('/');
                 }
 
-                res.cookie('user', user._id.split('@')[0].trim().toUpperCase(), {maxAge: 86400000, signed: true});
-                message.header.to = user._id;
+                res.cookie('user', user.name, {maxAge: 86400000, signed: true});
+                message.header.to = user.email;
                 message.header.subject = "Registration successful!";
 
-                message.attach_alternative("Hey there " + user._id.split('@')[0] + ",<br>Welcome to Sudoku Champs!<br><br>Regards,<br>The Sudoku champs team");
+                message.attach_alternative("Hey there " + user.name + ",<br>Welcome to Sudoku Champs!<br><br>Regards,<br>The Sudoku champs team");
                 email.send(message, function(err){
                     if(err)
                     {
@@ -150,8 +151,7 @@ router.get('/leaderboard', function(req, res){
 
         for(j = 0; j < docs.length; ++j)
         {
-            docs[j]._id = docs[j]._id.split('@')[0];
-            if(docs[j]._id === req.signedCookies.user)
+            if(docs[j].name === req.signedCookies.user)
             {
                 if(j > 4)
                 {
@@ -185,13 +185,7 @@ router.post('/forgot', function(req, res) {
         }
 
         token = buf.toString('hex');
-        message.header.subject = 'Time to get back in the game';
-        message.attach_alternative("Hey there, " + req.body.name + ".<br>A little birdie told us that you were having troubles with your Sudoku champs password.<br>" +
-            "That really hurts us, so please click <a href='http://" + req.headers.host + "/reset/" + token + "'>here</a> within sixty minutes of seeing this message in order to" +
-            " reset your password.<br>We would love to have you back as a user.<br> In the event that this password reset was not requested by you, please ignore this" +
-            " message and your password shall remain intact.<br>Regards,<br>The Sudoku Champs team.");
-
-        db.updateOne({_id : req.body.email, strategy : 'local'}, {$set:{token : token, expire : Date.now() + 3600000}}, function(err, doc){
+        db.updateOne({email: req.body.email, strategy: 'local'}, {$set:{token : token, expire : Date.now() + 3600000}}, function(err, doc){
             if(err)
             {
                 console.error(err.message);
@@ -205,6 +199,12 @@ router.post('/forgot', function(req, res) {
             }
 
             message.header.to = req.body.email;
+            message.header.subject = 'Time to get back in the game';
+            message.attach_alternative("Hey there, " + req.body.email.split('@')[0] + ".<br>A little birdie told us that you were having troubles with your Sudoku champs password.<br>" +
+            "That really hurts us, so please click <a href='http://" + req.headers.host + "/reset/" + token + "'>here</a> within sixty minutes of seeing this message in order to" +
+            " reset your password.<br>We would love to have you back as a user.<br> In the event that this password reset was not requested by you, please ignore this" +
+            " message and your password shall remain intact.<br>Regards,<br>The Sudoku Champs team.");
+
             email.send(message, function(err){
                 if(err)
                 {
@@ -220,7 +220,7 @@ router.post('/forgot', function(req, res) {
 
 // GET reset token page
 router.get('/reset/:token', function(req, res){
-    db.find({token: req.params.token, expire: {$gt: Date.now()}}, {limit : 1}).next(function(err, doc){
+    db.find({token: req.params.token, expire: {$gt: Date.now()}}).limit(1).next(function(err, doc){
         if (err || !doc)
         {
             req.flash('No matches found!');
@@ -275,7 +275,7 @@ router.post('/reset/:token', function(req, res){
 
                 message.header.to = doc.value.email;
                 message.header.subject = 'Password change successful!';
-                message.attach_alternative("Hey there," + doc.value._id + ".<br>We're just writing in to let you "
+                message.attach_alternative("Hey there," + doc.value.name + ".<br>We're just writing in to let you "
                     + "know that the recent password change for your account with Sudoku Champs was successful." +
                     "<br><br>Regards,<br>The Sudoku Champs team.");
                 email.send(message, function(err){

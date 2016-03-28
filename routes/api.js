@@ -33,7 +33,7 @@ var api = function(req, res, next)
 };
 
 router.get('/register/:email', api, function(req, res, next){
-    db.find({_id: req.params.email}).limit(1).next(function(err, doc){
+    db.find({email: req.params.email}).limit(1).next(function(err, doc){
         if(err)
         {
             res.status(422);
@@ -45,11 +45,15 @@ router.get('/register/:email', api, function(req, res, next){
 });
 
 router.get('/stats', api, function(req, res){
-    db.find({_id : req.signedCookies.user}, op).limit(1).next(function(err, doc){
+    db.find({name: req.signedCookies.user}, op).limit(1).next(function(err, doc){
         if(err)
         {
             res.status(422);
             return next(err);
+        }
+        if(!doc)
+        {
+            res.end();
         }
 
         temp = [doc.practice, doc.h2h, doc.challenge, doc.solo].sort();
