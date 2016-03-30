@@ -15,6 +15,7 @@
     "log": "heroku logs --app sudokuchamps",
     "start": "node node_modules/.bin/forever ./bin/www",
     "stop": "node node_modules/.bin/forever stop ./bin/www",
+    "style": "node node_modules/.bin/jscs . -p=airbnb -m 3500",
     "restart": "node node_modules/.bin/forever restart ./bin/www",
     "test": "node node_modules/.bin/mocha tests --recursive -R dot"
   },
@@ -47,7 +48,7 @@
     "express-session": "^1.13.0",
     "forever": "^0.15.1",
     "helmet": "^1.3.0",
-    "mongodb": "^2.1.11",
+    "mongodb": "^2.1.14",
     "morgan": "^1.7.0",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.0",
@@ -60,6 +61,7 @@
   "devDependencies": {
     "clean-css": "^3.4.10",
     "dotenv": "^2.0.0",
+    "jscs": "^2.11.0",
     "mocha": "^2.4.5",
     "pre-commit": "^1.1.2",
     "uglify-js": "^2.6.2"
