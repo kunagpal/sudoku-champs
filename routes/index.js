@@ -75,19 +75,19 @@ router.post('/login', function(req, res){
     db.find({_id: req.body.email, $or: [{strategy: 'local'}, {strategy: 'admin'}]}).limit(1).next(function(err, doc){
         if(err || !doc)
         {
-            req.flash('Incorrect credentials!');
+            res.flash('Incorrect credentials!');
             return res.redirect('/');
         }
 
         bcrypt.compare(req.body.password, doc.hash, function(err, result){
             if(err)
             {
-                req.flash('Unexpected error occurred, please re-try.');
+                res.flash('Unexpected error occurred, please re-try.');
                 return res.redirect('/');
             }
             if(!result)
             {
-                req.flash('Incorrect credentials!');
+                res.flash('Incorrect credentials!');
                 return res.redirect('/');
             }
 
@@ -109,7 +109,7 @@ router.post('/register', function(req, res) {
         bcrypt.hash(req.body.password, 10, function(err, hash){
             if(err)
             {
-                req.flash('An unexpected error occurred, please re-try.');
+                res.flash('An unexpected error occurred, please re-try.');
                 return res.redirect('/');
             }
 
@@ -119,7 +119,7 @@ router.post('/register', function(req, res) {
                 if(err)
                 {
                     console.error(err.message);
-                    req.flash('That username is already taken, please choose a different one.');
+                    res.flash('That username is already taken, please choose a different one.');
                     return res.redirect('/');
                 }
 
@@ -141,7 +141,7 @@ router.post('/register', function(req, res) {
     }
     else
     {
-        req.flash('Passwords do not match!');
+        res.flash('Passwords do not match!');
         res.redirect('/');
     }
 });
@@ -192,7 +192,7 @@ router.post('/forgot', function(req, res) {
     crypto.randomBytes(20, function(err, buf) {
         if(err)
         {
-            req.flash('An unexpected error had occurred, please retry.');
+            res.flash('An unexpected error had occurred, please retry.');
             return res.redirect('/forgot/password');
         }
 
@@ -201,12 +201,12 @@ router.post('/forgot', function(req, res) {
             if(err)
             {
                 console.error(err.message);
-                req.flash('An unexpected error has occurred. Please retry.');
+                res.flash('An unexpected error has occurred. Please retry.');
                 return res.redirect('/forgot');
             }
             if(!doc.value)
             {
-                req.flash('No matches found!');
+                res.flash('No matches found!');
                 return res.redirect('/forgot');
             }
 
@@ -223,7 +223,7 @@ router.post('/forgot', function(req, res) {
                     console.error(err.message);
                 }
 
-                req.flash(err ? 'Email sending error...' : 'An email has been sent to ' + req.body.email + ' with further instructions.');
+                res.flash(err ? 'Email sending error...' : 'An email has been sent to ' + req.body.email + ' with further instructions.');
                 res.redirect('/');
             });
         });
@@ -235,11 +235,11 @@ router.get('/reset/:token', function(req, res){
     db.find({token: req.params.token, expire: {$gt: Date.now()}}).limit(1).next(function(err, doc){
         if (err || !doc)
         {
-            req.flash('No matches found!');
+            res.flash('No matches found!');
             return res.redirect('/forgot');
         }
 
-        res.render('reset', {token: req.csrfToken(), msg: req.flash()});
+        res.render('reset', {token: req.csrfToken(), msg: res.flash()});
     });
 });
 
@@ -247,7 +247,7 @@ router.get('/reset/:token', function(req, res){
 router.post('/reset/:token', function(req, res){
     if (req.body.password !== req.body.confirm)
     {
-        req.flash('Passwords do not match!');
+        res.flash('Passwords do not match!');
         return res.render('reset', {token: req.csrfToken()});
     }
 
@@ -263,7 +263,7 @@ router.post('/reset/:token', function(req, res){
     bcrypt.hash(req.body.password, 10, function(err, hash){
         if(err)
         {
-            req.flash('An unexpected error has occured, please re-try.');
+            res.flash('An unexpected error has occured, please re-try.');
             return res.redirect('/reset/' + req.params,token);
         }
 
@@ -273,7 +273,7 @@ router.post('/reset/:token', function(req, res){
             if(err || !doc.value)
             {
                 console.error(err.message);
-                req.flash('This password reset link is either invalid or has expired. Please retry.');
+                res.flash('This password reset link is either invalid or has expired. Please retry.');
                 return res.redirect('/forgot');
             }
 
@@ -289,7 +289,7 @@ router.post('/reset/:token', function(req, res){
                     console.error(err.message);
                 }
 
-                req.flash(err ? 'Email send failure' : 'Updated successfully!');
+                res.flash(err ? 'Email send failure' : 'Updated successfully!');
                 res.redirect('/');
             });
         });

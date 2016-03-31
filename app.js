@@ -50,15 +50,15 @@ var status,
             req.session.flash = [];
         }
 
-        req.flash = function(content)
+        res.flash = function(content)
         {
             if(content)
             {
-                this.session.flash.push(content);
+                req.session.flash.push(content);
             }
             else
             {
-                return this.session.flash.pop();
+                return req.session.flash.pop();
             }
         };
 
@@ -107,7 +107,7 @@ app.use(function(err, req, res, next){
     res.status(status);
     if(err.code === 'EBADCSRFTOKEN')
     {
-        req.flash('That form submission had expired, please retry.');
+        res.flash('That form submission had expired, please retry.');
         res.redirect(req.headers.referer);
     }
     else

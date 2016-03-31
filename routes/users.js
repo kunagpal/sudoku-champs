@@ -70,7 +70,7 @@ router.get('/logout', check, function(req, res){
 
 // GET forgot password page
 router.get('/forgot', function(req, res){
-    res.render('forgot', {token: req.csrfToken(), msg: req.flash()});
+    res.render('forgot', {token: req.csrfToken(), msg: res.flash()});
 });
 
 // GET guest page
