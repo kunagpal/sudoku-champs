@@ -277,8 +277,8 @@ function shuffleArray(array)
     {
       var j = Math.floor(Math.random() * (i + 1));
       array[i] += array[j];
-      array[j] = array[i] - aray[j];
-      aray[i] -= array[j];
+      array[j] = array[i] - array[j];
+      array[i] -= array[j];
     }
   }
 }
@@ -347,7 +347,7 @@ function generatePuzzle(difficulty)
     }
     else
     {
-      knownCount--;
+      --knownCount;
     }
   }
 
@@ -472,7 +472,7 @@ function renderBoard(board)
       if(board[i][j] === 0)
       {
         child = document.createElement("input");
-        child.setAttribute('maxlength', 1);
+        child.setAttribute('maxlength', '1');
         child.setAttribute('id', 'c' + i + j);
         child.addEventListener('input', verify, false);
       }
@@ -484,7 +484,7 @@ function renderBoard(board)
 
       el.innerHTML = "";
       el.setAttribute("class", ((board[i][j] === 0) ? 'edit' : 'static') + 'Value');
-      el.setAttribute("tabIndex", 0);
+      el.setAttribute("tabIndex", '0');
       el.appendChild(child);
     }
   }
@@ -582,8 +582,8 @@ document.getElementById('checkButton').addEventListener('click', function() {
 
   if(result['valid'])
   {
-    var validMessages = [ "LOOKIN GOOD", "KEEP GOING", "AWESOME", "EXCELLENT",
-      "NICE", "SWEET", "LOOKS GOOD TO ME"];
+    var validMessages = [ "LOOKING GOOD", "KEEP GOING", "AWESOME", "EXCELLENT",
+	  "NICE", "SWEET", "LOOKS GOOD TO ME"];
 
     if(verifySolution(board, true)['valid'])
     {

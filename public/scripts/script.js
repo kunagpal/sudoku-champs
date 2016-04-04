@@ -6,6 +6,13 @@ var id,
     clock,
     ver = 0,
     hor = 0,
+  	arrow =
+	{
+	  65: 37,
+	  87: 38,
+	  68: 39,
+	  83: 40
+	},
     visible = true,
     started = false,
     ref = [37, 38, 39, 40, 67, 69, 90, 81];
@@ -13,25 +20,16 @@ var id,
 addEventListener('DOMContentLoaded', function() {
     window.onkeydown = function() {
         id = document.activeElement.id;
-        if(!id[2])
+
+	  	if(!id[2])
         {
             id = 'c' + id;
         }
-        temp = window.event.keyCode;
-        switch(temp)
-        {
-            case 65 : temp = 37; // left, a
-                      break;
-            case 87 : temp = 38; // up, w
-                      break;
-            case 68 : temp = 39; // right, d
-                      break;
-            case 83 : temp = 40; // down, s
-                      break;
-            default : break;
-        }
-        index = ref.indexOf(temp);
-        if(index > -1)
+
+	  	temp = arrow[window.event.keyCode];
+	  	index = ref.indexOf(temp);
+
+	  	if(index > -1)
         {
             if(id.match(/^c?[0-8]{2}$/))
             {
@@ -45,6 +43,7 @@ addEventListener('DOMContentLoaded', function() {
                     ver = Math.pow(-1, index);
                     hor = Math.pow(-1, parseInt(index / 2, 10));
                 }
+
                 ver = (parseInt(id[1], 10) + ver) % 9;
                 hor = (parseInt(id[2], 10) + hor) % 9;
                 ver = (ver > -1) ? ver.toString() : '8';
@@ -52,12 +51,13 @@ addEventListener('DOMContentLoaded', function() {
             }
             else
             {
-                ver = '0';
-                hor = '0';
+                ver = hor = '0';
             }
-            id = ver + hor;
+
+		  	id = ver + hor;
             temp = document.getElementById(id);
-            try
+
+		  	try
             {
                 document.getElementById('c' + id).focus();
             }
@@ -80,7 +80,8 @@ addEventListener('DOMContentLoaded', function() {
                     if(Date.now() - time > 10000)
                     {
                         window.onbeforeunload = null;
-                        try
+
+					  	try
                         {
                             document.getElementsByName('loss')[0].value = 1;
                             document.getElementById('hidden').click();
@@ -97,6 +98,7 @@ addEventListener('DOMContentLoaded', function() {
                     }
                 }, 0);
             },0);
+
             return "This action will result in a loss. (The game will be lost automatically in ten seconds.)";
         }
     };
@@ -107,6 +109,7 @@ addEventListener('DOMContentLoaded', function() {
             document.getElementById('newGameButton').style.visibility = 'visible';
             document.getElementById('newGameButton').click();
             document.getElementById('game').style.visibility = 'hidden';
+
             try
             {
                 document.getElementById('hide').style.visibility = 'visible';
@@ -115,12 +118,14 @@ addEventListener('DOMContentLoaded', function() {
             {
                 console.log('Playing as a guest.');
             }
+
             document.getElementById('Wrapper').style.visibility = 'visible';
             // start counter
             document.getElementById('start').innerText = 'QUIT';
-            document.getElementById('start').addEventListener('click', function(){
+            document.getElementById('start').addEventListener('click', function() {
                 window.location = '/';
             });
+
             started = true;
         }
     });

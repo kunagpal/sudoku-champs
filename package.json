@@ -1,6 +1,6 @@
 {
   "name": "sudokuchamps",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Sudoku Champs",
   "homepage": "https://www.sudokuchamps.herokuapp.com",
   "bugs": {
@@ -59,7 +59,7 @@
     "bcrypt": "^0.8.5"
   },
   "devDependencies": {
-    "clean-css": "^3.4.10",
+    "clean-css": "^3.4.11",
     "dotenv": "^2.0.0",
     "jscs": "^2.11.0",
     "mocha": "^2.4.5",
