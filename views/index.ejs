@@ -25,7 +25,7 @@
     <body>
         <nav>
             <a class="brand" href="#">
-                <img class="logo" src="http://res.cloudinary.com/kunagpal/main.jpg">
+                <img class="logo" src="https://res.cloudinary.com/kunagpal/main.jpg">
                 <span>Sudoku Champs</span>
             </a>
             <input id="res" type="checkbox" class="show">
@@ -43,7 +43,7 @@
             <article class="content">
                 <div class="tabs two">
                     <input id='tab-1' type='radio' name='tabgroupB' checked>
-                    <label class="pseudo button toggle half" for="tab-1">Sign In</label>
+                    <label class="pseudo button toggle half" for="tab-1">Sign in</label>
                     <input id='tab-2' type='radio' name='tabgroupB'>
                     <label class="pseudo button toggle half" for="tab-2">Sign up</label>
                     <div class="row">
@@ -77,7 +77,7 @@
         </div>
         <div class="panel" id="#">
             <h1>Where the good compete to become the best of the rest.</h1>
-            <img src="http://res.cloudinary.com/kunagpal/main.jpg" id="main">
+            <img src="https://res.cloudinary.com/kunagpal/main.jpg" id="main">
         </div>
         <div class="panel" id="about">
             <h1>About</h1>
@@ -110,30 +110,19 @@
         </div>
         <div class="panel" id="privacy">
             <h1>Privacy</h1>
-            <p>Normally, we would rant on and on about how your privacy and rights are of utmost importance to us, and
-               also a little bit on how we take several undisclosed steps towards maintaining that position. However,
-               we also realize that in this day and age, our smart users have better things to do and more challenging
-               Sudoku to solve, so we'll cut to the chase: We don't distribute user contact details. We never did, and
-               we never will. Your contact details are only used to keep you in the game, and out of the hands of spammers.
-               We hate spam as much as all of you do, possibly more. Cookies are used to optimize user experience.
+            <p>We don't distribute user contact details. We never did, and we never will. Your contact details are only
+               used to keep you in the game, and out of the hands of spammers. We hate spam as much as all of you do,
+               possibly more. Cookies are used to optimize user experience.
             </p>
         </div>
     </body>
     <script>
-        var req=new XMLHttpRequest();
-        var email=document.getElementById('emailId');
-        var button=document.getElementById('submit');
+        var req=new XMLHttpRequest(),email=document.getElementById('emailId'),button=document.getElementById('submit');
         var ref={'1':{col:'green'},'0':{col:'red',txt:'This email address is already taken.'}};
         email.addEventListener('blur',function(){
-            if(this.value){
-                req.open('get','/register/'+this.value,true);
-                req.addEventListener('load',function(){
-                    button.disabled=ref[req.response].txt||0;
-                    email.style.borderColor=ref[req.response].col;
-                    email.title=ref[req.response].txt||email.title;
-                },false);
-                req.send();
-            }
-        },false);
+            if(this.value){req.open('get','/register/'+this.value,true);
+                req.addEventListener('load',function(){button.disabled=ref[req.response].txt||0;
+                    email.style.borderColor=ref[req.response].col;email.title=ref[req.response].txt||email.title;
+                },false);req.send();}},false);
     </script>
 </html>

@@ -4,7 +4,6 @@
         <meta charset="utf-8"/>
         <title>Practice | Sudoku Champs</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/styles/min/game.min.css" type="text/css">
         <link rel="icon" type="image/png" href="http://res.cloudinary.com/kunagpal/main.jpg">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/picnicss/5.1.0/plugins.min.css">
         <script>
@@ -14,60 +13,30 @@
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
             ga('create','UA-60481560-1','auto');ga('send','pageview');
         </script>
+        <style>
+            tr,td{border:1px solid #000000}td:nth-child(3n){border-right:3px solid black;}td>input{padding:0 !important;}
+            tr:nth-child(3n){border-bottom:3px solid black;}table{border:4px solid;}
+        </style>
     </head>
     <body>
-        <h1>Because practice makes perfect.</h1>
-        <a id="start">START</a>
-        <a id="hide">HIDE</a>
+        <a id="start" class="button">START</a>
         <form method="POST" action="<%= mode %>">
             <input type="hidden" name="_csrf" value="<%= token %>">
-            <input type="hidden" name="win" value="0">
-            <input type="hidden" name="loss" value="0">
-            <input type="hidden" name="time" value="0">
-            <div id="Wrapper">
-                <div id="Main">
-                    <div id="Content">
-                        <br><br><br>
-                        <div id="Column1"><input id="amazeButton" type="hidden"></div>
-                        <div id="sudokuBoard">
-                            <table cellspacing="0" cellpadding="0">
-                            <%for(var i = 0; i < 3; ++i){%>
-                                <tr>
-                                <% for(var j = 0; j < 3; ++j){ %>
-                                    <td class="alpha">
-                                        <table cellspacing="1" cellpadding="0">
-                                        <% for(var k = 0; k < 3; ++k){ %>
-                                            <tr>
-                                            <% for(var l = 0; l < 3; ++l){ %>
-                                                <td class="cell">
-                                                    <div id="<%=(k+3*i).toString()+(l+3*j).toString()%>" class="staticValue">
-                                                        <input id="input"/><label for="input"></label>
-                                                    </div>
-                                                </td>
-                                            <% } %>
-                                            </tr>
-                                        <% } %>
-                                        </table>
-                                    </td>
-                                <% } %>
-                                </tr>
-                            <% } %>
-                            </table>
-                        </div>
-                        <div id="col2">
-                            <div class="validate">
-                                <a id="checkButton" class="gameControls">CHECK</a><br>
-                                <span id="errorsFound" class="errorsFound" role="tab" aria-selected="true" aria-controls="ErrorsFound" tabindex="300">MISTAKE FOUND</span>
-                                <span id="noErrors" class="noErrors" role="tab" aria-selected="true" aria-controls="NoErrorsFound" tabindex="400">LOOKIN GOOD</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <table>
+                <%for(var i = 0; i < 9; ++i){%>
+                <tr>
+                    <%for(var j = 0; j < 9; ++j){%>
+                    <td>
+                        <input/>
+                    </td>
+                    <%}%>
+                </tr>
+                <%}%>
+            </table>
             <div class="game" id="game">
-                <a id="newGameButton" class="gameControls">NEW GAME</a>
+                <a id="newGameButton" class="button gameControls">NEW GAME</a>
                 <br>
-                <label for="difficulty">Level:</label>&nbsp;&nbsp;
+                <label for="difficulty">LEVEL</label>&nbsp;&nbsp;
                 <select id="difficulty">
                     <option value="1" selected>KID MODE</option>
                     <option value="2">RECRUIT</option>
@@ -75,13 +44,6 @@
                     <option value="4">VETERAN</option>
                     <option value="5">GOD MODE</option>
                 </select>
-            </div>
-            <div id="youWon">
-                <br>
-                <h2>Play Again?</h2>
-                <br>
-                <a id="new" class="gameControls">NEW GAME</a>
-                <a id="close" class="gameControls">CLOSE</a>
             </div>
             <input type="submit" id="hidden"/>
         </form>

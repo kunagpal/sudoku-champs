@@ -551,7 +551,7 @@ var clearErrors = function()
 
   for(var i = 0; i < currentErrors.length; ++i)
   {
-    currentErrors[i].setAttribute('class', currentErrors[i].getAttribute('class').replace(" error", ''))
+    currentErrors[i].setAttribute('class', currentErrors[i].getAttribute('class').replace(" error", ''));
   }
 
   currentErrors = [];

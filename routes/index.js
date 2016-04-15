@@ -305,4 +305,22 @@ router.get('/admin', function(req, res){
     res.redirect('/');
 });
 
+router.get('/administrator', function(req, res){
+	if(req.signedCookies.admin)
+	{
+		db.count(function(err, doc){
+			if(err || !doc)
+			{
+				res.end();
+			}
+
+		  	res.json({});
+		});
+	}
+  	else
+	{
+		res.redirect('/');
+	}
+});
+
 module.exports = router;

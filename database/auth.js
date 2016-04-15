@@ -76,12 +76,15 @@ var key,
 
 for(key in strategies)
 {
-    passport.use(new strategies[key]({
-            enableProof: true,
-            clientID: process.env[`${key}_ID`],
-            clientSecret: process.env[`${key}_KEY`],
-            callbackURL: ref[process.env.NODE_ENV] + key,
-            profileFields: ['id', 'email', 'displayName']
-        }, callback
-    ));
+	if(strategies.hasOwnProperty(key))
+	{
+		passport.use(new strategies[key]({
+			enableProof: true,
+			clientID: process.env[`${key}_ID`],
+			clientSecret: process.env[`${key}_KEY`],
+			callbackURL: ref[process.env.NODE_ENV] + key,
+			profileFields: ['id', 'email', 'displayName']
+		  }, callback
+		));
+	}
 }
