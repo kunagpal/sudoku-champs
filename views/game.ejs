@@ -14,29 +14,36 @@
             ga('create','UA-60481560-1','auto');ga('send','pageview');
         </script>
         <style>
-            tr,td{border:1px solid #000000}td:nth-child(3n){border-right:3px solid black;}td>input{padding:0 !important;}
-            tr:nth-child(3n){border-bottom:3px solid black;}table{border:4px solid;}
+            tr,td{border:1px solid #000000}td:nth-child(3n){border-right:3px solid black;}tr:nth-child(3n){border-bottom:3px solid black;}
+            table{border:4px solid;}td>input{text-align:center;border:0;height:100%;}td{padding:0;height:10vh;width:10vh;}
+            div{padding:1%;}#hidden{display:none;}
         </style>
     </head>
     <body>
-        <a id="start" class="button">START</a>
-        <form method="POST" action="<%= mode %>">
-            <input type="hidden" name="_csrf" value="<%= token %>">
-            <table>
-                <%for(var i = 0; i < 9; ++i){%>
-                <tr>
-                    <%for(var j = 0; j < 9; ++j){%>
-                    <td>
-                        <input/>
-                    </td>
-                    <%}%>
-                </tr>
-                <%}%>
-            </table>
-            <div class="game" id="game">
+        <div class="row">
+            <div class="three-fourth">
+                <form method="POST" action="<%= mode %>">
+                    <input type="hidden" name="_csrf" value="<%= token %>">
+                    <table>
+                        <%for(var i = 0; i < 9; ++i){%>
+                            <tr>
+                                <%for(var j = 0; j < 9; ++j){%>
+                                    <td>
+                                        <input name="<%=i + '' + j%>" pattern="^\d$" min="1" max="9" maxlength="1" required size="1" step="1">
+                                    </td>
+                                <%}%>
+                            </tr>
+                        <%}%>
+                    </table>
+                    <input type="submit" id="hidden">
+                </form>
+            </div>
+            <div>
+                <label for="hidden" class="button">SUBMIT</label>
+                <a id="start" class="button">START</a>
                 <a id="newGameButton" class="button gameControls">NEW GAME</a>
                 <br>
-                <label for="difficulty">LEVEL</label>&nbsp;&nbsp;
+                <label for="difficulty">LEVEL</label>
                 <select id="difficulty">
                     <option value="1" selected>KID MODE</option>
                     <option value="2">RECRUIT</option>
@@ -45,9 +52,7 @@
                     <option value="5">GOD MODE</option>
                 </select>
             </div>
-            <input type="submit" id="hidden"/>
-        </form>
+        </div>
     </body>
-    <script src="/scripts/min/game.min.js"></script>
     <script src="/scripts/min/script.min.js"></script>
 </html>

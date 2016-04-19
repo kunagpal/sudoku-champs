@@ -1,5 +1,5 @@
 // Created by Kunal Nagpal <kunagpal@gmail.com> on 13-02-2015.
-var id,
+var cell,
     time,
     temp,
     index,
@@ -15,57 +15,27 @@ var id,
 	},
     visible = true,
     started = false,
-    ref = [37, 38, 39, 40, 67, 69, 90, 81];
+    ref = [37, 38, 39, 40];
 
 addEventListener('DOMContentLoaded', function() {
     window.onkeydown = function() {
-        id = document.activeElement.id;
+		ver = hor = '0';
+        cell = document.activeElement.name || '';
+	  	temp = arrow[window.event.keyCode] || window.event.keyCode;
 
-	  	if(!id[2])
+		if(ref.indexOf(temp) > -1)
         {
-            id = 'c' + id;
-        }
-
-	  	temp = arrow[window.event.keyCode];
-	  	index = ref.indexOf(temp);
-
-	  	if(index > -1)
-        {
-            if(id.match(/^c?[0-8]{2}$/))
+            if(cell.match(/^[0-8]{2}$/))
             {
-                if(index <= 3)
-                {
-                    ver = (temp % 2) ? 0 : (temp - 39);
-                    hor = (temp % 2) ? (temp - 38) : 0;
-                }
-                else
-                {
-                    ver = Math.pow(-1, index);
-                    hor = Math.pow(-1, parseInt(index / 2, 10));
-                }
-
-                ver = (parseInt(id[1], 10) + ver) % 9;
-                hor = (parseInt(id[2], 10) + hor) % 9;
+				ver = (temp % 2) ? 0 : (temp - 39);
+				hor = (temp % 2) ? (temp - 38) : 0;
+                ver = (parseInt(cell[0], 10) + ver) % 9;
+                hor = (parseInt(cell[1], 10) + hor) % 9;
                 ver = (ver > -1) ? ver.toString() : '8';
                 hor = (hor > -1) ? hor.toString() : '8';
             }
-            else
-            {
-                ver = hor = '0';
-            }
 
-		  	id = ver + hor;
-            temp = document.getElementById(id);
-
-		  	try
-            {
-                document.getElementById('c' + id).focus();
-            }
-            catch(err)
-            {
-                document.getElementById(id).focus();
-                console.log(document.getElementById(id).style.border);
-            }
+			document.getElementsByName(ver + hor)[0].focus();
         }
     };
 
@@ -88,7 +58,6 @@ addEventListener('DOMContentLoaded', function() {
                         }
                         catch(err)
                         {
-                            console.log('Playing as a guest.');
                             window.location = document.activeElement.href;
                         }
                     }
@@ -108,18 +77,6 @@ addEventListener('DOMContentLoaded', function() {
         {
             document.getElementById('newGameButton').style.visibility = 'visible';
             document.getElementById('newGameButton').click();
-            document.getElementById('game').style.visibility = 'hidden';
-
-            try
-            {
-                document.getElementById('hide').style.visibility = 'visible';
-            }
-            catch(err)
-            {
-                console.log('Playing as a guest.');
-            }
-
-            document.getElementById('Wrapper').style.visibility = 'visible';
             // start counter
             document.getElementById('start').innerText = 'QUIT';
             document.getElementById('start').addEventListener('click', function() {
