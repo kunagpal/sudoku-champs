@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
-        <meta charset="utf-8"/>
+        <meta charset="utf-8">
         <title>Practice | Sudoku Champs</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/png" href="http://res.cloudinary.com/kunagpal/main.jpg">
@@ -14,9 +14,9 @@
             ga('create','UA-60481560-1','auto');ga('send','pageview');
         </script>
         <style>
-            tr,td{border:1px solid #000000}td:nth-child(3n){border-right:3px solid black;}tr:nth-child(3n){border-bottom:3px solid black;}
-            table{border:4px solid;}td>input{text-align:center;border:0;height:100%;}td{padding:0;height:10vh;width:10vh;}
-            div{padding:1%;}#hidden{display:none;}
+            td:nth-child(3n){border-right:3px solid black;}tr:nth-child(3n){border-bottom:3px solid black;}.hidden{display:none;}
+            table{border:4px solid;position:relative;left:50%;transform:translateX(-50%);}div.row{width:100%;margin:0;padding:1%;}
+            td{border:1px solid black;padding:0;height:10vh;width:10vh;}input{text-align:center;border:0;height:100%;padding:0;font-size:xx-large;}
         </style>
     </head>
     <body>
@@ -25,32 +25,33 @@
                 <form method="POST" action="<%= mode %>">
                     <input type="hidden" name="_csrf" value="<%= token %>">
                     <table>
-                        <%for(var i = 0; i < 9; ++i){%>
-                            <tr>
-                                <%for(var j = 0; j < 9; ++j){%>
-                                    <td>
-                                        <input name="<%=i + '' + j%>" pattern="^\d$" min="1" max="9" maxlength="1" required size="1" step="1">
-                                    </td>
-                                <%}%>
-                            </tr>
+                    <%for(var i = 0; i < 9; ++i){%>
+                        <tr>
+                        <%for(var j = 0; j < 9; ++j){%>
+                            <td>
+                                <label><input name="<%=i + '' + j%>" pattern="^\d$" min="1" max="9" maxlength="1" required size="1" step="1"></label>
+                            </td>
                         <%}%>
+                        </tr>
+                    <%}%>
                     </table>
-                    <input type="submit" id="hidden">
+                    <input type="submit" id="submit" class="hidden">
                 </form>
             </div>
             <div>
-                <label for="hidden" class="button">SUBMIT</label>
                 <a id="start" class="button">START</a>
-                <a id="newGameButton" class="button gameControls">NEW GAME</a>
-                <br>
-                <label for="difficulty">LEVEL</label>
-                <select id="difficulty">
-                    <option value="1" selected>KID MODE</option>
-                    <option value="2">RECRUIT</option>
-                    <option value="3">SEASONED</option>
-                    <option value="4">VETERAN</option>
-                    <option value="5">GOD MODE</option>
-                </select>
+                <label id="end" for="submit" class="button hidden">SUBMIT</label>
+                <a id="new" class="button hidden">NEW GAME</a>
+                <div id="select">
+                    <label for="difficulty">LEVEL</label>
+                    <select id="difficulty">
+                        <option value="1" selected>KID MODE</option>
+                        <option value="2">RECRUIT</option>
+                        <option value="3">SEASONED</option>
+                        <option value="4">VETERAN</option>
+                        <option value="5">GOD MODE</option>
+                    </select>
+                </div>
             </div>
         </div>
     </body>
