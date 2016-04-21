@@ -1,5 +1,5 @@
-function solveSudoku(inputBoard, stats) {
-  var stats = stats || {};
+function solveSudoku(inputBoard, statistics) {
+  var stats = statistics || {};
   stats['easy'] = true;
   var board = JSON.parse(JSON.stringify(inputBoard));
   var possibilities = [[], [], [], [], [], [], [], [], []];
@@ -652,7 +652,7 @@ document.getElementById('checkButton').addEventListener('click', function() {
 document.getElementById('newGameButton').addEventListener('click', function() {
   if(started)
   {
-    return window.location = '/';
+    window.location = '/';
   }
 
   clearErrors();

@@ -16,7 +16,12 @@
  */
 
 var router = require('express').Router(),
-    op = {dob : 0, hash : 0, email : 0, token : 0, expires : 0, form : 0, num : 0};
+	ref = [Number.MAX_VALUE, -1],
+	clean = function(arg, mode)
+	{
+		return arg !== ref[mode] ? parseInt(arg / 60, 10) + ' : ' + (arg % 60 > 9 ? '' : '0') + arg % 60 : 'NA';
+	},
+    op = {dob: 0, hash: 0, email: 0, token: 0, expires: 0, form: 0, num: 0};
 
 var api = function(req, res, next)
 {
@@ -44,7 +49,7 @@ router.get('/register/:email', api, function(req, res, next){
     });
 });
 
-router.get('/stats', api, function(req, res){
+router.get('/stats', api, function(req, res, next){
     db.find({name: req.signedCookies.user}, op).limit(1).next(function(err, doc){
         if(err)
         {
@@ -53,7 +58,7 @@ router.get('/stats', api, function(req, res){
         }
         if(!doc)
         {
-            res.end();
+            return res.end();
         }
 
         temp = [doc.practice, doc.h2h, doc.challenge, doc.solo].sort();
@@ -61,8 +66,8 @@ router.get('/stats', api, function(req, res){
         doc.avg = parseInt(doc.avg / 60, 10) + ' : ' + (doc.avg % 60 > 9 ? '' : '0') + doc.avg % 60;
         doc.fav = doc.practice === temp[3] ? 'Practice' : doc.challenge === temp[3] ? 'Challenge' : doc.solo === temp[3] ? 'Solo' : 'Head to head';
         doc.fav += ' (' + temp[3] + ' of ' + doc.played + ' games)';
-        doc.best = doc.best !== Number.MAX_VALUE ? parseInt(doc.best / 60, 10) + ' : ' + (doc.best % 60 > 9 ? '' : '0') + doc.best % 60 : 'NA';
-        doc.worst = doc.worst !== -1 ? parseInt(doc.worst / 60, 10) + ' : ' + (doc.worst % 60 > 9 ? '' : '0') + doc.worst % 60 : 'NA';
+        doc.best = clean(doc.best, 0);
+        doc.worst = clean(doc.best, 1);
         res.json(doc);
     });
 });

@@ -74,8 +74,6 @@ document.getElementById('start').addEventListener('click', function () {
 		document.getElementById('new').style.display = 'block';
 		document.getElementById('end').style.display = 'block';
 		document.getElementById('select').style.display = 'none';
-		document.getElementById('new').click();
-		// start counter
 		document.getElementById('start').innerText = 'QUIT';
 		document.getElementById('start').addEventListener('click', function() {
 			window.location = '/home'; // to be adjusted
