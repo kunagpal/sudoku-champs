@@ -1,0 +1,74 @@
+span {
+    color: #7F8C8D;
+}
+
+body {
+    color: #34495E;
+}
+
+nav {
+    background: #2C2C2C;
+}
+
+#rules {
+    background: #3498DB;
+    color: whitesmoke;
+}
+
+form > label {
+    width: 38%;
+    text-align: center;
+}
+
+.panel {
+    width: 100%;
+    height: 100vh;
+    padding: 0 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ECF0F1;
+    flex-direction: column;
+}
+
+#about {
+    background: #E67E22;
+    color: whitesmoke;
+}
+
+input[type='submit'], form > a {
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+}
+
+form > input {
+    width: 60%;
+    margin: 1% auto;
+}
+
+label {
+    display: inline-block;
+}
+
+#privacy {
+    background: #1ABC9C;
+    color: #261A3B;
+}
+
+.mid {
+    text-align: center;
+    padding-top: 0;
+}
+
+.half {
+    width: 49% !important;
+}
+
+a > label {
+    width: 100%;
+}
+
+article {
+    padding: 1% !important;
+}
