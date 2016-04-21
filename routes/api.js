@@ -15,8 +15,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var router = require('express').Router(),
+var temp,
+	router = require('express').Router(),
 	ref = [Number.MAX_VALUE, -1],
+	modeRef = ['Practice', 'Challenge', 'Solo'],
 	clean = function(arg, mode)
 	{
 		return arg !== ref[mode] ? parseInt(arg / 60, 10) + ' : ' + (arg % 60 > 9 ? '' : '0') + arg % 60 : 'NA';
@@ -64,7 +66,7 @@ router.get('/stats', api, function(req, res, next){
         temp = [doc.practice, doc.h2h, doc.challenge, doc.solo].sort();
         doc.avg = parseInt(doc.time / doc.played, 10);
         doc.avg = parseInt(doc.avg / 60, 10) + ' : ' + (doc.avg % 60 > 9 ? '' : '0') + doc.avg % 60;
-        doc.fav = doc.practice === temp[3] ? 'Practice' : doc.challenge === temp[3] ? 'Challenge' : doc.solo === temp[3] ? 'Solo' : 'Head to head';
+        doc.fav = modeRef[+(doc.practice === temp[3]) + (doc.challenge === temp[3]) * 2 + (doc.solo === temp[3]) * 3 - 1] || 'Head to head';
         doc.fav += ' (' + temp[3] + ' of ' + doc.played + ' games)';
         doc.best = clean(doc.best, 0);
         doc.worst = clean(doc.best, 1);

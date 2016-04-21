@@ -19,7 +19,6 @@ var i,
     lead,
     flag,
     token,
-    bcrypt,
     message,
     op =
     {
@@ -35,6 +34,7 @@ var i,
     },
     path = require('path'),
     crypto = require('crypto'),
+	bcrypt = require('bcrypt'),
     router = require('express').Router(),
     slice = {_id:0, name: 1, points: 1, played: 1, streak: 1},
     user = require(path.join(__dirname, '..', 'database', 'user')),
@@ -42,15 +42,6 @@ var i,
     frame = {sort: [['points', -1], ['played' , 1], ['streak' , -1]]};
 
 message = email.wrap({from : 'sudokuchampster@gmail.com'});
-
-try
-{
-    bcrypt = require('bcrypt');
-}
-catch(err)
-{
-	throw 'Failure to compile run time requirement Bcrypt(js)';
-}
 
 router.get('/', function(req, res){
     if(req.signedCookies.user)

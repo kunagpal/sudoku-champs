@@ -1,8 +1,7 @@
 function solveSudoku(inputBoard, statistics) {
-  var stats = statistics || {};
+  var stats = statistics || {}, board = JSON.parse(JSON.stringify(inputBoard)), possibilities = [[], [], [], [], [], [], [], [], []],
+	  solved = false, impossible = false, mutated = false, needCheckFreedoms = false, loopCount = 0;
   stats['easy'] = true;
-  var board = JSON.parse(JSON.stringify(inputBoard));
-  var possibilities = [[], [], [], [], [], [], [], [], []];
 
   for(var i = 0; i < 9; ++i)
   {
@@ -12,15 +11,11 @@ function solveSudoku(inputBoard, statistics) {
     }
   }
 
-  var solved = false, impossible = false, mutated = false;
-  var needCheckFreedoms = false, loopCount = 0;
-
   outerLoop: while(!solved && !impossible) {
     solved = true;
     mutated = false;
     ++loopCount;
-    var leastFree = [];
-    var leastRemaining = 9;
+    var leastFree = [], leastRemaining = 9;
 
     for(i = 0; i < 9; ++i)
     {
@@ -29,8 +24,7 @@ function solveSudoku(inputBoard, statistics) {
         if(board[i][j] === 0)
         {
           solved = false;
-          var currentPos = possibilities[i][j];
-          var zoneRow, zoneCol;
+          var currentPos = possibilities[i][j], zoneRow, zoneCol;
 
           if(loopCount === 1)
           {
@@ -109,18 +103,16 @@ function solveSudoku(inputBoard, statistics) {
 
 function getZone(i)
 {
-  if(i < 3)
-  {
-    return 0;
-  }
-  else if(i < 6)
-  {
-    return 1;
-  }
-  else
-  {
-    return 2;
-  }
+	if(i < 3)
+	{
+		return 0;
+	}
+	if(i < 6)
+	{
+		return 1;
+	}
+
+	return 2;
 }
 
 function reducePossibilities(board, row, column, currentPos, zoneRow, zoneCol)
@@ -130,8 +122,7 @@ function reducePossibilities(board, row, column, currentPos, zoneRow, zoneCol)
   for(var k = 0; k < 9; ++k)
   {
     mutated = (currentPos[board[row][k]] || currentPos[board[k][column]]);
-    currentPos[board[row][k]] = false;
-    currentPos[board[k][column]] = false;
+    currentPos[board[row][k]] = currentPos[board[k][column]] = false;
   }
   for(var x = zoneRow; x <= (zoneRow + 2); ++x)
   {
@@ -151,8 +142,9 @@ function reducePossibilities(board, row, column, currentPos, zoneRow, zoneCol)
 
 function checkFreedoms(board, i, j, possibilities, zoneRow, zoneCol)
 {
-  var answer = 0, currentPos = possibilities[i][j], uniquePosRow = currentPos.slice(0);
-  var uniquePosCol = currentPos.slice(0), uniquePosCube = currentPos.slice(0);
+  var answer = 0, currentPos = possibilities[i][j], uniquePosRow = currentPos.slice(0), uniquePosCol = currentPos.slice(0),
+	  uniquePosCube = currentPos.slice(0), remainingRow = 0, remainingCol = 0, lastDigitRow = 0, lastDigitCol = 0,
+	  remainingCube = 0, lastDigitCube = 0;
 
   for(k = 0; k < 9; ++k)
   {
@@ -162,8 +154,6 @@ function checkFreedoms(board, i, j, possibilities, zoneRow, zoneCol)
       uniquePosCol[l] = !(board[k][j] === 0 && possibilities[k][j][l] && k !== i);
     }
   }
-
-  var remainingRow = 0, remainingCol = 0, lastDigitRow = 0, lastDigitCol = 0;
 
   for(k = 1; k < 10; ++k)
   {
@@ -200,8 +190,6 @@ function checkFreedoms(board, i, j, possibilities, zoneRow, zoneCol)
       }
     }
   }
-
-  var remainingCube = 0, lastDigitCube = 0;
 
   for(var k = 1; k < 10; ++k)
   {
@@ -283,32 +271,29 @@ function shuffleArray(array)
   }
 }
 
-(function() {
-  var last = 31337, randomBackup = Math.random;
+var last = 31337, randomBackup = Math.random;
+var fakeRandom = function()
+{
+	var a = 214013, c = 2531011, m = 4294967296;
+	var next = (a * last + c) % m;
+	last = next;
+	return next / m;
+};
 
-  var fakeRandom = function()
-  {
-    var a = 214013, c = 2531011, m = 4294967296;
-    var next = (a * last + c) % m;
-    last = next;
-    return next / m;
-  };
+Math.enableFakeRandom = function()
+{
+	Math.random = fakeRandom;
+};
 
-  Math.enableFakeRandom = function()
-  {
-    Math.random = fakeRandom;
-  };
+Math.disableFakeRandom = function()
+{
+	Math.random = randomBackup;
+};
 
-  Math.disableFakeRandom = function()
-  {
-    Math.random = randomBackup;
-  };
-
-  Math.fakeRandomSeed = function(seed)
-  {
-    last = seed;
-  }
-})();
+Math.fakeRandomSeed = function(seed)
+{
+	last = seed;
+};
 
 
 function generatePuzzle(difficulty)
@@ -364,8 +349,7 @@ function verifySolution(board, onlyFullySolved)
     return resp;
   }
 
-  var rows = [], cols = [];
-  var cubes = [ [[], [], []], [[], [], []], [[], [], []]];
+  var rows = [], cols = [],cubes = [ [[], [], []], [[], [], []], [[], [], []]];
 
   for(var i = 0; i < 9; ++i)
   {
@@ -416,19 +400,6 @@ function verifySolution(board, onlyFullySolved)
   resp['valid'] = true;
   return resp;
 }
-
-var solvedPuzzle =
-[
-  [5, 3, 4, 6, 7, 8, 9, 1, 2],
-  [6, 7, 2, 1, 9, 5, 3, 4, 8],
-  [1, 9, 8, 3, 4, 2, 5, 6, 7],
-  [8, 5, 9, 7, 6, 1, 4, 2, 3],
-  [4, 2, 6, 8, 5, 3, 7, 9, 1],
-  [7, 1, 3, 9, 2, 4, 8, 5, 6],
-  [9, 6, 1, 5, 3, 7, 2, 8, 4],
-  [2, 8, 7, 4, 1, 9, 6, 3, 5],
-  [3, 4, 5, 2, 8, 6, 1, 7, 9]
-];
 
 var hardPuzzle =
 [
@@ -530,19 +501,12 @@ function getCurrentBoard()
   return board;
 }
 
-var id, el, i, j, k, l;
-var started;
+var id, i, started, currentPuzzle = generatePuzzle(), currentErrors = [], amazing = false, amazeButton = document.getElementById('amazeButton'),
+	calculatingDiv = document.getElementById('calculating'), finishedCalculatingDiv = document.getElementById('finishedCalculating'),
+	winBlock = document.getElementById('youWon'), noErrorsSpan = document.getElementById('noErrors'), errorsFoundSpan = document.getElementById('errorsFound'),
+	difficulty = document.getElementById('difficulty');
 document.getElementById('youWon').style.display = 'none';
-var currentPuzzle = generatePuzzle();
 renderBoard(currentPuzzle);
-var amazeButton = document.getElementById('amazeButton');
-var calculatingDiv = document.getElementById('calculating');
-var finishedCalculatingDiv = document.getElementById('finishedCalculating');
-var winBlock = document.getElementById('youWon');
-var noErrorsSpan = document.getElementById('noErrors');
-var errorsFoundSpan = document.getElementById('errorsFound');
-var difficulty = document.getElementById('difficulty');
-var currentErrors = [], amazing = false;
 
 var clearErrors = function()
 {
@@ -660,10 +624,4 @@ document.getElementById('newGameButton').addEventListener('click', function() {
   currentPuzzle = generatePuzzle(value);
   renderBoard(currentPuzzle);
   started = true;
-}, false);
- addEventListener('mouseup', function(event) {
-  if(event.which === 1)
-  {
-    noErrorsSpan.style.display = 'none';
-  }
 }, false);
