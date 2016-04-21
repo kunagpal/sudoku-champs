@@ -12,6 +12,7 @@
   "scripts": {
     "deploy": "git push heroku master",
     "log": "heroku logs --app sudokuchamps",
+    "postinstall": "node utils/postinstall.js",
     "start": "node node_modules/.bin/forever ./bin/www",
     "stop": "node node_modules/.bin/forever stop ./bin/www",
     "style": "node node_modules/.bin/jscs . -p=airbnb -m 3500",

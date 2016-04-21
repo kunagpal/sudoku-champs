@@ -49,14 +49,7 @@ try
 }
 catch(err)
 {
-    try
-    {
-        bcrypt = require('bcryptjs');
-    }
-    catch(err)
-    {
-        throw 'Failure to compile run time requirement Bcrypt(js)';
-    }
+	throw 'Failure to compile run time requirement Bcrypt(js)';
 }
 
 router.get('/', function(req, res){
@@ -118,7 +111,6 @@ router.post('/register', function(req, res) {
             db.insertOne(user, {w : 1}, function(err){
                 if(err)
                 {
-                    console.error(err.message);
                     res.flash('That username is already taken, please choose a different one.');
                     return res.redirect('/');
                 }
@@ -163,24 +155,17 @@ router.get('/leaderboard', function(req, res){
 
         for(j = 0; j < docs.length; ++j)
         {
-            if(docs[j].name === req.signedCookies.user)
-            {
-                if(j > 4)
-                {
-                    docs[j].rank = j + 1;
-                }
+			flag |= docs[i]._id === req.signedCookies.user;
 
-                flag = true;
-                lead.push(docs[j]);
-            }
-            else if(lead.length < 5)
-            {
-                lead.push(docs[j]);
-            }
-            else if(flag)
-            {
-                break;
-            }
+			if (j < 5 || flag)
+			{
+				lead.push(docs[i]);
+			}
+			if (flag && lead.length > 4)
+			{
+				lead[lead.length - 1].rank = j + 1;
+				break;
+			}
         }
 
         res.json(lead);
@@ -200,7 +185,6 @@ router.post('/forgot', function(req, res) {
         db.findOneAndUpdate({_id: req.body.email, strategy: 'local'}, {$set: {token: token, expire: Date.now() + 3600000}}, function(err, doc){
             if(err)
             {
-                console.error(err.message);
                 res.flash('An unexpected error has occurred. Please retry.');
                 return res.redirect('/forgot');
             }
