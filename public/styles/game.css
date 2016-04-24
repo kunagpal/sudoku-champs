@@ -11,29 +11,48 @@ tr:nth-child(3n) {
 }
 
 table {
+    left: 50%;
     border: 4px solid;
     position: relative;
-    left: 50%;
     transform: translateX(-50%);
 }
 
 div.row {
-    width: 100%;
     margin: 0;
+    width: 100%;
     padding: 1%;
 }
 
 td {
-    border: 1px solid black;
     padding: 0;
-    height: 10vh;
     width: 10vh;
+    height: 10vh;
+    border: 1px solid black;
 }
 
 input {
-    text-align: center;
     border: 0;
-    height: 100%;
     padding: 0;
+    height: 100%;
+    text-align: center;
     font-size: xx-large;
+}
+
+#clock {
+    left: 25%;
+    width: 60%;
+    margin-top: 10%;
+    border-radius: 4px;
+    text-align: center;
+    position: relative;
+    background: #2C3E50;
+}
+
+#clock > h1 {
+    padding: 0;
+    margin: 0 1px;
+    color: #BDC3C7;
+    font-size: xx-large;
+    font-weight: lighter;
+    display: inline-block;
 }

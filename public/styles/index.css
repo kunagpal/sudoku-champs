@@ -26,14 +26,14 @@ form > label {
     padding: 0 10%;
     display: flex;
     align-items: center;
-    justify-content: center;
     background: #ECF0F1;
     flex-direction: column;
+    justify-content: center;
 }
 
 #about {
-    background: #E67E22;
     color: whitesmoke;
+    background: #E67E22;
 }
 
 input[type='submit'], form > a {
@@ -52,13 +52,13 @@ label {
 }
 
 #privacy {
-    background: #1ABC9C;
     color: #261A3B;
+    background: #1ABC9C;
 }
 
 .mid {
-    text-align: center;
     padding-top: 0;
+    text-align: center;
 }
 
 .half {

@@ -24,6 +24,7 @@ var status,
     path = require('path'),
     async = require('async'),
     csrf = require('csurf')(),
+	dir = [__dirname, 'routes'],
     express = require('express'),
     app = express(),
     helmet = require('helmet')(),
@@ -32,16 +33,16 @@ var status,
     morgan = require('morgan')('dev'),
     compress = require('compression')(),
     url = parser.urlencoded({extended:true}),
+	api = require(path.join(...dir, 'api')),
+	index = require(path.join(...dir, 'index')),
+	users = require(path.join(...dir, 'users')),
+	social = require(path.join(...dir, 'social')),
     passport = require('passport').initialize(),
     raven = require('raven').middleware.express,
     error = raven.errorHandler(process.env.SENTRY),
     request = raven.requestHandler(process.env.SENTRY),
-    api = require(path.join(__dirname, 'routes', 'api')),
-    index = require(path.join(__dirname, 'routes', 'index')),
-    users = require(path.join(__dirname, 'routes', 'users')),
-    social = require(path.join(__dirname, 'routes', 'social')),
     cookie = require('cookie-parser')(process.env.COOKIE_SECET || "secret"),
-    stat = express.static(path.join(__dirname, 'public'), {maxAge:86400000 * 30}),
+    stat = express.static(path.join(__dirname, 'public'), {maxAge: 86400000 * 30}),
     session = require('express-session')({secret: 'session secret key', resave: '', saveUninitialized: ''}),
     flash = function(req, res, next)
     {
@@ -52,14 +53,12 @@ var status,
 
         res.flash = function(content)
         {
-            if(content)
+            if(!content)
             {
-                req.session.flash.push(content);
+				return req.session.flash.pop();
             }
-            else
-            {
-                return req.session.flash.pop();
-            }
+
+			req.session.flash.push(content);
         };
 
         next();
@@ -72,7 +71,6 @@ app.use(function(req, res, next)
         }, next);
     }
 );
-//app.use(compress);
 // view engine setup
 app.set('view engine', 'ejs');
 app.set('case sensitive routing', true);

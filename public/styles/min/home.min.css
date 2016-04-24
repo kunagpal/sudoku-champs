@@ -1,1 +1,1 @@
-body{display:flex;flex-direction:column;align-items:center;justify-content:center}#a{background:#E67E22}#b{background:#C0392B}#c{background:#27AE60}#d{background:#2C3E50}div.row{text-align:center}div>a{width:85%!important}a.demo{background:#000;position:fixed;top:0;right:1px}
+body{display:flex;align-items:center;flex-direction:column;justify-content:center}#a{background:#E67E22}#b{background:#C0392B}#c{background:#27AE60}#d{background:#2C3E50}div.row{text-align:center}div>a{width:85%!important}a.demo{top:0;right:1px;position:fixed;background:#000}

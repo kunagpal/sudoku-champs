@@ -5,16 +5,24 @@ var cell,
     clock,
     ver = 0,
     hor = 0,
-  	arrow =
+	arrow =
 	{
 	  65: 37,
 	  87: 38,
 	  68: 39,
 	  83: 40
 	},
+	hFlag = 1,
+	dFlag = 1,
     visible = true,
     started = false,
-    ref = [37, 38, 39, 40];
+    ref = [37, 38, 39, 40],
+	day = document.createElement('h1'),
+	sep = document.createElement('h1'),
+	hour = document.createElement('h1'),
+	min = document.getElementById('min'),
+	sec = document.getElementById('sec'),
+	tick = document.getElementById('clock');
 
 window.onkeydown = function() {
 	ver = hor = '0';
@@ -68,6 +76,55 @@ window.onbeforeunload = function()
 	}
 };
 
+function check(arg)
+{
+	return (arg < 9 ? '0' : '') + ++arg;
+}
+
+function counter()
+{
+	sep.innerText = ':';
+	day.innerText = hour.InnerText = min.innerText = sec.innerText = '00';
+
+	clock = setInterval(function() {
+		sec.innerText = check(sec.innerText);
+
+		if (sec.innerText === '60')
+		{
+			sec.innerText = '00';
+			min.innerText = check(min.innerText);
+
+			if (min.innerText === '60')
+			{
+				if (hFlag)
+				{
+					hFlag = 0;
+					tick.insertBefore(sep, tick.firstChild);
+					tick.insertBefore(hour, tick.firstChild);
+				}
+
+				min.innerText = '00';
+				hour.innerText = check(hour.innerText);
+
+				if (hour.innerText === '24')
+				{
+					if(dFlag)
+					{
+						dFlag = 0;
+						sep = document.createElement('h1');
+						sep.innerText = ':';
+						tick.insertBefore(sep, tick.firstChild);
+						tick.insertBefore(day, tick.firstChild);
+					}
+
+					hour.innerText = '00';
+					day.innerText = check(day.innerText);
+				}
+			}
+		}
+	}, 1000);
+}
+
 document.getElementById('start').addEventListener('click', function () {
 	if (!started)
 	{
@@ -75,6 +132,9 @@ document.getElementById('start').addEventListener('click', function () {
 		document.getElementById('end').style.display = 'block';
 		document.getElementById('select').style.display = 'none';
 		document.getElementById('start').innerText = 'QUIT';
+
+		counter();
+
 		document.getElementById('start').addEventListener('click', function() {
 			window.location = '/home'; // to be adjusted
 		});
