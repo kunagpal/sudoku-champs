@@ -19,10 +19,15 @@ var cell,
     ref = [37, 38, 39, 40],
 	day = document.createElement('h1'),
 	sep = document.createElement('h1'),
+	nue = document.getElementById('new'),
 	hour = document.createElement('h1'),
 	min = document.getElementById('min'),
 	sec = document.getElementById('sec'),
-	tick = document.getElementById('clock');
+	tick = document.getElementById('clock'),
+	submit = document.getElementById('submit'),
+	select = document.getElementById('select'),
+	control = document.getElementById('start'),
+	board = document.getElementsByClassName('three-fourth')[0];
 
 window.onkeydown = function() {
 	ver = hor = '0';
@@ -55,19 +60,11 @@ window.onbeforeunload = function()
 				if(Date.now() - time > 10000)
 				{
 					window.onbeforeunload = null;
-
-					try
-					{
-						document.getElementById('hidden').click();
-					}
-					catch(err)
-					{
-						window.location = document.activeElement.href;
-					}
+					window.location = '/' + (window.location.pathname === '/guest' ? '' : 'home');
 				}
 				else
 				{
-					document.getElementById('sudokuBoard').style.visibility = 'visible';
+					board.style.visibility = 'visible';
 				}
 			}, 0);
 		},0);
@@ -85,6 +82,8 @@ function counter()
 {
 	sep.innerText = ':';
 	day.innerText = hour.InnerText = min.innerText = sec.innerText = '00';
+
+	tick.style.display = 'block';
 
 	clock = setInterval(function() {
 		sec.innerText = check(sec.innerText);
@@ -128,30 +127,19 @@ function counter()
 document.getElementById('start').addEventListener('click', function () {
 	if (!started)
 	{
-		document.getElementById('new').style.display = 'block';
-		document.getElementById('end').style.display = 'block';
-		document.getElementById('select').style.display = 'none';
-		document.getElementById('start').innerText = 'QUIT';
+		nue.style.display = 'block';
+		submit.style.display = 'block';
+		select.style.display = 'none';
+		control.id = 'quit';
+		control.innerText = 'QUIT';
 
 		counter();
 
-		document.getElementById('start').addEventListener('click', function() {
-			window.location = '/home'; // to be adjusted
+		control.addEventListener('click', function() {
+			window.onbeforeunload = null;
+			window.location = '/' + (window.location.pathname === '/guest' ? '' : 'home');
 		});
 
 		started = true;
 	}
 });
-
-try
-{
-	document.getElementById('hide').addEventListener('click', function () {
-		document.getElementById('clock').style.visibility = visible && started ? 'hidden' : 'visible';
-		document.getElementById('hide').innerText = visible && started ? 'BRING IT BACK' : 'HIDE';
-		visible = !visible;
-	});
-}
-catch(err)
-{
-	console.log('Playing as a guest.');
-}

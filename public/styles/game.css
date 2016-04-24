@@ -39,7 +39,7 @@ input {
 }
 
 #clock {
-    left: 25%;
+    left: 20%;
     width: 60%;
     margin-top: 10%;
     border-radius: 4px;
@@ -55,4 +55,12 @@ input {
     font-size: xx-large;
     font-weight: lighter;
     display: inline-block;
+}
+
+#quit {
+    background: #C0392B;
+}
+
+#new {
+    background: #27AE60;
 }

@@ -20,7 +20,7 @@ if(process.platform === 'win32') // the bcrypt issue is only prevalent on Micros
 {
 	var join = require('path').join;
 	var dir = [__dirname, 'node_modules'];
-	require('child_process').exec('npm i bcryptjs', () => {
+	require('child_process').exec('npm i bcryptjs', function() {
 		require('fs').renameSync(join(...dir, 'bcryptjs'), join(...dir, 'bcrypt'));
 	});
 }
