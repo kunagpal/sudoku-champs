@@ -10,7 +10,7 @@
 
 ## The source code repository for the sudoku-champs initiative
 
-### The website is hosted [here](https://www.sudokuchamps.herokuapp.com)
+### The website is hosted [here](https://sudokuchamps.herokuapp.com)
 
 #### Please report any bugs / issues [here](https://www.github.com/kunagpal/sudoku-champs)
 
