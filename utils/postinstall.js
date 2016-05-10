@@ -1,6 +1,5 @@
 /*
- *  GraVITas Premier League <gravitaspremierleague@gmail.com>
- *  Copyright (C) 2014  IEEE Computer Society - VIT Student Chapter <ieeecs@vit.ac.in>
+ *  Sudoku Champs <sudokuchampster@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
