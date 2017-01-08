@@ -56,7 +56,7 @@
     "raven": "^1.0.0"
   },
   "optionalDependencies": {
-    "bcrypt": "^0.8.5"
+    "bcrypt": "^1.0.0"
   },
   "devDependencies": {
     "clean-css": "^3.4.18",
