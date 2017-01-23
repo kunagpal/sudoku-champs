@@ -8,6 +8,8 @@
 
 # sudoku-champs
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kunagpal/sudoku-champs.svg)](https://greenkeeper.io/)
+
 ## The source code repository for the sudoku-champs initiative
 
 ### The website is hosted [here](https://sudokuchamps.herokuapp.com)
