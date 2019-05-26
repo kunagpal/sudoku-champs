@@ -44,7 +44,7 @@
     "debug": "^2.2.0",
     "ejs": "^2.4.2",
     "emailjs": "^1.0.5",
-    "express": "^4.14.0",
+    "express": "^4.17.1",
     "express-session": "^1.14.0",
     "forever": "^0.15.2",
     "helmet": "^3.0.0",
